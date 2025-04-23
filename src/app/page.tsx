@@ -1,103 +1,167 @@
+import Link from "next/link";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <main className="min-h-screen bg-[#0B0C2A] text-white">
+      {/* Hero Section */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* 배경 이미지 */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/starry-night.jpg"
+            alt="Starry Night Background"
+            fill
+            priority
+            className="object-cover object-center"
+            quality={100}
+            sizes="100vw"
+            style={{
+              objectPosition: "center",
+              opacity: 0.8,
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#281C40]/60 to-[#0B0C2A] z-10" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+        {/* 메인 콘텐츠 */}
+        <div className="relative z-20 text-center px-4">
+          <h1 className="font-title text-5xl md:text-7xl font-bold text-[#FFD700] mb-6 drop-shadow-lg">
+            별의 속삭임을 따라,
+            <br />
+            당신의 내일을 열어보세요.
+          </h1>
+          <p className="font-body text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-lg">
+            오늘의 운세부터, 감성 챗봇까지.
+            <br />
+            나만의 타로 세계가 열립니다.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/fortune"
+              className="font-main bg-[#FFD700] text-[#0B0C2A] px-8 py-3 rounded-full text-lg font-medium hover:bg-[#FFE566] transition-colors shadow-lg"
+            >
+              오늘의 운세 보기
+            </Link>
+            <Link
+              href="/chat"
+              className="font-main bg-transparent border-2 border-[#FFD700] text-[#FFD700] px-8 py-3 rounded-full text-lg font-medium hover:bg-[#FFD700]/10 transition-colors shadow-lg"
+            >
+              별의 속삭임에게 묻기
+            </Link>
+          </div>
+          <p className="text-sm text-gray-300 mt-4 drop-shadow-lg">
+            기록은 로그인 후 저장됩니다
+          </p>
+        </div>
+      </section>
+
+      {/* 카드 섹션 */}
+      <section className="py-20 bg-[#281C40]">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-serif text-center mb-16">
+            타로 카드로 만나는 내일
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((card) => (
+              <div
+                key={card}
+                className="group relative h-[400px] bg-[#0B0C2A] rounded-lg overflow-hidden transform transition-all duration-500 hover:scale-105"
+              >
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-20 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                  <h3 className="text-2xl font-serif mb-2">카드 제목</h3>
+                  <p className="text-[#BFA2DB]">키워드: 운명, 선택, 기회</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 기능 소개 섹션 */}
+      <section className="py-20 bg-[#0B0C2A]">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-serif text-center mb-16">
+            Whispers of the Stars의 기능
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              {
+                title: "감성 챗봇 '별의 속삭임'",
+                description:
+                  "AI가 당신의 고민을 들어주고 직관적인 해석을 제공합니다.",
+                icon: "💫",
+              },
+              {
+                title: "나만의 타로 기록장",
+                description: "과거의 리딩 결과를 저장하고 관리할 수 있습니다.",
+                icon: "📝",
+              },
+              {
+                title: "커뮤니티 공간",
+                description:
+                  "다른 사람들과 해석을 공유하고 이야기를 나눠보세요.",
+                icon: "👥",
+              },
+              {
+                title: "외부 상담 연결",
+                description: "전문가와의 상담을 원하시나요? 문의해주세요.",
+                icon: "📩",
+              },
+            ].map((feature, index) => (
+              <div
+                key={index}
+                className="bg-[#281C40] p-8 rounded-lg transform transition-all duration-300 hover:-translate-y-2"
+              >
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-2xl font-serif mb-4">{feature.title}</h3>
+                <p className="text-[#BFA2DB]">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 푸터 */}
+      <footer className="bg-[#0B0C2A] py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-center space-x-6 mb-8">
+            <a
+              href="#"
+              className="text-[#BFA2DB] hover:text-[#FFD700] transition-colors"
+            >
+              Instagram
+            </a>
+            <a
+              href="#"
+              className="text-[#BFA2DB] hover:text-[#FFD700] transition-colors"
+            >
+              YouTube
+            </a>
+            <a
+              href="#"
+              className="text-[#BFA2DB] hover:text-[#FFD700] transition-colors"
+            >
+              Email
+            </a>
+          </div>
+          <div className="flex justify-center space-x-4 text-sm text-gray-500">
+            <a href="#" className="hover:text-[#BFA2DB] transition-colors">
+              개인정보처리방침
+            </a>
+            <a href="#" className="hover:text-[#BFA2DB] transition-colors">
+              서비스 이용약관
+            </a>
+            <a
+              href="/contact"
+              className="hover:text-[#BFA2DB] transition-colors"
+            >
+              문의하기
+            </a>
+          </div>
+        </div>
       </footer>
-    </div>
+    </main>
   );
 }
