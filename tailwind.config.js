@@ -7,6 +7,18 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        title: ["var(--font-title)", "cursive"],
+        body: ["var(--font-body)", "sans-serif"],
+      },
+      borderColor: {
+        border: "hsl(var(--border))",
+      },
+      colors: {
+        border: "hsl(var(--border))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

@@ -4,22 +4,47 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* 카페24 써라운드 - 감성적인 제목용 */
+@import url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/Cafe24Ssurround.woff2");
 
-@media (prefers-color-scheme: dark) {
+/* 스포카 한 산스 네오 - 본문용 */
+@import url("https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css");
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-[#0B0C2A] text-white;
+    min-height: 100vh;
+    width: 100%;
   }
 }
 
+:root {
+  --font-title: "Cafe24Ssurround";
+  --font-body: "Spoqa Han Sans Neo";
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), sans-serif;
+  background-color: #0b0c2a;
+  color: #ffffff;
+  min-height: 100vh;
+  width: 100%;
 }
 
 .animate-pulse-slow {
@@ -27,11 +52,12 @@ body {
 }
 
 .animate-fade-in {
-  animation: fadeIn 1.5s ease-in-out;
+  animation: fadeIn 1s ease-out forwards;
 }
 
 .animate-fade-in-delay {
-  animation: fadeIn 1.5s ease-in-out 0.5s both;
+  animation: fadeIn 1s ease-out 0.5s forwards;
+  opacity: 0;
 }
 
 @keyframes pulse {
@@ -55,14 +81,148 @@ body {
   }
 }
 
+@keyframes twinkle {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes shootingStar {
+  0% {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100px) translateY(100px);
+    opacity: 0;
+  }
+}
+
+@keyframes cardGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+  }
+}
+
+.animate-twinkle {
+  animation: twinkle 2s infinite;
+}
+
+.animate-shooting-star {
+  animation: shootingStar 3s infinite;
+}
+
+.animate-card-glow {
+  animation: cardGlow 3s infinite;
+}
+
+/* 버튼 호버 효과 */
+.button-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.button-glow::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.3) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.button-glow:hover::before {
+  opacity: 1;
+}
+
+/* 카드 호버 효과 */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 반짝이는 효과 */
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #ffd700;
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 2s infinite;
+}
+
 /* 스크롤 애니메이션 */
 .scroll-reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease-out;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
 }
 
 .scroll-reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.delay-0 {
+  animation-delay: 0s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-600 {
+  animation-delay: 0.6s;
+}
+
+.delay-800 {
+  animation-delay: 0.8s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
 }
