@@ -7,7 +7,11 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Whispers of the Stars",
-  description: "별들의 속삭임을 들으세요",
+  description: "타로 카드와 함께하는 신비로운 여정",
+  icons: {
+    icon: "/images/favicon.ico",
+    apple: "/images/favicon.ico",
+  },
 };
 
 export default function RootLayout({

@@ -1,48 +1,37 @@
 @charset "UTF-8";
 
+/* 기존 폰트 임포트 */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap");
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+/* 로고 폰트 - Marcellus */
+@import url("https://fonts.googleapis.com/css2?family=Marcellus&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* 카페24 써라운드 - 감성적인 제목용 */
-@import url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/Cafe24Ssurround.woff2");
-
-/* 스포카 한 산스 네오 - 본문용 */
-@import url("https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css");
-
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --border: 214.3 31.8% 91.4%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-  }
-
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-[#0B0C2A] text-white;
-    min-height: 100vh;
-    width: 100%;
-  }
+:root {
+  --font-title-kr: "Noto Serif KR", serif;
+  --font-title-en: "Playfair Display", serif;
+  --font-body: "Pretendard", sans-serif;
+  --font-logo: "Marcellus", serif;
+  --background: #0b0c2a;
+  --foreground: #ffffff;
 }
 
-:root {
-  --font-title: "Cafe24Ssurround";
-  --font-body: "Spoqa Han Sans Neo";
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0b0c2a;
+    --foreground: #ffffff;
+  }
 }
 
 body {
-  font-family: var(--font-body), sans-serif;
-  background-color: #0b0c2a;
-  color: #ffffff;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-body);
   min-height: 100vh;
   width: 100%;
 }
@@ -52,12 +41,11 @@ body {
 }
 
 .animate-fade-in {
-  animation: fadeIn 1s ease-out forwards;
+  animation: fadeIn 0.8s ease-out forwards;
 }
 
 .animate-fade-in-delay {
-  animation: fadeIn 1s ease-out 0.5s forwards;
-  opacity: 0;
+  animation: fade-in-delay 2s ease-out forwards;
 }
 
 @keyframes pulse {
@@ -70,10 +58,25 @@ body {
   }
 }
 
+@keyframes twinkle {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
@@ -81,77 +84,76 @@ body {
   }
 }
 
-@keyframes twinkle {
+@keyframes fade-in-delay {
   0% {
-    opacity: 0.2;
+    opacity: 0;
+    transform: translateY(20px);
   }
   50% {
-    opacity: 1;
+    opacity: 0;
+    transform: translateY(20px);
   }
   100% {
-    opacity: 0.2;
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes shootingStar {
+@keyframes meteor {
   0% {
-    transform: translateX(0) translateY(0);
+    transform: translate(-100%, -100%) rotate(45deg);
     opacity: 1;
   }
+  20% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0;
+  }
   100% {
-    transform: translateX(100px) translateY(100px);
+    transform: translate(200%, 200%) rotate(45deg);
     opacity: 0;
   }
 }
 
-@keyframes cardGlow {
-  0% {
-    box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-  }
-  100% {
-    box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
-  }
-}
-
 .animate-twinkle {
-  animation: twinkle 2s infinite;
+  animation: twinkle 3s infinite;
 }
 
-.animate-shooting-star {
-  animation: shootingStar 3s infinite;
-}
-
-.animate-card-glow {
-  animation: cardGlow 3s infinite;
+.animate-meteor {
+  animation: meteor 3s linear infinite;
 }
 
 /* 버튼 호버 효과 */
 .button-glow {
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .button-glow::before {
   content: "";
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 215, 0, 0.3) 0%,
-    transparent 70%
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 215, 0, 0.2),
+    transparent
   );
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: 0.5s;
 }
 
 .button-glow:hover::before {
-  opacity: 1;
+  left: 100%;
+}
+
+.button-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
 }
 
 /* 카드 호버 효과 */
@@ -179,7 +181,7 @@ body {
 .scroll-reveal {
   opacity: 0;
   transform: translateY(20px);
-  transition: all 0.6s ease-out;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 .scroll-reveal.visible {
@@ -190,11 +192,11 @@ body {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translate(-20px, -20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(0, 0);
   }
 }
 
@@ -203,6 +205,7 @@ body {
   animation: fadeInUp 0.8s ease-out forwards;
 }
 
+/* 지연 애니메이션 */
 .delay-0 {
   animation-delay: 0s;
 }
@@ -225,4 +228,282 @@ body {
 
 .delay-1000 {
   animation-delay: 1s;
+}
+
+.delay-1200 {
+  animation-delay: 1.2s;
+}
+
+.delay-1400 {
+  animation-delay: 1.4s;
+}
+
+.delay-1600 {
+  animation-delay: 1.6s;
+}
+
+.delay-1800 {
+  animation-delay: 1.8s;
+}
+
+.delay-2000 {
+  animation-delay: 2s;
+}
+
+@layer utilities {
+  .font-title-kr {
+    font-family: var(--font-title-kr);
+  }
+  .font-title-en {
+    font-family: var(--font-title-en);
+  }
+  .font-body {
+    font-family: var(--font-body);
+  }
+  .font-logo {
+    font-family: var(--font-logo);
+    letter-spacing: 0.05em;
+  }
+}
+
+/* 애니메이션 정의 */
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-down {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-fade-right {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* 지연 애니메이션 */
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.delay-600 {
+  animation-delay: 0.6s;
+}
+
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
+.delay-800 {
+  animation-delay: 0.8s;
+}
+
+.delay-900 {
+  animation-delay: 0.9s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+/* 버튼 효과 */
+.button-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.button-glow::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.2) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.button-glow:hover::after {
+  opacity: 1;
+}
+
+/* 카드 스타일 */
+.card {
+  @apply bg-[#281C40]/50 backdrop-blur-sm rounded-2xl p-6 border border-[#FFD700]/10 
+         hover:border-[#FFD700]/30 transition-all duration-300 
+         hover:shadow-[0_4px_20px_rgba(255,215,0,0.15)];
+}
+
+.card:hover {
+  @apply border-[#FFD700]/40;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.15);
+}
+
+/* 입력 필드 스타일 */
+.input-field {
+  @apply w-full px-4 py-2 bg-[#0B0C2A] border border-[#FFD700]/20 rounded-lg text-white;
+  @apply focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent;
+  transition: all 0.3s ease;
+}
+
+.input-field:hover {
+  @apply border-[#FFD700]/40;
+}
+
+/* 배경 그라디언트 */
+.bg-gradient-primary {
+  background: var(--gradient-primary);
+}
+
+.bg-gradient-overlay {
+  background: var(--gradient-overlay);
+}
+
+/* 별빛 효과 */
+.starlight {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
+}
+
+/* 유성 효과 */
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--color-accent));
+  animation: meteor 3s linear infinite;
+}
+
+/* 인증 페이지 공통 스타일 */
+.auth-container {
+  @apply min-h-screen bg-[#0B0C2A] text-white;
+}
+
+.auth-section {
+  @apply relative h-screen flex items-center justify-center overflow-hidden;
+}
+
+.auth-background {
+  @apply absolute inset-0 z-0;
+}
+
+.auth-overlay {
+  @apply absolute inset-0 bg-gradient-to-b from-[#281C40]/60 via-[#281C40]/80 to-[#0B0C2A] z-10;
+}
+
+.auth-content {
+  @apply relative z-20 text-center px-4;
+}
+
+.auth-title {
+  @apply font-title text-5xl md:text-7xl text-[#FFD700] mb-6 
+         drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] animate-fade-in;
+}
+
+.auth-subtitle {
+  @apply font-body text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto 
+         drop-shadow-lg animate-fade-in-delay tracking-wide;
+}
+
+.auth-form-container {
+  @apply w-full max-w-md mx-auto animate-fade-in-delay;
+}
+
+.auth-form-box {
+  @apply p-8 bg-[#281C40]/50 backdrop-blur-sm rounded-2xl 
+         border border-[#FFD700]/10 hover:border-[#FFD700]/30 
+         transition-all duration-300;
+}
+
+.auth-form-title {
+  @apply font-title text-2xl mb-6 text-[#FFD700] 
+         drop-shadow-[0_0_8px_rgba(255,215,0,0.3)];
+}
+
+.auth-social-button {
+  @apply w-full flex items-center justify-center gap-2 
+         bg-white/90 text-gray-800 px-4 py-3 rounded-lg 
+         hover:bg-white transition-colors font-body;
+}
+
+.auth-divider {
+  @apply relative flex items-center justify-center mb-6;
+}
+
+.auth-divider-line {
+  @apply absolute inset-0 flex items-center;
+}
+
+.auth-divider-text {
+  @apply relative bg-[#281C40] px-4 text-sm text-[#BFA2DB] font-body;
+}
+
+.auth-input-label {
+  @apply block font-body text-sm font-medium text-[#BFA2DB] mb-1;
+}
+
+.auth-input {
+  @apply w-full px-4 py-3 bg-[#0B0C2A]/80 border border-[#FFD700]/10 rounded-lg 
+         text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700]/30 
+         focus:border-[#FFD700]/30 hover:border-[#FFD700]/30 
+         transition-all duration-300 font-body;
+}
+
+.auth-submit-button {
+  @apply w-full bg-[#FFD700] text-[#0B0C2A] px-4 py-3 rounded-lg 
+         hover:bg-[#FFE566] transition-colors font-body font-medium
+         transform hover:translate-y-[-2px] 
+         hover:shadow-[0_4px_12px_rgba(255,215,0,0.3)]
+         transition-all duration-300;
+}
+
+.auth-error {
+  @apply text-red-400 text-sm text-center font-body;
+}
+
+.auth-link {
+  @apply text-[#FFD700] hover:text-[#FFE566] transition-colors font-body 
+         hover:underline decoration-[#FFD700]/30 underline-offset-4;
 }

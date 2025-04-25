@@ -1,222 +1,196 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        router.push("/home");
+        return;
+      }
+      setLoading(false);
+    };
+
+    checkUser();
+  }, [router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0B0C2A] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#FFD700]"></div>
+      </div>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-[#0B0C2A] text-white">
-      {/* Hero Section */}
-      <section className="relative h-[calc(100vh-64px)] flex items-center justify-center overflow-hidden">
-        {/* 배경 이미지 */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/starry-night.jpg"
-            alt="Starry Night Background"
-            fill
-            priority
-            className="object-cover object-center"
-            quality={100}
-            sizes="100vw"
+    <main className="h-screen bg-[#0B0C2A] text-white overflow-hidden">
+      {/* 배경 */}
+      <div className="fixed inset-0 z-0">
+        {/* 그라디언트 배경 */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#281C40] via-[#1A1B3A] to-[#0B0C2A]" />
+
+        {/* 별빛 효과 */}
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute animate-twinkle"
             style={{
-              objectPosition: "center",
-              opacity: 0.6,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              width: `${Math.random() * 2 + 1}px`,
+              height: `${Math.random() * 2 + 1}px`,
+              background: "#FFD700",
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${Math.random() * 2 + 1}s`,
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#281C40]/60 via-[#281C40]/80 to-[#0B0C2A] z-10" />
+        ))}
 
-          {/* 별빛 효과 추가 */}
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute animate-twinkle"
-              style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                width: `${Math.random() * 3 + 1}px`,
-                height: `${Math.random() * 3 + 1}px`,
-                background: "#FFD700",
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${Math.random() * 2 + 1}s`,
-              }}
-            />
-          ))}
-        </div>
+        {/* 유성 효과 */}
+        {[...Array(5)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute animate-meteor"
+            style={{
+              top: `${Math.random() * 20}%`,
+              left: `${Math.random() * 100}%`,
+              width: "2px",
+              height: "60px",
+              background: "linear-gradient(to bottom, transparent, #FFD700)",
+              animationDelay: `${Math.random() * 3}s`,
+              transform: `rotate(${Math.random() * 30 - 15}deg)`,
+            }}
+          />
+        ))}
+      </div>
 
-        {/* 메인 콘텐츠 */}
-        <div className="relative z-20 text-center px-4">
-          <h1 className="font-title text-5xl md:text-7xl text-[#FFD700] mb-6 drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] animate-fade-in">
-            별의 속삭임을 따라,
-            <br />
-            당신의 내일을 열어보세요.
-          </h1>
-          <p className="font-body text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-lg animate-fade-in-delay tracking-wide">
-            오늘의 운세부터, 감성 챗봇까지.
-            <br />
-            나만의 타로 세계가 열립니다.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-delay">
-            <Link
-              href="/fortune"
-              className="button-glow font-body bg-[#FFD700] text-[#0B0C2A] px-8 py-3.5 rounded-full text-lg hover:bg-[#FFE566] focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:ring-offset-2 focus:ring-offset-[#0B0C2A] transition-all duration-300 shadow-lg hover:shadow-[#FFD700]/50"
-            >
-              오늘의 운세 보기
-            </Link>
-            <Link
-              href="/chat"
-              className="button-glow font-body bg-transparent border-2 border-[#FFD700] text-[#FFD700] px-8 py-3.5 rounded-full text-lg hover:bg-[#FFD700]/10 focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:ring-offset-2 focus:ring-offset-[#0B0C2A] transition-all duration-300 shadow-lg"
-            >
-              별의 속삭임에게 묻기
-            </Link>
+      <div className="relative z-10 h-full flex flex-col">
+        {/* 상단 섹션 */}
+        <div className="flex-1 flex flex-col items-center justify-center px-4">
+          <div className="text-center max-w-2xl mb-8">
+            <h1 className="font-title text-3xl md:text-5xl text-[#FFD700] mb-3 drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] animate-fade-in">
+              별이 속삭이기 시작하려면,
+              <br />
+              당신의 이름이 필요해요.
+            </h1>
+            <p className="font-body text-lg md:text-xl text-white/90 mb-4 drop-shadow-lg animate-fade-in-delay">
+              오늘의 운세, 카드 리딩, 감성 챗봇.
+              <br />
+              모든 타로 경험을 이곳에서 시작하세요.
+            </p>
           </div>
-          <p className="font-body text-sm text-gray-300 mt-4 drop-shadow-lg animate-fade-in-delay">
-            기록은 로그인 후 저장됩니다
-          </p>
-        </div>
-      </section>
 
-      {/* 카드 섹션 */}
-      <section className="py-20 bg-[#281C40]">
-        <div className="container mx-auto px-4">
-          <h2 className="font-title text-4xl text-center mb-16 text-[#FFD700] drop-shadow-[0_0_8px_rgba(255,215,0,0.2)]">
-            타로 카드로 만나는 내일
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "과거의 이야기",
-                keywords: "기억, 경험, 교훈",
-                image: "/images/past-card.jpg",
-              },
-              {
-                title: "현재의 순간",
-                keywords: "직관, 통찰, 깨달음",
-                image: "/images/present-card.jpg",
-              },
-              {
-                title: "미래의 가능성",
-                keywords: "희망, 성장, 변화",
-                image: "/images/future-card.jpg",
-              },
-            ].map((card, index) => (
-              <div
-                key={index}
-                className="group relative h-[400px] bg-[#0B0C2A] rounded-lg overflow-hidden transform transition-all duration-500 hover:scale-105 shadow-lg"
-              >
-                <Image
-                  src={card.image}
-                  alt={card.title}
-                  fill
-                  className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 z-20 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="font-title text-2xl mb-2 text-[#FFD700] drop-shadow-[0_0_8px_rgba(255,215,0,0.3)]">
-                    {card.title}
-                  </h3>
-                  <p className="font-body text-[#BFA2DB]">
-                    키워드: {card.keywords}
-                  </p>
+          {/* Features Section */}
+          <div className="w-full max-w-5xl animate-fade-in-delay">
+            <h2 className="font-title text-2xl md:text-3xl text-center text-[#FFD700] mb-6">
+              별들이 들려주는 이야기
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Feature 1 */}
+              <div className="group bg-[#281C40]/50 backdrop-blur-sm rounded-2xl p-5 border border-[#FFD700]/20 hover:border-[#FFD700]/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,215,0,0.2)]">
+                <div className="text-3xl mb-2 text-center text-[#FFD700] group-hover:scale-110 transition-transform duration-300">
+                  🔮
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 기능 소개 섹션 */}
-      <section className="py-20 bg-[#0B0C2A]">
-        <div className="container mx-auto px-4">
-          <h2 className="font-title text-4xl text-center mb-16 text-[#FFD700] drop-shadow-[0_0_8px_rgba(255,215,0,0.2)]">
-            Whispers of the Stars의 기능
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              {
-                title: "감성 챗봇 '별의 속삭임'",
-                description:
-                  "AI가 당신의 고민을 들어주고 직관적인 해석을 제공합니다.",
-                icon: "💫",
-              },
-              {
-                title: "나만의 타로 기록장",
-                description: "과거의 리딩 결과를 저장하고 관리할 수 있습니다.",
-                icon: "📝",
-              },
-              {
-                title: "커뮤니티 공간",
-                description:
-                  "다른 사람들과 해석을 공유하고 이야기를 나눠보세요.",
-                icon: "👥",
-              },
-              {
-                title: "외부 상담 연결",
-                description: "전문가와의 상담을 원하시나요? 문의해주세요.",
-                icon: "📩",
-              },
-            ].map((feature, index) => (
-              <div
-                key={index}
-                className="group card-hover bg-gradient-to-br from-[#281C40]/95 to-[#0B0C2A]/95 backdrop-blur-sm p-8 rounded-2xl transform transition-all duration-500 hover:from-[#281C40] hover:to-[#0B0C2A] border border-[#FFD700]/10 hover:border-[#FFD700]/30 shadow-lg"
-              >
-                <div className="text-4xl mb-4 transform transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_0_8px_rgba(255,215,0,0.3)]">
-                  {feature.icon}
-                </div>
-                <h3 className="font-title text-2xl mb-4 text-[#FFD700] group-hover:text-[#FFE566] transition-colors duration-300">
-                  {feature.title}
+                <h3 className="font-title text-lg text-center text-[#FFD700] mb-2">
+                  오늘의 운세 보기
                 </h3>
-                <p className="font-body text-[#BFA2DB] group-hover:text-white/90 transition-colors duration-300">
-                  {feature.description}
+                <p className="font-body text-sm text-[#BFA2DB] text-center">
+                  매일 아침, 나만을 위한 운세 메시지를 확인하세요.
+                  <br />
+                  별들이 전하는 오늘의 메시지를 받아보세요.
                 </p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* 푸터 */}
-      <footer className="bg-[#0B0C2A] py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center space-x-6 mb-8">
-            <a
-              href="#"
-              className="font-body text-[#BFA2DB] hover:text-[#FFD700] transition-colors"
-            >
-              Instagram
-            </a>
-            <a
-              href="#"
-              className="font-body text-[#BFA2DB] hover:text-[#FFD700] transition-colors"
-            >
-              YouTube
-            </a>
-            <a
-              href="#"
-              className="font-body text-[#BFA2DB] hover:text-[#FFD700] transition-colors"
-            >
-              Email
-            </a>
+              {/* Feature 2 */}
+              <div className="group bg-[#281C40]/50 backdrop-blur-sm rounded-2xl p-5 border border-[#FFD700]/20 hover:border-[#FFD700]/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,215,0,0.2)]">
+                <div className="text-3xl mb-2 text-center text-[#FFD700] group-hover:scale-110 transition-transform duration-300">
+                  🃏
+                </div>
+                <h3 className="font-title text-lg text-center text-[#FFD700] mb-2">
+                  타로 카드 리딩
+                </h3>
+                <p className="font-body text-sm text-[#BFA2DB] text-center">
+                  카드를 뽑고 감성 챗봇과 함께
+                  <br />
+                  나의 흐름과 가능성을 해석해보세요.
+                </p>
+              </div>
+
+              {/* Feature 3 */}
+              <div className="group bg-[#281C40]/50 backdrop-blur-sm rounded-2xl p-5 border border-[#FFD700]/20 hover:border-[#FFD700]/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,215,0,0.2)]">
+                <div className="text-3xl mb-2 text-center text-[#FFD700] group-hover:scale-110 transition-transform duration-300">
+                  ✨
+                </div>
+                <h3 className="font-title text-lg text-center text-[#FFD700] mb-2">
+                  리딩 기록 저장
+                </h3>
+                <p className="font-body text-sm text-[#BFA2DB] text-center">
+                  내가 뽑은 카드와 해석을 자동 저장,
+                  <br />
+                  언제든지 다시 확인할 수 있어요.
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="flex justify-center space-x-4 text-sm text-gray-500">
-            <a
-              href="#"
-              className="font-body hover:text-[#BFA2DB] transition-colors"
-            >
-              개인정보처리방침
-            </a>
-            <a
-              href="#"
-              className="font-body hover:text-[#BFA2DB] transition-colors"
-            >
-              서비스 이용약관
-            </a>
+
+          {/* Login Button */}
+          <div className="flex justify-center mt-10 animate-fade-in-delay">
             <Link
-              href="/contact"
-              className="font-body hover:text-[#BFA2DB] transition-colors"
+              href="/login"
+              className="button-glow font-body bg-[#FFD700] text-[#0B0C2A] px-8 py-3 rounded-full text-base hover:bg-[#FFE566] focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:ring-offset-2 focus:ring-offset-[#0B0C2A] transition-all duration-300 shadow-lg hover:shadow-[#FFD700]/50 inline-block"
             >
-              문의하기
+              별자리 여행 시작하기
             </Link>
           </div>
         </div>
-      </footer>
+
+        {/* 하단 섹션 */}
+        <div className="flex-none">
+          {/* Footer */}
+          <footer className="bg-[#0B0C2A] border-t border-[#FFD700]/10 py-4">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col md:flex-row justify-between items-center">
+                <div className="mb-2 md:mb-0">
+                  <p className="font-body text-sm text-[#BFA2DB]">
+                    © 2024 Whispers of the Stars. All rights reserved.
+                  </p>
+                </div>
+                <div className="flex space-x-4">
+                  <Link
+                    href="/terms"
+                    className="font-body text-sm text-[#BFA2DB] hover:text-[#FFD700] transition-colors"
+                  >
+                    이용약관
+                  </Link>
+                  <Link
+                    href="/privacy"
+                    className="font-body text-sm text-[#BFA2DB] hover:text-[#FFD700] transition-colors"
+                  >
+                    개인정보처리방침
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="font-body text-sm text-[#BFA2DB] hover:text-[#FFD700] transition-colors"
+                  >
+                    문의하기
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
     </main>
   );
 }
