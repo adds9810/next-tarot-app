@@ -17,14 +17,16 @@
   --font-title-en: "Playfair Display", serif;
   --font-body: "Pretendard", sans-serif;
   --font-logo: "Marcellus", serif;
-  --background: #0b0c2a;
+  --background: #070817;
   --foreground: #ffffff;
+  --component-bg: #1c1635;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0b0c2a;
+    --background: #070817;
     --foreground: #ffffff;
+    --component-bg: #1c1635;
   }
 }
 
@@ -59,17 +61,14 @@ body {
 }
 
 @keyframes twinkle {
-  0% {
+  0%,
+  100% {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(1);
   }
   50% {
     opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.8);
+    transform: scale(1.2);
   }
 }
 
@@ -366,7 +365,7 @@ body {
 
 /* 카드 스타일 */
 .card {
-  @apply bg-[#281C40]/50 backdrop-blur-sm rounded-2xl p-6 border border-[#FFD700]/10 
+  @apply bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl p-6 border border-[#FFD700]/10 
          hover:border-[#FFD700]/30 transition-all duration-300 
          hover:shadow-[0_4px_20px_rgba(255,215,0,0.15)];
 }
@@ -379,7 +378,7 @@ body {
 
 /* 입력 필드 스타일 */
 .input-field {
-  @apply w-full px-4 py-2 bg-[#0B0C2A] border border-[#FFD700]/20 rounded-lg text-white;
+  @apply w-full px-4 py-2 bg-[#070817]/80 border border-[#FFD700]/20 rounded-lg text-white;
   @apply focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent;
   transition: all 0.3s ease;
 }
@@ -430,7 +429,7 @@ body {
 }
 
 .auth-overlay {
-  @apply absolute inset-0 bg-gradient-to-b from-[#281C40]/60 via-[#281C40]/80 to-[#0B0C2A] z-10;
+  @apply absolute inset-0 bg-gradient-to-b from-[#070817]/60 via-[#1C1635]/80 to-[#070817] z-10;
 }
 
 .auth-content {
@@ -452,9 +451,7 @@ body {
 }
 
 .auth-form-box {
-  @apply p-8 bg-[#281C40]/50 backdrop-blur-sm rounded-2xl 
-         border border-[#FFD700]/10 hover:border-[#FFD700]/30 
-         transition-all duration-300;
+  @apply p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl;
 }
 
 .auth-form-title {
@@ -477,7 +474,7 @@ body {
 }
 
 .auth-divider-text {
-  @apply relative bg-[#281C40] px-4 text-sm text-[#BFA2DB] font-body;
+  @apply relative bg-[#1C1635] px-4 text-sm text-[#BFA2DB] font-body;
 }
 
 .auth-input-label {
