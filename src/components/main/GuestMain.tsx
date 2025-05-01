@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function GuestMain() {
   return (
-    <section className="relative min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+    <section className="relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
       <div className="relative z-20 w-full max-w-6xl mx-auto space-y-12">
         <div className="text-center space-y-8 md:space-y-12">
           {/* 메인 타이틀 */}

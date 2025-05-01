@@ -114,7 +114,7 @@ export default function Home() {
                 💫
               </motion.div>
               <h3 className="font-title text-xl sm:text-2xl text-[#FFD700] group-hover:text-[#FFE566]">
-                별에게 묻기
+                별에게 질문하기
               </h3>
               <p className="font-body text-[#BFA2DB] group-hover:text-white/90 text-sm sm:text-base">
                 당신만의 특별한 질문으로
@@ -125,7 +125,7 @@ export default function Home() {
           </Link>
 
           {/* 남겨둔 속삭임 읽기 */}
-          <Link href="/history" className="group">
+          <Link href="/record" className="group">
             <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
               <motion.div
                 whileHover={{ scale: 1.1 }}

@@ -93,13 +93,34 @@ export default function SignUp() {
       setLoading(false);
     }
   };
+  const handleGoogleSignUp = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: "offline",
+            prompt: "consent",
+          },
+        },
+      });
+      if (error) throw error;
+    } catch (error) {
+      if (error instanceof AuthError) {
+        setError(error.message);
+      } else {
+        setError("Google 로그인 중 오류가 발생했습니다.");
+      }
+    }
+  };
 
   return (
     <section
-      className="relative h-screen flex items-center justify-center overflow-hidden"
+      className="relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
       aria-label="회원가입 섹션"
     >
-      <div className="relative z-20 text-center px-4 w-full max-w-lg mx-auto animate-fade-in">
+      <div className="relative z-20 text-center w-full max-w-lg mx-auto animate-fade-in">
         {/* 감성적 소개 문구 */}
         <section className="mb-8 space-y-4" aria-label="서비스 소개">
           <h1 className="font-title text-3xl md:text-4xl text-[#FFD700] mb-4 drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
@@ -113,6 +134,29 @@ export default function SignUp() {
         {/* 회원가입 폼 */}
         <div className="w-full animate-fade-in-delay">
           <div className="p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-200">
+            {/* 소셜 회원가입 버튼 */}
+            <div className="space-y-3 mb-6">
+              <button
+                onClick={handleGoogleSignUp}
+                className="w-full flex items-center justify-center gap-2 bg-white/90 text-gray-800 px-4 py-3 rounded-lg hover:bg-white transition-colors font-body"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path
+                    fill="currentColor"
+                    d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"
+                  />
+                </svg>
+                Google로 별자리 등록하기
+              </button>
+            </div>{" "}
+            <div className="relative flex items-center justify-center mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-[#FFD700]/20"></div>
+              </div>
+              <div className="relative bg-[#281C40] px-4 text-sm text-[#BFA2DB] font-body">
+                또는 이메일로 등록하기
+              </div>
+            </div>
             <form onSubmit={handleSignUp} className="space-y-6">
               <div className="text-left">
                 <label
@@ -175,9 +219,9 @@ export default function SignUp() {
                     {passwordError}
                   </p>
                 )}
-                {/* <p className="mt-1 text-xs text-[#BFA2DB]/70 font-body">
+                <p className="mt-1 text-xs text-[#BFA2DB]/70 font-body">
                   8~16자의 영문, 숫자, 특수문자 중 2가지 이상을 조합해 주세요.
-                </p> */}
+                </p>
               </div>
               <div className="text-left">
                 <label
@@ -224,7 +268,6 @@ export default function SignUp() {
                 {loading ? "별자리 생성 중..." : "나만의 별자리 완성하기"}
               </button>
             </form>
-
             <div className="mt-6 text-center text-base text-[#BFA2DB] font-body">
               <p>
                 이미 별자리가 있으신가요?{" "}

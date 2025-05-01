@@ -54,7 +54,7 @@ export default function PageBackground({ children }: PageBackgroundProps) {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+    <div className="relative overflow-hidden">
       {/* 배경 이미지 */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -67,7 +67,7 @@ export default function PageBackground({ children }: PageBackgroundProps) {
           sizes="100vw"
           style={{
             objectPosition: "center",
-            opacity: 0.6,
+            opacity: 0.9,
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#070817]/60 via-[#1C1635]/80 to-[#070817] z-10" />
@@ -135,7 +135,9 @@ export default function PageBackground({ children }: PageBackgroundProps) {
       ))}
 
       {/* 메인 콘텐츠 */}
-      <div className="relative z-20">{children}</div>
+      <div className="relative min-h-screen w-full pt-16 md:pt-20 flex items-center justify-center z-20">
+        {children}
+      </div>
     </div>
   );
 }

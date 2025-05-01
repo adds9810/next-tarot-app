@@ -58,10 +58,10 @@ export default function Login() {
 
   return (
     <section
-      className="relative h-screen flex items-center justify-center overflow-hidden"
+      className="relative relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
       aria-label="로그인 섹션"
     >
-      <div className="relative z-20 text-center px-4 w-full max-w-lg mx-auto">
+      <div className="relative z-20 text-center w-full max-w-lg mx-auto">
         {/* 감성적 소개 문구 */}
         <section
           className="mb-8 space-y-4 animate-fade-in"

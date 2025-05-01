@@ -21,6 +21,24 @@ export default function Home() {
 
         if (session?.user) {
           setUser(session.user);
+          // 로그인한 사용자의 세션이 존재하는 경우
+          const { data: existingUser } = await supabase
+            .from("users")
+            .select("id")
+            .eq("id", session.user.id)
+            .single();
+
+          if (!existingUser) {
+            await supabase.from("users").insert({
+              id: session.user.id,
+              email: session.user.email,
+              nickname:
+                session.user.user_metadata?.nickname ||
+                session.user.user_metadata?.full_name ||
+                session.user.email?.split("@")[0],
+              profile_image: session.user.user_metadata?.avatar_url || null,
+            });
+          }
           // 구글 로그인의 경우 이메일에서 닉네임 추출
           if (session.user.app_metadata.provider === "google") {
             const emailNickname = session.user.email?.split("@")[0] || "";
@@ -71,14 +89,14 @@ export default function Home() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#FFD700]" />
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen text-white overflow-hidden">
+    <main className=" text-white overflow-hidden">
       {user ? <UserMain nickname={nickname} /> : <GuestMain />}
     </main>
   );

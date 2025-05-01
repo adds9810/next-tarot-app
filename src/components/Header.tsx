@@ -82,17 +82,21 @@ export default function Header() {
 
   const menuItems = user
     ? [
-        { href: "/fortune", label: "오늘의 운세" },
-        { href: "/chat", label: "타로 상담" },
+        // { href: "/fortune", label: "오늘의 운세" },
+        // { href: "/chat", label: "타로 상담" },
+        { href: "/post", label: "커뮤니티" },
+        { href: "/record", label: "흔적" },
       ]
     : [
-        { href: "/fortune", label: "오늘의 운세" },
-        { href: "/chat", label: "타로 상담" },
+        // { href: "/fortune", label: "오늘의 운세" },
+        // { href: "/chat", label: "타로 상담" },
+        { href: "/post", label: "커뮤니티" },
+        { href: "/record", label: "흔적" },
       ];
 
   return (
     <header
-      className="sticky top-0 z-50 bg-gradient-to-b from-[#070817]/80 to-[#1C1635]/80 backdrop-blur-md border-b border-[#FFD700]/10 shadow-lg shadow-[#1C1635]/20"
+      className="fixed w-full top-0 z-50 bg-gradient-to-b from-[#070817]/80 to-[#1C1635]/80 backdrop-blur-md border-b border-[#FFD700]/10 shadow-lg shadow-[#1C1635]/20"
       role="banner"
     >
       <div className="container mx-auto px-4 py-3 md:py-4">
@@ -140,7 +144,8 @@ export default function Header() {
                     <div className="relative w-8 h-8 rounded-full overflow-hidden border border-[#FFD700]/20 glow-sm">
                       <Image
                         src={
-                          user.user_metadata.avatar_url || "/images/profile.png"
+                          user.user_metadata.avatar_url ||
+                          "/images/them/profile.png"
                         }
                         alt={`${nickname}님의 프로필 이미지`}
                         fill
@@ -174,7 +179,7 @@ export default function Header() {
                       role="menu"
                     >
                       <Link
-                        href="/my-readings"
+                        href="/record"
                         className="block px-4 py-2 text-sm text-[#EAE7FF] hover:bg-[#FFD700]/10 font-body transition-colors duration-200 focus:outline-none focus:bg-[#FFD700]/20"
                         role="menuitem"
                       >
@@ -262,7 +267,8 @@ export default function Header() {
                     <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[#FFD700]/30 glow-sm">
                       <Image
                         src={
-                          user.user_metadata.avatar_url || "/images/profile.png"
+                          user.user_metadata.avatar_url ||
+                          "/images/them/profile.png"
                         }
                         alt={`${nickname}님의 프로필 이미지`}
                         fill
@@ -295,7 +301,7 @@ export default function Header() {
 
                   <div className="space-y-2 border-t border-[#FFD700]/10 pt-4">
                     <Link
-                      href="/my-readings"
+                      href="/record"
                       className="block font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
                       role="menuitem"
                       onClick={() => setIsMenuOpen(false)}

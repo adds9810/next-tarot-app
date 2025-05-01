@@ -11,7 +11,7 @@ interface UserMainProps {
 export default function UserMain({ nickname }: UserMainProps) {
   return (
     <section
-      className="relative min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      className="relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
       role="main"
       aria-label="사용자 메인 페이지"
     >
@@ -128,7 +128,7 @@ export default function UserMain({ nickname }: UserMainProps) {
                 💫
               </motion.div>
               <h2 className="font-title text-xl sm:text-2xl text-[#FFD700] group-hover:text-[#FFE566]">
-                별에게 묻기
+                별에게 질문하기
               </h2>
               <p className="font-body text-[#BFA2DB] group-hover:text-white/90 text-sm sm:text-base">
                 당신만의 특별한 질문으로
@@ -140,7 +140,7 @@ export default function UserMain({ nickname }: UserMainProps) {
 
           {/* 남겨둔 속삭임 읽기 */}
           <Link
-            href="/history"
+            href="/record"
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
           >
             <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
