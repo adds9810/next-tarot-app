@@ -76,7 +76,7 @@ export default function RecordList() {
         title="아직 작성된 기록이 없어요"
         description="처음으로 별 속에 담긴 당신의 이야기를 남겨보세요."
         buttonText="기록하러 가기"
-        buttonLink="/records/new"
+        buttonLink="/records/create"
       />
     );
   }
@@ -92,7 +92,7 @@ export default function RecordList() {
         className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8"
       >
         <Link
-          href="/record/new"
+          href="/record/create"
           className="group relative px-8 py-4 w-full sm:w-auto min-w-[200px] bg-gradient-to-r from-[#FFD700] to-[#FFA500] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
           aria-label="기록 흔적 남기기"
         >

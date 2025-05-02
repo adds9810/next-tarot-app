@@ -12,6 +12,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Card as CardType } from "@/types/card";
 import { Record } from "@/types/record";
 import { useToast } from "@/hooks/use-toast";
+import ClientStarryBackground from "@/components/ClientStarryBackground";
 
 interface PageProps {
   params: {
@@ -26,6 +27,29 @@ export default function RecordDetailPage({ params }: PageProps) {
   const router = useRouter();
   const supabase = createClientComponentClient();
   const { toast } = useToast();
+
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("정말 이 기록을 삭제하시겠어요?");
+    if (!confirmDelete) return;
+
+    const { error } = await supabase
+      .from("records")
+      .delete()
+      .eq("id", params.id);
+
+    if (error) {
+      toast({
+        title: "삭제 실패",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "기록이 삭제되었습니다.",
+      });
+      router.push("/record");
+    }
+  };
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -68,10 +92,19 @@ export default function RecordDetailPage({ params }: PageProps) {
           throw recordError;
         }
 
-        // 2. 연결된 카드 데이터 가져오기
+        // 2. 연결된 카드 데이터 가져오기 (JOIN 방식)
         const { data: cardsData, error: cardsError } = await supabase
           .from("record_cards")
-          .select("*, cards(*)")
+          .select(
+            `
+            type,
+            cards (
+              id,
+              name,
+              keywords
+            )
+          `
+          )
           .eq("record_id", params.id);
 
         if (cardsError) {
@@ -113,13 +146,16 @@ export default function RecordDetailPage({ params }: PageProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black py-12">
-        <div className="container max-w-4xl mx-auto px-4">
-          <div className="bg-black/50 backdrop-blur-lg rounded-xl border border-white/10 p-8">
-            <p className="text-white text-center">로딩 중...</p>
+      <>
+        <ClientStarryBackground />
+        <div className="w-full max-w-2xl p-8 space-y-8 bg-black/30 backdrop-blur-lg rounded-xl border border-white/10">
+          <div className="container max-w-4xl mx-auto px-4">
+            <div className="bg-black/50 backdrop-blur-lg rounded-xl border border-white/10 p-8">
+              <p className="text-white text-center">로딩 중...</p>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -128,67 +164,45 @@ export default function RecordDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-black py-12">
-      <div className="container max-w-4xl mx-auto px-4">
-        <div className="bg-black/50 backdrop-blur-lg rounded-xl border border-white/10 p-8 space-y-8">
-          {/* 헤더 */}
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-white">{record.title}</h1>
-            <p className="text-gray-400">
-              {format(new Date(record.created_at), "PPP", { locale: ko })}
-            </p>
-          </div>
-
-          {/* 이미지 */}
-          {record.images && record.images.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {record.images.map((image: string, index: number) => (
-                <div key={index} className="relative aspect-video">
-                  <img
-                    src={image}
-                    alt={`기록 이미지 ${index + 1}`}
-                    className="rounded-lg object-cover w-full h-full"
-                  />
-                </div>
-              ))}
+    <>
+      {" "}
+      <ClientStarryBackground />
+      <div className="min-h-screen  py-12">
+        <div className="container max-w-4xl mx-auto px-4">
+          <div className="bg-black/30 backdrop-blur-lg rounded-xl border border-white/10 p-8 space-y-8">
+            {/* 헤더 */}
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold text-white">{record.title}</h1>
+              <p className="text-gray-400">
+                {format(new Date(record.created_at), "PPP", { locale: ko })}
+              </p>
             </div>
-          )}
 
-          {/* 내용 */}
-          <div className="prose prose-invert max-w-none">
-            <p className="text-white whitespace-pre-wrap">{record.content}</p>
-          </div>
-
-          {/* 메인 카드 */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-white">메인 카드</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {record.main_cards_data?.map((card: CardType) => (
-                <Card key={card.id} className="bg-white/5 border-white/10 p-4">
-                  <h3 className="text-lg font-medium text-white mb-2">
-                    {card.name}
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {card.keywords.map((keyword: string, index: number) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-white/10 rounded-full text-sm text-white"
-                      >
-                        {keyword}
-                      </span>
-                    ))}
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* 서브 카드 */}
-          {record.sub_cards_data && record.sub_cards_data.length > 0 && (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-white">서브 카드</h2>
+            {/* 이미지 */}
+            {record.images && record.images.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {record.sub_cards_data.map((card: CardType) => (
+                {record.images.map((image: string, index: number) => (
+                  <div key={index} className="relative aspect-video">
+                    <img
+                      src={image}
+                      alt={`기록 이미지 ${index + 1}`}
+                      className="rounded-lg object-cover w-full h-full"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* 내용 */}
+            <div className="prose prose-invert max-w-none">
+              <p className="text-white whitespace-pre-wrap">{record.content}</p>
+            </div>
+
+            {/* 메인 카드 */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-white">메인 카드</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {record.main_cards_data?.map((card: CardType) => (
                   <Card
                     key={card.id}
                     className="bg-white/5 border-white/10 p-4"
@@ -210,43 +224,59 @@ export default function RecordDetailPage({ params }: PageProps) {
                 ))}
               </div>
             </div>
-          )}
 
-          {/* 태그 */}
-          {record.tags && record.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {record.tags.map((tag: string, index: number) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-white/10 rounded-full text-sm text-white"
+            {/* 서브 카드 */}
+            {record.sub_cards_data && record.sub_cards_data.length > 0 && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-white">서브 카드</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {record.sub_cards_data.map((card: CardType) => (
+                    <Card
+                      key={card.id}
+                      className="bg-white/5 border-white/10 p-4"
+                    >
+                      <h3 className="text-lg font-medium text-white mb-2">
+                        {card.name}
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {card.keywords.map((keyword: string, index: number) => (
+                          <span
+                            key={index}
+                            className="px-2 py-1 bg-white/10 rounded-full text-sm text-white"
+                          >
+                            {keyword}
+                          </span>
+                        ))}
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 액션 버튼 */}
+            <div className="flex justify-end gap-4 pt-4 border-t border-white/10">
+              <Link href={`/record/${params.id}/edit`}>
+                <Button
+                  variant="outline"
+                  className="bg-white/5 border-white/10 text-white hover:bg-white/10"
                 >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* 액션 버튼 */}
-          <div className="flex justify-end gap-4 pt-4 border-t border-white/10">
-            <Link href={`/record/${params.id}/edit`}>
+                  <Pencil className="w-4 h-4 mr-2" />
+                  수정
+                </Button>
+              </Link>
               <Button
-                variant="outline"
-                className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                onClick={handleDelete}
+                variant="destructive"
+                className="bg-red-500/10 border-red-500/20 text-red-500 hover:bg-red-500/20"
               >
-                <Pencil className="w-4 h-4 mr-2" />
-                수정
+                <Trash2 className="w-4 h-4 mr-2" />
+                삭제
               </Button>
-            </Link>
-            <Button
-              variant="destructive"
-              className="bg-red-500/10 border-red-500/20 text-red-500 hover:bg-red-500/20"
-            >
-              <Trash2 className="w-4 h-4 mr-2" />
-              삭제
-            </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

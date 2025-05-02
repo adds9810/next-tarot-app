@@ -1,214 +1,236 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Card } from "@/types/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import CardSelector from "./CardSelector";
+import { useToast } from "@/hooks/use-toast";
+import CardSelector from "@/components/record/CardSelector";
 import { Plus, X } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 interface RecordFormProps {
+  initialTitle?: string;
+  initialContent?: string;
+  initialImages?: string[];
+  initialMainCards?: Card[];
+  initialSubCards?: Card[];
   onSubmit: (formData: {
     title: string;
     content: string;
-    image: File[];
-    tags: string[];
-  }) => void;
-  mainCards: Card[];
-  subCards: Card[];
-  onMainCardsChange: (cards: Card[]) => void;
-  onSubCardsChange: (cards: Card[]) => void;
-  isSubmitting: boolean;
+    images: string[];
+    mainCards: Card[];
+    subCards: Card[];
+  }) => Promise<void>;
+  isLoading?: boolean;
+  redirectPathOnSuccess?: string;
 }
 
 export default function RecordForm({
+  initialTitle = "",
+  initialContent = "",
+  initialImages = [],
+  initialMainCards = [],
+  initialSubCards = [],
   onSubmit,
-  isSubmitting,
-  mainCards,
-  subCards,
-  onMainCardsChange,
-  onSubCardsChange,
+  isLoading = false,
+  redirectPathOnSuccess = "/record",
 }: RecordFormProps) {
+  const [title, setTitle] = useState(initialTitle);
+  const [content, setContent] = useState(initialContent);
+  const [images, setImages] = useState<string[]>(initialImages);
+  const [mainCards, setMainCards] = useState<Card[]>(initialMainCards);
+  const [subCards, setSubCards] = useState<Card[]>(initialSubCards);
   const { toast } = useToast();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState<File[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
+  const router = useRouter();
+
+  const [errors, setErrors] = useState<{
+    title?: string;
+    content?: string;
+    mainCards?: string;
+  }>({});
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    if (image.length + files.length > 5) {
+    if (images.length + files.length > 5) {
       toast({
         title: "이미지는 최대 5장까지 업로드할 수 있습니다",
         variant: "destructive",
       });
       return;
     }
-    setImage([...image, ...files]);
+    setImages([...images, ...files.map((file) => URL.createObjectURL(file))]);
   };
 
   const removeImage = (index: number) => {
-    setImage(image.filter((_, i) => i !== index));
+    setImages(images.filter((_, i) => i !== index));
   };
 
-  const addTag = () => {
-    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
-      setTags([...tags, tagInput.trim()]);
-      setTagInput("");
-    }
+  const validateForm = () => {
+    const newErrors: {
+      title?: string;
+      content?: string;
+      mainCards?: string;
+    } = {};
+
+    if (!title.trim()) newErrors.title = "제목을 입력해 주세요";
+    if (!content.trim()) newErrors.content = "내용을 입력해 주세요";
+    if (mainCards.length === 0)
+      newErrors.mainCards = "메인 카드를 최소 1장 이상 선택해주세요";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (mainCards.length === 0) {
-      toast({
-        title: "메인 카드를 최소 1장 이상 선택해주세요",
-        variant: "destructive",
-      });
-      return;
+    if (!validateForm()) return;
+
+    await onSubmit({ title, content, images, mainCards, subCards });
+
+    if (redirectPathOnSuccess) {
+      router.push(redirectPathOnSuccess); // ✅ 여기서 이동
     }
-    onSubmit({
-      title,
-      content,
-      image,
-      tags,
-    });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="title">제목</Label>
-        <Input
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          maxLength={50}
-          required
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div>
+          <div className="space-y-2">
+            <Label htmlFor="title" className="text-white">
+              제목
+            </Label>
+            <Input
+              id="title"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                if (errors.title) setErrors({ ...errors, title: undefined });
+              }}
+              maxLength={50}
+              className={cn(
+                "bg-white/5 border-white/10 text-white placeholder:text-gray-500",
+                errors.title && "border-red-500"
+              )}
+              placeholder="제목을 입력하세요"
+            />
+            {errors.title && (
+              <p className="text-sm text-red-500">{errors.title}</p>
+            )}
+          </div>
+
+          <div className="mt-2 space-y-2">
+            <Label htmlFor="content" className="text-white">
+              내용
+            </Label>
+            <Textarea
+              id="content"
+              value={content}
+              onChange={(e) => {
+                setContent(e.target.value);
+                if (errors.content)
+                  setErrors({ ...errors, content: undefined });
+              }}
+              className={cn(
+                "min-h-[200px] bg-white/5 border-white/10 text-white placeholder:text-gray-500",
+                errors.content && "border-red-500"
+              )}
+              placeholder="내용을 입력하세요"
+            />
+            {errors.content && (
+              <p className="text-sm text-red-500">{errors.content}</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label className="text-white">이미지 (최대 5장)</Label>
+            <Input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+              className="hidden"
+              id="image-upload"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10"
+              onClick={() => document.getElementById("image-upload")?.click()}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              이미지 추가
+            </Button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {images.map((url, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={url}
+                    alt={`Uploaded ${index + 1}`}
+                    className="w-full h-[200px] object-cover rounded-md"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => removeImage(index)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-white">메인 카드</Label>
+          <CardSelector
+            type="main"
+            selectedCards={mainCards}
+            onChange={setMainCards}
+            maxCards={10}
+            excludeCardIds={subCards.map((card) => card.id)}
+          />
+          {errors.mainCards && (
+            <p className="text-sm text-red-500">{errors.mainCards}</p>
+          )}
+        </div>
+
+        <div className=" space-y-2">
+          <Label className="text-white">서브 카드</Label>
+          <CardSelector
+            type="sub"
+            selectedCards={subCards}
+            onChange={setSubCards}
+            maxCards={10}
+            excludeCardIds={mainCards.map((card) => card.id)}
+          />
+        </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="content">내용</Label>
-        <Textarea
-          id="content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="min-h-[200px]"
-          required
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>이미지 (최대 5장)</Label>
-        <Input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleImageChange}
-          className="hidden"
-          id="image-upload"
-        />
+      <div className="flex justify-between pt-4 border-t border-white/10">
         <Button
           type="button"
-          variant="outline"
-          className="w-full"
-          onClick={() => document.getElementById("image-upload")?.click()}
+          onClick={() => router.push("/record")}
+          className="text-sm text-white underline hover:text-gray-300 transition"
         >
-          <Plus className="mr-2 h-4 w-4" />
-          이미지 추가
+          취소하고 목록으로
         </Button>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {image.map((file, index) => (
-            <div key={index} className="relative group">
-              <img
-                src={URL.createObjectURL(file)}
-                alt={`Uploaded ${index + 1}`}
-                className="w-full h-[200px] object-cover rounded-md"
-              />
-              <Button
-                type="button"
-                variant="destructive"
-                size="sm"
-                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() => removeImage(index)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      <div className="space-y-2">
-        <Label>메인 카드</Label>
-        <CardSelector
-          selectedCards={mainCards}
-          onChange={onMainCardsChange}
-          maxCards={10}
-          isMain={true}
-        />
+        <Button
+          type="submit"
+          className="bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black hover:from-[#FFA500] hover:to-[#FFD700] transition-all duration-300"
+          disabled={isLoading}
+        >
+          {isLoading ? "저장 중..." : "저장"}
+        </Button>
       </div>
-
-      <div className="space-y-2">
-        <Label>서브 카드</Label>
-        <CardSelector
-          selectedCards={subCards}
-          onChange={onSubCardsChange}
-          maxCards={10}
-          isMain={false}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>태그</Label>
-        <div className="flex gap-2">
-          <Input
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                addTag();
-              }
-            }}
-            placeholder="태그 입력 후 Enter"
-          />
-          <Button type="button" onClick={addTag}>
-            추가
-          </Button>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <div
-              key={tag}
-              className="flex items-center gap-1 bg-secondary px-2 py-1 rounded-md"
-            >
-              <span>{tag}</span>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => removeTag(tag)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? "저장 중..." : "저장"}
-      </Button>
     </form>
   );
 }

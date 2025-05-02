@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Card } from "@/types/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import type { Card } from "@/types/card";
 import {
   Command,
   CommandEmpty,
@@ -18,216 +15,158 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Check, ChevronsUpDown, Search, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-
-interface Deck {
-  id: string;
-  name: string;
-}
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 interface CardSelectorProps {
+  type: "main" | "sub";
   selectedCards: Card[];
   onChange: (cards: Card[]) => void;
-  maxCards: number;
-  isMain: boolean;
+  maxCards?: number;
+  excludeCardIds?: string[]; // ✅ 추가
 }
 
 export default function CardSelector({
+  type,
   selectedCards,
   onChange,
-  maxCards,
-  isMain,
+  maxCards = 10,
+  excludeCardIds,
 }: CardSelectorProps) {
-  const { toast } = useToast();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [cards, setCards] = useState<Card[]>([]);
-  const [decks, setDecks] = useState<Deck[]>([]);
-  const [selectedDeck, setSelectedDeck] = useState<string>("all");
   const [open, setOpen] = useState(false);
+  const [cards, setCards] = useState<Card[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const supabase = createClientComponentClient();
 
   useEffect(() => {
-    fetchDecks();
-  }, []);
+    const fetchCards = async () => {
+      const { data, error } = await supabase
+        .from("cards")
+        .select("*")
+        .order("name");
 
-  useEffect(() => {
-    fetchCards();
-  }, [selectedDeck]);
-
-  const fetchDecks = async () => {
-    try {
-      const supabase = createClientComponentClient();
-      const { data, error } = await supabase.from("decks").select("*");
-      if (error) throw error;
-      setDecks(data || []);
-    } catch (error) {
-      console.error("Error fetching decks:", error);
-      toast({
-        title: "덱 목록을 불러오는데 실패했습니다",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const fetchCards = async () => {
-    try {
-      const supabase = createClientComponentClient();
-      let query = supabase.from("cards").select("*");
-
-      if (selectedDeck !== "all") {
-        query = query.eq("deck_id", selectedDeck);
+      if (error) {
+        console.error("Error fetching cards:", error);
+        return;
       }
 
-      const { data, error } = await query;
-      if (error) throw error;
       setCards(data || []);
-    } catch (error) {
-      console.error("Error fetching cards:", error);
-      toast({
-        title: "카드 목록을 불러오는데 실패했습니다",
-        variant: "destructive",
-      });
-    }
-  };
+    };
 
-  const handleCardSelect = async (card: Card) => {
+    fetchCards();
+  }, [supabase]);
+
+  const filteredCards = cards.filter((card) => {
+    const searchLower = searchQuery.toLowerCase();
+
+    // 🔽 1. excludeCardIds에 포함된 카드면 제외
+    const isExcluded = excludeCardIds?.includes(card.id);
+    if (isExcluded) return false;
+
+    // 🔽 2. 검색 필터
+    return (
+      card.name.toLowerCase().includes(searchLower) ||
+      card.keywords.some((keyword) =>
+        keyword.toLowerCase().includes(searchLower)
+      ) ||
+      card.deck_name.toLowerCase().includes(searchLower)
+    );
+  });
+
+  const handleSelect = (card: Card) => {
     if (selectedCards.length >= maxCards) {
-      toast({
-        title: `최대 ${maxCards}장까지만 선택할 수 있습니다`,
-        variant: "destructive",
-      });
       return;
     }
 
     if (selectedCards.some((selected) => selected.id === card.id)) {
-      toast({
-        title: "이미 선택된 카드입니다",
-        variant: "destructive",
-      });
       return;
     }
 
-    const newSelectedCards = [...selectedCards, card];
-    onChange(newSelectedCards);
+    onChange([...selectedCards, card]);
+    setOpen(false);
+    setSearchQuery("");
   };
 
-  const handleCardRemove = (cardId: string) => {
-    const newSelectedCards = selectedCards.filter((card) => card.id !== cardId);
-    onChange(newSelectedCards);
+  const handleRemove = (cardId: string) => {
+    onChange(selectedCards.filter((card) => card.id !== cardId));
   };
-
-  const filteredCards = cards.filter(
-    (card) =>
-      card.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      card.keywords.some((keyword) =>
-        keyword.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-  );
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2 overflow-x-auto pb-2">
-        <Button
-          variant={selectedDeck === "all" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setSelectedDeck("all")}
-          className={
-            selectedDeck === "all"
-              ? "bg-white/10 text-white"
-              : "text-black hover:text-white hover:bg-white/10"
-          }
-        >
-          전체
-        </Button>
-        {decks.map((deck) => (
-          <Button
-            key={deck.id}
-            variant={selectedDeck === deck.id ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedDeck(deck.id)}
-            className={
-              selectedDeck === deck.id
-                ? "bg-white/10 text-white"
-                : "text-black hover:text-white hover:bg-white/10"
-            }
-          >
-            {deck.name}
-          </Button>
-        ))}
-      </div>
-
-      <div className="relative">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="카드명 또는 키워드로 검색"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-8 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
-        />
-      </div>
-
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between bg-white/5 border-white/10 text-white hover:bg-white/10"
+            className="w-full justify-between bg-[#1C1635]/50 border-[#FFD700]/10 text-white hover:bg-[#1C1635]/70 hover:border-[#FFD700]/30"
           >
-            {isMain ? "메인 카드 선택" : "서브 카드 선택"}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            {type === "main" ? "메인 카드 선택" : "서브 카드 선택"}
+            <span className="text-[#BFA2DB] text-sm">
+              {selectedCards.length}/{maxCards}
+            </span>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0">
-          <Command>
-            <CommandInput placeholder="카드 검색..." />
-            <CommandEmpty>카드를 찾을 수 없습니다.</CommandEmpty>
-            <CommandGroup>
-              <ScrollArea className="h-[200px]">
-                {filteredCards.map((card) => (
-                  <CommandItem
-                    key={card.id}
-                    onSelect={() => {
-                      handleCardSelect(card);
-                      setOpen(false);
-                    }}
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        selectedCards.some((c) => c.id === card.id)
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                    />
-                    {card.name}
-                  </CommandItem>
-                ))}
-              </ScrollArea>
+        <PopoverContent className="w-full p-0 bg-[#1C1635] border-[#FFD700]/10">
+          <Command className="w-full">
+            <CommandInput
+              placeholder="카드명, 키워드, 덱 이름으로 검색..."
+              value={searchQuery}
+              onValueChange={setSearchQuery}
+              className="border-none focus:ring-0 text-white placeholder:text-[#BFA2DB]/50"
+            />
+            <CommandEmpty className="py-6 text-center text-[#BFA2DB]">
+              검색 결과가 없습니다.
+            </CommandEmpty>
+            <CommandGroup className="max-h-[300px] overflow-auto">
+              {filteredCards.map((card) => (
+                <CommandItem
+                  key={card.id}
+                  value={card.name}
+                  onSelect={() => handleSelect(card)}
+                  className="text-white hover:bg-[#281C40] cursor-pointer"
+                  disabled={selectedCards.some(
+                    (selected) => selected.id === card.id
+                  )}
+                >
+                  <div className="flex flex-col">
+                    <span className="font-medium">{card.name}</span>
+                    <span className="text-sm text-[#BFA2DB]">
+                      {card.deck_name} • {card.keywords.join(", ")}
+                    </span>
+                  </div>
+                </CommandItem>
+              ))}
             </CommandGroup>
           </Command>
         </PopoverContent>
       </Popover>
 
-      <div className="space-y-2">
-        {selectedCards.map((card) => (
-          <div
-            key={card.id}
-            className="flex items-center justify-between rounded-md border border-white/10 p-2 bg-white/5"
-          >
-            <span className="text-white">{card.name}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-white hover:bg-white/10"
-              onClick={() => handleCardRemove(card.id)}
+      {selectedCards.length > 0 && (
+        <div className="space-y-2">
+          {selectedCards.map((card) => (
+            <div
+              key={card.id}
+              className="flex items-center justify-between p-3 bg-[#1C1635]/50 border border-[#FFD700]/10 rounded-lg"
             >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        ))}
-      </div>
+              <div className="flex flex-col">
+                <span className="font-medium text-white">{card.name}</span>
+                <span className="text-sm text-[#BFA2DB]">
+                  {card.deck_name} • {card.keywords.join(", ")}
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => handleRemove(card.id)}
+                className="h-8 w-8 text-[#BFA2DB] hover:text-white hover:bg-[#281C40]"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

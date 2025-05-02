@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   // 로그인 필요 페이지
-  const protectedRoutes = ["/record", "/record/new", "/record/", "/profile"];
+  const protectedRoutes = ["/record", "/record/create", "/record/", "/profile"];
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );
