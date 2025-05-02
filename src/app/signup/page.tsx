@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { AuthError } from "@supabase/supabase-js";
 import Link from "next/link";
 
 export default function SignUp() {
   const router = useRouter();
+  const supabase = createClientComponentClient();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,9 +30,9 @@ export default function SignUp() {
     }
 
     let combinationCount = 0;
-    if (hasUpperCase || hasLowerCase) combinationCount++; // 영문 포함
-    if (hasNumbers) combinationCount++; // 숫자 포함
-    if (hasSpecialChar) combinationCount++; // 특수문자 포함
+    if (hasUpperCase || hasLowerCase) combinationCount++;
+    if (hasNumbers) combinationCount++;
+    if (hasSpecialChar) combinationCount++;
 
     if (combinationCount < 2) {
       return "별자리 암호는 영문, 숫자, 특수문자 중 2가지 이상을 포함해야 합니다";
@@ -51,7 +52,6 @@ export default function SignUp() {
     setLoading(true);
     setError(null);
 
-    // 비밀번호 유효성 검사
     const passwordValidationError = validatePassword(password);
     if (passwordValidationError) {
       setError(passwordValidationError);
@@ -73,6 +73,7 @@ export default function SignUp() {
           data: {
             nickname: name,
           },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
@@ -93,6 +94,7 @@ export default function SignUp() {
       setLoading(false);
     }
   };
+
   const handleGoogleSignUp = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -107,21 +109,13 @@ export default function SignUp() {
       });
       if (error) throw error;
     } catch (error) {
-      if (error instanceof AuthError) {
-        setError(error.message);
-      } else {
-        setError("Google 로그인 중 오류가 발생했습니다.");
-      }
+      setError("Google 로그인 중 오류가 발생했습니다.");
     }
   };
 
   return (
-    <section
-      className="relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
-      aria-label="회원가입 섹션"
-    >
+    <section className="relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
       <div className="relative z-20 text-center w-full max-w-lg mx-auto animate-fade-in">
-        {/* 감성적 소개 문구 */}
         <section className="mb-8 space-y-4" aria-label="서비스 소개">
           <h1 className="font-title text-3xl md:text-4xl text-[#FFD700] mb-4 drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
             당신만의 <br className="md:hidden" /> 별자리를 등록하고
@@ -131,10 +125,9 @@ export default function SignUp() {
           </p>
         </section>
 
-        {/* 회원가입 폼 */}
         <div className="w-full animate-fade-in-delay">
           <div className="p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-200">
-            {/* 소셜 회원가입 버튼 */}
+            {/* 소셜 회원가입 */}
             <div className="space-y-3 mb-6">
               <button
                 onClick={handleGoogleSignUp}
@@ -148,15 +141,17 @@ export default function SignUp() {
                 </svg>
                 Google로 별자리 등록하기
               </button>
-            </div>{" "}
+            </div>
+
             <div className="relative flex items-center justify-center mb-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[#FFD700]/20"></div>
+                <div className="w-full border-t border-[#FFD700]/20" />
               </div>
               <div className="relative bg-[#281C40] px-4 text-sm text-[#BFA2DB] font-body">
                 또는 이메일로 등록하기
               </div>
             </div>
+
             <form onSubmit={handleSignUp} className="space-y-6">
               <div className="text-left">
                 <label
@@ -176,6 +171,7 @@ export default function SignUp() {
                   aria-required="true"
                 />
               </div>
+
               <div className="text-left">
                 <label
                   htmlFor="email"
@@ -194,6 +190,7 @@ export default function SignUp() {
                   aria-required="true"
                 />
               </div>
+
               <div className="text-left">
                 <label
                   htmlFor="password"
@@ -208,27 +205,23 @@ export default function SignUp() {
                   onChange={handlePasswordChange}
                   className={`w-full px-4 py-3 bg-[#0B0C2A]/80 border ${
                     passwordError ? "border-red-500" : "border-[#FFD700]/10"
-                  } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700]/30 focus:border-[#FFD700]/30 hover:border-[#FFD700]/30 transition-all duration-300 font-body text-base`}
+                  } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700]/30 transition-all duration-300 font-body text-base`}
                   placeholder="비밀번호를 입력해주세요"
                   required
-                  aria-required="true"
-                  minLength={6}
                 />
                 {passwordError && (
                   <p className="mt-1 text-xs text-red-400 font-body">
                     {passwordError}
                   </p>
                 )}
-                <p className="mt-1 text-xs text-[#BFA2DB]/70 font-body">
-                  8~16자의 영문, 숫자, 특수문자 중 2가지 이상을 조합해 주세요.
-                </p>
               </div>
+
               <div className="text-left">
                 <label
                   htmlFor="confirmPassword"
                   className="block font-body text-base text-[#BFA2DB] mb-2"
                 >
-                  당신만의 비밀 열쇠 재확인
+                  비밀 열쇠 재확인
                 </label>
                 <input
                   id="confirmPassword"
@@ -240,7 +233,7 @@ export default function SignUp() {
                     password !== confirmPassword && confirmPassword
                       ? "border-red-500"
                       : "border-[#FFD700]/10"
-                  } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700]/30 focus:border-[#FFD700]/30 hover:border-[#FFD700]/30 transition-all duration-300 font-body`}
+                  } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700]/30 transition-all duration-300 font-body text-base`}
                   placeholder="비밀번호를 다시 한 번 입력하세요"
                 />
                 {password !== confirmPassword && confirmPassword && (
@@ -268,12 +261,13 @@ export default function SignUp() {
                 {loading ? "별자리 생성 중..." : "나만의 별자리 완성하기"}
               </button>
             </form>
+
             <div className="mt-6 text-center text-base text-[#BFA2DB] font-body">
               <p>
                 이미 별자리가 있으신가요?{" "}
                 <Link
                   href="/login"
-                  className="text-[#FFD700] hover:text-[#FFE566] transition-colors hover:underline decoration-[#FFD700]/30 underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-sm block md:inline"
+                  className="text-[#FFD700] hover:text-[#FFE566] hover:underline underline-offset-4 decoration-[#FFD700]/30 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-sm block md:inline"
                 >
                   별의 문 열기
                 </Link>

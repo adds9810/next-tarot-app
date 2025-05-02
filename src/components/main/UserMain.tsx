@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 interface UserMainProps {
@@ -15,50 +14,6 @@ export default function UserMain({ nickname }: UserMainProps) {
       role="main"
       aria-label="사용자 메인 페이지"
     >
-      {/* 배경 이미지 */}
-      <div className="absolute inset-0 z-0" aria-hidden="true">
-        <Image
-          src="/images/starry-night.jpg"
-          alt="별이 빛나는 밤하늘 배경"
-          fill
-          priority
-          className="object-cover object-center"
-          quality={100}
-          sizes="100vw"
-          style={{
-            objectPosition: "center",
-            opacity: 0.6,
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#070817]/60 via-[#1C1635]/80 to-[#070817] z-10" />
-
-        {/* 별빛 효과 */}
-        {[...Array(30)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: [0, 1, 0],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-            className="absolute"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              width: `${Math.random() * 3 + 1}px`,
-              height: `${Math.random() * 3 + 1}px`,
-              background: "#FFD700",
-            }}
-            aria-hidden="true"
-          />
-        ))}
-      </div>
-
       {/* 메인 콘텐츠 */}
       <div className="relative z-20 w-full max-w-6xl mx-auto space-y-12">
         {/* 환영 메시지 */}
