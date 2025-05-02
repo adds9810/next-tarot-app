@@ -16,14 +16,16 @@ export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   // 로그인 필요 페이지
-  const protectedRoutes = ["/record", "/profile", "/dashboard"];
+  const protectedRoutes = ["/record", "/record/new", "/record/", "/profile"];
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );
 
   // 보호된 경로 → 비로그인 상태면 로그인으로
   if (isProtectedRoute && !session) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("message", "회원만 접근 가능한 페이지입니다.");
+    return NextResponse.redirect(loginUrl);
   }
 
   // /auth 경로 → /login, /signup으로 정리
@@ -39,5 +41,10 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico|images|fonts|api).*)"], // 정적 자원 제외
+  // matcher: ["/((?!_next|favicon.ico|images|fonts|api).*)"], // 정적 자원 제외
+  matcher: [
+    // 보호가 필요한 모든 경로 작성
+    "/record/:path*",
+    "/profile",
+  ],
 };

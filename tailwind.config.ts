@@ -14,11 +14,19 @@ const config: Config = {
       },
       borderColor: {
         border: "hsl(var(--border))",
+        destructive: "hsl(var(--destructive))",
+      },
+      textColor: {
+        "destructive-foreground": "hsl(var(--destructive-foreground))",
       },
       colors: {
         border: "hsl(var(--border))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        destructive: {
+          DEFAULT: "hsl(0, 100%, 50%)",
+          foreground: "hsl(0, 100%, 100%)",
+        },
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

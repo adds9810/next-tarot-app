@@ -19,7 +19,7 @@ export default function EmptyState({
   buttonLink,
 }: EmptyStateProps) {
   return (
-    <div className="text-center py-12 px-6">
+    <div className="text-center py-12 px-6 animate-fade-in-delay">
       <p className="text-gray-500 text-lg">{title}</p>
       <p className="text-sm text-gray-400 mt-2">{description}</p>
 
@@ -27,7 +27,7 @@ export default function EmptyState({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}
-        className="mt-8"
+        className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8"
       >
         <Link
           href={buttonLink}

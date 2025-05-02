@@ -18,6 +18,8 @@
   --font-body: "Pretendard", sans-serif;
   --font-logo: "Marcellus", serif;
   --component-bg: #1c1635;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 100% 100%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -499,8 +501,6 @@ body {
          hover:underline decoration-[#FFD700]/30 underline-offset-4;
 }
 
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -556,8 +556,6 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {

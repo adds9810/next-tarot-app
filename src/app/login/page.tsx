@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { Provider } from "@supabase/supabase-js";
+
+import { useSearchParams } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,6 +15,9 @@ export default function Login() {
   const [error, setError] = useState("");
   const router = useRouter();
   const supabase = createClientComponentClient();
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
+  const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,6 +62,18 @@ export default function Login() {
       setError("소셜 로그인 중 오류가 발생했습니다.");
     }
   };
+
+  useEffect(() => {
+    if (message) {
+      toast({
+        title: "로그인이 필요합니다.",
+        description: "회원만 접근 가능한 페이지입니다.",
+        variant: "destructive",
+      });
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, "", newUrl);
+    }
+  }, [message]);
 
   return (
     <section
