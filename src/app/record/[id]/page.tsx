@@ -57,28 +57,38 @@ export default function RecordDetailPage({ params }: PageProps) {
       if (!isAuthenticated) return;
 
       try {
-        const { data, error: recordError } = await supabase
+        // 1. 기록 데이터 가져오기
+        const { data: recordData, error: recordError } = await supabase
           .from("records")
-          .select(
-            `
-            *,
-            main_cards_data:main_cards(cards(*)),
-            sub_cards_data:sub_cards(cards(*))
-          `
-          )
+          .select("*")
           .eq("id", params.id)
           .single();
 
-        if (recordError) {
+        if (recordError || !recordData) {
           throw recordError;
         }
 
-        if (!data) {
-          router.replace("/record");
-          return;
+        // 2. 연결된 카드 데이터 가져오기
+        const { data: cardsData, error: cardsError } = await supabase
+          .from("record_cards")
+          .select("*, cards(*)")
+          .eq("record_id", params.id);
+
+        if (cardsError) {
+          throw cardsError;
         }
 
-        setRecord(data as Record);
+        const mainCards =
+          cardsData?.filter((c) => c.type === "main").map((c) => c.cards) || [];
+
+        const subCards =
+          cardsData?.filter((c) => c.type === "sub").map((c) => c.cards) || [];
+
+        setRecord({
+          ...recordData,
+          main_cards_data: mainCards,
+          sub_cards_data: subCards,
+        } as Record);
       } catch (error) {
         console.error("Error fetching record:", error);
         toast({

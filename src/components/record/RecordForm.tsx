@@ -14,49 +14,45 @@ interface RecordFormProps {
   onSubmit: (formData: {
     title: string;
     content: string;
-    images: File[];
-    mainCards: Card[];
-    subCards: Card[];
+    image: File[];
     tags: string[];
   }) => void;
+  mainCards: Card[];
+  subCards: Card[];
+  onMainCardsChange: (cards: Card[]) => void;
+  onSubCardsChange: (cards: Card[]) => void;
   isSubmitting: boolean;
 }
 
 export default function RecordForm({
   onSubmit,
   isSubmitting,
+  mainCards,
+  subCards,
+  onMainCardsChange,
+  onSubCardsChange,
 }: RecordFormProps) {
   const { toast } = useToast();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [images, setImages] = useState<File[]>([]);
-  const [mainCards, setMainCards] = useState<Card[]>([]);
-  const [subCards, setSubCards] = useState<Card[]>([]);
+  const [image, setImage] = useState<File[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    if (images.length + files.length > 5) {
+    if (image.length + files.length > 5) {
       toast({
         title: "이미지는 최대 5장까지 업로드할 수 있습니다",
         variant: "destructive",
       });
       return;
     }
-    setImages([...images, ...files]);
+    setImage([...image, ...files]);
   };
 
   const removeImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index));
-  };
-
-  const handleMainCardsChange = (cards: Card[]) => {
-    setMainCards(cards);
-  };
-
-  const handleSubCardsChange = (cards: Card[]) => {
-    setSubCards(cards);
+    setImage(image.filter((_, i) => i !== index));
   };
 
   const addTag = () => {
@@ -82,9 +78,7 @@ export default function RecordForm({
     onSubmit({
       title,
       content,
-      images,
-      mainCards,
-      subCards,
+      image,
       tags,
     });
   };
@@ -133,7 +127,7 @@ export default function RecordForm({
           이미지 추가
         </Button>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {images.map((file, index) => (
+          {image.map((file, index) => (
             <div key={index} className="relative group">
               <img
                 src={URL.createObjectURL(file)}
@@ -158,7 +152,7 @@ export default function RecordForm({
         <Label>메인 카드</Label>
         <CardSelector
           selectedCards={mainCards}
-          onChange={handleMainCardsChange}
+          onChange={onMainCardsChange}
           maxCards={10}
           isMain={true}
         />
@@ -168,7 +162,7 @@ export default function RecordForm({
         <Label>서브 카드</Label>
         <CardSelector
           selectedCards={subCards}
-          onChange={handleSubCardsChange}
+          onChange={onSubCardsChange}
           maxCards={10}
           isMain={false}
         />

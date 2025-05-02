@@ -10,7 +10,7 @@ interface Record {
   content: string;
   created_at: string;
   cards?: string[];
-  image_urls: string[];
+  images: string[];
 }
 
 interface RecordCardProps {

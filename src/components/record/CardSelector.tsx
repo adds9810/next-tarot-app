@@ -135,7 +135,7 @@ export default function CardSelector({
           className={
             selectedDeck === "all"
               ? "bg-white/10 text-white"
-              : "text-white hover:bg-white/10"
+              : "text-black hover:text-white hover:bg-white/10"
           }
         >
           전체
