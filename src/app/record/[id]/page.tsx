@@ -165,7 +165,6 @@ export default function RecordDetailPage({ params }: PageProps) {
 
   return (
     <>
-      {" "}
       <ClientStarryBackground />
       <div className="min-h-screen  py-12">
         <div className="container max-w-4xl mx-auto px-4">

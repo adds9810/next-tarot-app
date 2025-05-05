@@ -85,15 +85,15 @@ export default function Header() {
   const menuItems = user
     ? [
         // { href: "/fortune", label: "오늘의 운세" },
-        // { href: "/chat", label: "타로 상담" },
+        { href: "/tarot", label: "당신을 위한 카드" },
         { href: "/post", label: "커뮤니티" },
-        { href: "/record", label: "흔적" },
+        { href: "/record", label: "속삭임의 흔적" },
       ]
     : [
         // { href: "/fortune", label: "오늘의 운세" },
-        // { href: "/chat", label: "타로 상담" },
+        { href: "/tarot", label: "당신을 위한 카드" },
         { href: "/post", label: "커뮤니티" },
-        { href: "/record", label: "흔적" },
+        { href: "/record", label: "속삭임의 흔적" },
       ];
 
   return (
