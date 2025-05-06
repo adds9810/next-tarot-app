@@ -4,4 +4,5 @@ export interface Card {
   keywords: string[];
   deck_id: string;
   deck_name: string;
+  image: string;
 }

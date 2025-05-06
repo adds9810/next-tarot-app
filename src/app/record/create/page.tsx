@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import RecordForm from "@/components/record/RecordForm"; // 분리된 폼 컴포넌트
+import RecordForm from "@/components/record/RecordForm";
 import { useToast } from "@/hooks/use-toast";
 import ClientStarryBackground from "@/components/ClientStarryBackground";
 import { Card } from "@/types/card";
@@ -14,10 +15,38 @@ type RecordFormData = {
   mainCards: Card[];
   subCards: Card[];
 };
+
 export default function CreateRecordPage() {
   const supabase = createClientComponentClient();
   const router = useRouter();
   const { toast } = useToast();
+
+  const [initialValues, setInitialValues] = useState<Partial<RecordFormData>>(
+    {}
+  );
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem("tarot_temp_record");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setInitialValues({
+        title: parsed.title || "오늘의 운세",
+        content: parsed.content || "",
+        mainCards: [
+          {
+            id: parsed.main_card_id || "1", // ID는 임시, 실제 연결 시 cards 테이블과 맞춰야 함
+            name: parsed.main_card_name || "",
+            image: parsed.main_card_image || "",
+            keywords: parsed.main_card_keywords || [],
+            deck_id: "1",
+            deck_name: "Universal Tarot",
+          },
+        ],
+        subCards: [],
+        images: [],
+      });
+    }
+  }, []);
 
   const handleCreate = async ({
     title,
@@ -91,7 +120,17 @@ export default function CreateRecordPage() {
           <h1 className="text-4xl font-bold text-white mb-2">새로운 기록</h1>
           <p className="text-gray-400">타로 카드 기록을 남겨보세요</p>
         </div>
-        <RecordForm onSubmit={handleCreate} redirectPathOnSuccess="/record" />
+        {initialValues.title !== undefined && (
+          <RecordForm
+            initialTitle={initialValues.title}
+            initialContent={initialValues.content}
+            initialMainCards={initialValues.mainCards}
+            initialSubCards={initialValues.subCards}
+            initialImages={initialValues.images}
+            onSubmit={handleCreate}
+            redirectPathOnSuccess="/record"
+          />
+        )}
       </div>
     </div>
   );

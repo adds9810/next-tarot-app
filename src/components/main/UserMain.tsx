@@ -47,7 +47,7 @@ export default function UserMain({ nickname }: UserMainProps) {
         >
           {/* 별의 흐름 따라가기 */}
           <Link
-            href="/fortune"
+            href="/tarot"
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
           >
             <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
@@ -71,7 +71,7 @@ export default function UserMain({ nickname }: UserMainProps) {
 
           {/* 별에게 묻기 */}
           <Link
-            href="/chat"
+            href="/tarot"
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
           >
             <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
