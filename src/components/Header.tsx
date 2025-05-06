@@ -84,16 +84,14 @@ export default function Header() {
 
   const menuItems = user
     ? [
-        // { href: "/fortune", label: "오늘의 운세" },
         { href: "/tarot", label: "당신을 위한 카드" },
-        { href: "/post", label: "커뮤니티" },
         { href: "/record", label: "속삭임의 흔적" },
+        { href: "/post", label: "커뮤니티" },
       ]
     : [
-        // { href: "/fortune", label: "오늘의 운세" },
         { href: "/tarot", label: "당신을 위한 카드" },
-        { href: "/post", label: "커뮤니티" },
         { href: "/record", label: "속삭임의 흔적" },
+        { href: "/post", label: "커뮤니티" },
       ];
 
   return (
