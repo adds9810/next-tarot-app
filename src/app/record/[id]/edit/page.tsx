@@ -14,18 +14,6 @@ interface PageProps {
   };
 }
 
-type RawRecordCardLink = {
-  type: "main" | "sub";
-  cards: {
-    id: string;
-    name: string;
-    keywords: string[];
-    image_url: string;
-    deck_id: string;
-    deck_name: string;
-  } | null;
-};
-
 export default function EditRecordPage({ params }: PageProps) {
   const router = useRouter();
   const supabase = createClientComponentClient();
@@ -35,6 +23,8 @@ export default function EditRecordPage({ params }: PageProps) {
   const [record, setRecord] = useState<{
     title: string;
     content: string;
+    interpretation: string;
+    feedback: string;
     image_urls: string[];
     mainCards: Card[];
     subCards: Card[];
@@ -43,6 +33,7 @@ export default function EditRecordPage({ params }: PageProps) {
   useEffect(() => {
     const fetchRecord = async () => {
       try {
+        // 1. 기록 본문 불러오기
         const { data: recordData, error: recordError } = await supabase
           .from("records")
           .select("*")
@@ -51,6 +42,7 @@ export default function EditRecordPage({ params }: PageProps) {
 
         if (recordError) throw recordError;
 
+        // 2. 연결된 카드들 불러오기
         const { data: cardLinks, error: linkError } = await supabase
           .from("record_cards")
           .select(
@@ -65,41 +57,33 @@ export default function EditRecordPage({ params }: PageProps) {
 
         if (linkError) throw linkError;
 
-        const safeCardLinks = (cardLinks ?? []) as {
-          type: "main" | "sub";
-          cards: Partial<Card> | null;
-        }[];
+        const mainCards: Card[] = [];
+        const subCards: Card[] = [];
 
-        const mainCards: Card[] = safeCardLinks
-          .filter(
-            (c) =>
-              c.type === "main" && c.cards && typeof c.cards.id === "string"
-          )
-          .map((c) => ({
-            id: c.cards!.id ?? "",
-            name: c.cards!.name ?? "",
-            keywords: c.cards!.keywords ?? [],
-            image_url: c.cards!.image_url ?? "",
-            deck_id: c.cards!.deck_id ?? "",
-            deck_name: c.cards!.deck_name ?? "",
-          }));
-
-        const subCards: Card[] = safeCardLinks
-          .filter(
-            (c) => c.type === "sub" && c.cards && typeof c.cards.id === "string"
-          )
-          .map((c) => ({
-            id: c.cards!.id ?? "",
-            name: c.cards!.name ?? "",
-            keywords: c.cards!.keywords ?? [],
-            image_url: c.cards!.image_url ?? "",
-            deck_id: c.cards!.deck_id ?? "",
-            deck_name: c.cards!.deck_name ?? "",
-          }));
+        (cardLinks ?? []).forEach((link: any) => {
+          const c = link.cards;
+          if (c && typeof c.id === "string") {
+            const card: Card = {
+              id: c.id,
+              name: c.name ?? "",
+              keywords: c.keywords ?? [],
+              image_url: c.image_url ?? "",
+              deck_id: c.deck_id ?? "",
+              deck_name: c.deck_name ?? "",
+            };
+            if (link.type === "main") {
+              mainCards.push(card);
+            } else if (link.type === "sub") {
+              subCards.push(card);
+            }
+          }
+        });
 
         setRecord({
           title: recordData.title,
           content: recordData.content,
+          interpretation: recordData.interpretation || "",
+          feedback: recordData.feedback || "",
           image_urls: recordData.image_urls || [],
           mainCards,
           subCards,
@@ -122,12 +106,16 @@ export default function EditRecordPage({ params }: PageProps) {
   const handleUpdate = async ({
     title,
     content,
+    interpretation,
+    feedback,
     imageUrls,
     mainCards,
     subCards,
   }: {
     title: string;
     content: string;
+    interpretation: string;
+    feedback: string;
     imageUrls: string[];
     mainCards: Card[];
     subCards: Card[];
@@ -135,7 +123,13 @@ export default function EditRecordPage({ params }: PageProps) {
     try {
       const { error: updateError } = await supabase
         .from("records")
-        .update({ title, content, image_urls: imageUrls })
+        .update({
+          title,
+          content,
+          interpretation,
+          feedback,
+          image_urls: imageUrls,
+        })
         .eq("id", params.id);
 
       if (updateError) throw updateError;
@@ -191,6 +185,8 @@ export default function EditRecordPage({ params }: PageProps) {
           <RecordForm
             initialTitle={record.title}
             initialContent={record.content}
+            initialInterpretation={record.interpretation}
+            initialFeedback={record.feedback}
             initialImageUrls={record.image_urls}
             initialMainCards={record.mainCards}
             initialSubCards={record.subCards}

@@ -10,7 +10,7 @@ import { ko } from "date-fns/locale";
 import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
 import { Card as CardType } from "@/types/card";
-import { Record } from "@/types/record";
+import { RecordDetail } from "@/types/record";
 import { useToast } from "@/hooks/use-toast";
 import ClientStarryBackground from "@/components/ClientStarryBackground";
 
@@ -21,7 +21,7 @@ interface PageProps {
 }
 
 export default function RecordDetailPage({ params }: PageProps) {
-  const [record, setRecord] = useState<Record | null>(null);
+  const [record, setRecord] = useState<RecordDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
@@ -121,7 +121,7 @@ export default function RecordDetailPage({ params }: PageProps) {
           ...recordData,
           main_cards_data: mainCards,
           sub_cards_data: subCards,
-        } as Record);
+        } as RecordDetail);
       } catch (error) {
         console.error("Error fetching record:", error);
         toast({
@@ -166,7 +166,7 @@ export default function RecordDetailPage({ params }: PageProps) {
   return (
     <>
       <ClientStarryBackground />
-      <div className="min-h-screen  py-12">
+      <div className="min-h-screen py-12">
         <div className="container max-w-4xl mx-auto px-4">
           <div className="bg-black/30 backdrop-blur-lg rounded-xl border border-white/10 p-8 space-y-8">
             {/* 헤더 */}
@@ -178,9 +178,9 @@ export default function RecordDetailPage({ params }: PageProps) {
             </div>
 
             {/* 이미지 */}
-            {record.images && record.images.length > 0 && (
+            {record.image_urls && record.image_urls.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {record.images.map((image: string, index: number) => (
+                {record.image_urls.map((image: string, index: number) => (
                   <div key={index} className="relative aspect-video">
                     <img
                       src={image}
@@ -192,10 +192,28 @@ export default function RecordDetailPage({ params }: PageProps) {
               </div>
             )}
 
-            {/* 내용 */}
+            {/* 카드 해석 */}
+            {record.interpretation && (
+              <div className="prose prose-invert max-w-none">
+                <p className="text-white whitespace-pre-wrap">
+                  {record.interpretation}
+                </p>
+              </div>
+            )}
+
+            {/* 조언 및 내용 */}
             <div className="prose prose-invert max-w-none">
               <p className="text-white whitespace-pre-wrap">{record.content}</p>
             </div>
+
+            {/* 후기 / 피드백 */}
+            {record.feedback && (
+              <div className="prose prose-invert max-w-none">
+                <p className="text-white whitespace-pre-wrap">
+                  {record.feedback}
+                </p>
+              </div>
+            )}
 
             {/* 메인 카드 */}
             <div className="space-y-4">

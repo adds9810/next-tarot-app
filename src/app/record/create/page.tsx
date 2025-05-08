@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+
 import RecordForm from "@/components/record/RecordForm";
 import { useToast } from "@/hooks/use-toast";
 import ClientStarryBackground from "@/components/ClientStarryBackground";
@@ -11,27 +12,34 @@ import { Card } from "@/types/card";
 type RecordFormData = {
   title: string;
   content: string;
+  interpretation: string;
+  feedback: string;
   imageUrls: string[];
   mainCards: Card[];
   subCards: Card[];
 };
 
 export default function CreateRecordPage() {
-  const supabase = createClientComponentClient();
+  const supabase = createPagesBrowserClient();
   const router = useRouter();
   const { toast } = useToast();
 
   const [initialValues, setInitialValues] = useState<Partial<RecordFormData>>(
     {}
   );
-
   useEffect(() => {
     const saved = sessionStorage.getItem("tarot_temp_record");
+    console.log("📦 등록 페이지에서 sessionStorage 내용:", saved);
+
     if (saved) {
       const parsed = JSON.parse(saved);
-      setInitialValues({
+      console.log("📌 parsed session data:", parsed); // ✅ 여기는 확인 가능
+
+      const next = {
         title: parsed.title || "오늘의 운세",
         content: parsed.content || "",
+        interpretation: parsed.interpretation || "",
+        feedback: parsed.feedback || "",
         mainCards: [
           {
             id: parsed.main_card_id,
@@ -44,12 +52,16 @@ export default function CreateRecordPage() {
         ],
         subCards: [],
         imageUrls: [],
-      });
-      sessionStorage.removeItem("tarot_temp_record");
+      };
+
+      console.log("📌 about to set:", next); // ✅ 이걸로 확인하자
+      setInitialValues(next);
     } else {
       setInitialValues({
         title: "",
         content: "",
+        interpretation: "",
+        feedback: "",
         mainCards: [],
         subCards: [],
         imageUrls: [],
@@ -60,6 +72,8 @@ export default function CreateRecordPage() {
   const handleCreate = async ({
     title,
     content,
+    interpretation,
+    feedback,
     imageUrls,
     mainCards,
     subCards,
@@ -78,6 +92,8 @@ export default function CreateRecordPage() {
         .insert({
           title,
           content,
+          interpretation,
+          feedback,
           image_urls: imageUrls,
           user_id: session.user.id,
           created_at: new Date(),
@@ -143,6 +159,8 @@ export default function CreateRecordPage() {
           <RecordForm
             initialTitle={initialValues.title}
             initialContent={initialValues.content}
+            initialInterpretation={initialValues.interpretation}
+            initialFeedback={initialValues.feedback}
             initialMainCards={initialValues.mainCards}
             initialSubCards={initialValues.subCards}
             initialImageUrls={initialValues.imageUrls}

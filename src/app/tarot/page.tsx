@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/types/card";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -21,7 +21,7 @@ export default function TarotPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
-  const supabase = createBrowserSupabaseClient();
+  const supabase = createPagesBrowserClient();
 
   // 카드 JSON 불러오기
   useEffect(() => {
@@ -92,14 +92,20 @@ export default function TarotPage() {
   const saveToSessionAndGo = () => {
     if (!selectedCard || !fortuneText) return;
 
+    console.log("✅ 저장 시작"); // 이거 안 찍히면 버튼이 안 눌린 거야
+
     const payload = {
       title: question || "오늘의 운세",
       content: fortuneText,
+      interpretation: selectedCard.keywords.join(", "),
+      feedback: "",
       main_card_id: selectedCard.id,
       main_card_name: selectedCard.name,
       main_card_image: selectedCard.image_url,
       main_card_keywords: selectedCard.keywords,
     };
+
+    console.log("🧾 저장할 payload:", payload);
 
     sessionStorage.setItem("tarot_temp_record", JSON.stringify(payload));
     router.push("/record/create");

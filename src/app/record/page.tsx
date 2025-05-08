@@ -7,17 +7,10 @@ import { motion } from "framer-motion";
 import ClientStarryBackground from "@/components/ClientStarryBackground";
 import RecordCard from "@/components/record/RecordCard";
 import EmptyState from "@/components/EmptyState";
-
-interface Record {
-  id: string;
-  title: string;
-  content: string;
-  created_at: string;
-  cards?: string[];
-}
+import { RecordSummary } from "@/types/record";
 
 export default function RecordPage() {
-  const [records, setRecords] = useState<Record[]>([]);
+  const [records, setRecords] = useState<RecordSummary[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const supabase = createClientComponentClient();

@@ -3,18 +3,10 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-
-interface Record {
-  id: string;
-  title: string;
-  content: string;
-  created_at: string;
-  cards?: string[];
-  images: string[];
-}
+import { RecordSummary } from "@/types/record";
 
 interface RecordCardProps {
-  record: Record;
+  record: RecordSummary;
 }
 
 const MotionDiv = motion.div;

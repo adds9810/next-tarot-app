@@ -15,12 +15,16 @@ import { cn } from "@/lib/utils";
 interface RecordFormProps {
   initialTitle?: string;
   initialContent?: string;
+  initialInterpretation?: string;
+  initialFeedback?: string;
   initialImageUrls?: string[];
   initialMainCards?: Card[];
   initialSubCards?: Card[];
   onSubmit: (formData: {
     title: string;
     content: string;
+    interpretation: string;
+    feedback: string;
     imageUrls: string[];
     mainCards: Card[];
     subCards: Card[];
@@ -32,6 +36,8 @@ interface RecordFormProps {
 export default function RecordForm({
   initialTitle = "",
   initialContent = "",
+  initialInterpretation = "",
+  initialFeedback = "",
   initialImageUrls = [],
   initialMainCards = [],
   initialSubCards = [],
@@ -41,6 +47,8 @@ export default function RecordForm({
 }: RecordFormProps) {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
+  const [interpretation, setInterpretation] = useState(initialInterpretation);
+  const [feedback, setFeedback] = useState(initialFeedback);
   const [imageUrls, setImageUrls] = useState<string[]>(initialImageUrls);
   const [mainCards, setMainCards] = useState<Card[]>(initialMainCards);
   const [subCards, setSubCards] = useState<Card[]>(initialSubCards);
@@ -92,7 +100,15 @@ export default function RecordForm({
     e.preventDefault();
     if (!validateForm()) return;
 
-    await onSubmit({ title, content, imageUrls, mainCards, subCards });
+    await onSubmit({
+      title,
+      content,
+      interpretation,
+      feedback,
+      imageUrls,
+      mainCards,
+      subCards,
+    });
 
     if (redirectPathOnSuccess) {
       router.push(redirectPathOnSuccess);
@@ -126,9 +142,22 @@ export default function RecordForm({
             )}
           </div>
 
-          <div className="mt-2 space-y-2">
+          <div className="space-y-2 mt-4">
+            <Label htmlFor="interpretation" className="text-white">
+              카드 해석
+            </Label>
+            <Textarea
+              id="interpretation"
+              value={interpretation}
+              onChange={(e) => setInterpretation(e.target.value)}
+              className="bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+              placeholder="카드 해석 내용을 입력하세요"
+            />
+          </div>
+
+          <div className="space-y-2 mt-4">
             <Label htmlFor="content" className="text-white">
-              내용
+              조언 및 내용
             </Label>
             <Textarea
               id="content"
@@ -149,7 +178,20 @@ export default function RecordForm({
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 mt-4">
+            <Label htmlFor="feedback" className="text-white">
+              후기 / 피드백
+            </Label>
+            <Textarea
+              id="feedback"
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              className="bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+              placeholder="나중에 느낀 점이나 결과를 기록해보세요"
+            />
+          </div>
+
+          <div className="space-y-2 mt-4">
             <Label className="text-white">이미지 (최대 5장)</Label>
             <Input
               type="file"
