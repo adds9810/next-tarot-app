@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Card } from "@/types/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,13 +15,13 @@ import { cn } from "@/lib/utils";
 interface RecordFormProps {
   initialTitle?: string;
   initialContent?: string;
-  initialImages?: string[];
+  initialImageUrls?: string[];
   initialMainCards?: Card[];
   initialSubCards?: Card[];
   onSubmit: (formData: {
     title: string;
     content: string;
-    images: string[];
+    imageUrls: string[];
     mainCards: Card[];
     subCards: Card[];
   }) => Promise<void>;
@@ -33,7 +32,7 @@ interface RecordFormProps {
 export default function RecordForm({
   initialTitle = "",
   initialContent = "",
-  initialImages = [],
+  initialImageUrls = [],
   initialMainCards = [],
   initialSubCards = [],
   onSubmit,
@@ -42,7 +41,7 @@ export default function RecordForm({
 }: RecordFormProps) {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
-  const [images, setImages] = useState<string[]>(initialImages);
+  const [imageUrls, setImageUrls] = useState<string[]>(initialImageUrls);
   const [mainCards, setMainCards] = useState<Card[]>(initialMainCards);
   const [subCards, setSubCards] = useState<Card[]>(initialSubCards);
   const { toast } = useToast();
@@ -56,18 +55,21 @@ export default function RecordForm({
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    if (images.length + files.length > 5) {
+    if (imageUrls.length + files.length > 5) {
       toast({
         title: "이미지는 최대 5장까지 업로드할 수 있습니다",
         variant: "destructive",
       });
       return;
     }
-    setImages([...images, ...files.map((file) => URL.createObjectURL(file))]);
+    setImageUrls([
+      ...imageUrls,
+      ...files.map((file) => URL.createObjectURL(file)),
+    ]);
   };
 
   const removeImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index));
+    setImageUrls(imageUrls.filter((_, i) => i !== index));
   };
 
   const validateForm = () => {
@@ -90,10 +92,10 @@ export default function RecordForm({
     e.preventDefault();
     if (!validateForm()) return;
 
-    await onSubmit({ title, content, images, mainCards, subCards });
+    await onSubmit({ title, content, imageUrls, mainCards, subCards });
 
     if (redirectPathOnSuccess) {
-      router.push(redirectPathOnSuccess); // ✅ 여기서 이동
+      router.push(redirectPathOnSuccess);
     }
   };
 
@@ -146,6 +148,7 @@ export default function RecordForm({
               <p className="text-sm text-red-500">{errors.content}</p>
             )}
           </div>
+
           <div className="space-y-2">
             <Label className="text-white">이미지 (최대 5장)</Label>
             <Input
@@ -162,11 +165,10 @@ export default function RecordForm({
               className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10"
               onClick={() => document.getElementById("image-upload")?.click()}
             >
-              <Plus className="mr-2 h-4 w-4" />
-              이미지 추가
+              <Plus className="mr-2 h-4 w-4" /> 이미지 추가
             </Button>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {images.map((url, index) => (
+              {imageUrls.map((url, index) => (
                 <div key={index} className="relative group">
                   <img
                     src={url}
@@ -202,7 +204,7 @@ export default function RecordForm({
           )}
         </div>
 
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label className="text-white">서브 카드</Label>
           <CardSelector
             type="sub"

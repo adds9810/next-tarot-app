@@ -11,7 +11,7 @@ import { Card } from "@/types/card";
 type RecordFormData = {
   title: string;
   content: string;
-  images: string[];
+  imageUrls: string[];
   mainCards: Card[];
   subCards: Card[];
 };
@@ -34,16 +34,25 @@ export default function CreateRecordPage() {
         content: parsed.content || "",
         mainCards: [
           {
-            id: parsed.main_card_id || "1", // ID는 임시, 실제 연결 시 cards 테이블과 맞춰야 함
+            id: parsed.main_card_id,
             name: parsed.main_card_name || "",
-            image: parsed.main_card_image || "",
+            image_url: parsed.main_card_image || "",
             keywords: parsed.main_card_keywords || [],
-            deck_id: "1",
-            deck_name: "Universal Tarot",
+            deck_id: "00000000-0000-0000-0000-000000000001",
+            deck_name: "Universal",
           },
         ],
         subCards: [],
-        images: [],
+        imageUrls: [],
+      });
+      sessionStorage.removeItem("tarot_temp_record");
+    } else {
+      setInitialValues({
+        title: "",
+        content: "",
+        mainCards: [],
+        subCards: [],
+        imageUrls: [],
       });
     }
   }, []);
@@ -51,7 +60,7 @@ export default function CreateRecordPage() {
   const handleCreate = async ({
     title,
     content,
-    images,
+    imageUrls,
     mainCards,
     subCards,
   }: RecordFormData) => {
@@ -69,7 +78,7 @@ export default function CreateRecordPage() {
         .insert({
           title,
           content,
-          images,
+          image_urls: imageUrls,
           user_id: session.user.id,
           created_at: new Date(),
         })
@@ -83,10 +92,20 @@ export default function CreateRecordPage() {
       const subIds = subCards.map((c) => c.id);
       const allIds = [...mainIds, ...subIds];
 
-      const { data: cards } = await supabase
+      if (allIds.length === 0) {
+        toast({ title: "기록이 저장되었습니다. (카드 연결 없음)" });
+        router.push("/record");
+        router.refresh();
+        return;
+      }
+
+      const { data: cards, error: cardFetchError } = await supabase
         .from("cards")
         .select("id")
         .in("id", allIds);
+
+      if (cardFetchError) throw cardFetchError;
+      if (!cards) throw new Error("카드 정보를 불러오지 못했습니다.");
 
       const rows = cards.map((card) => ({
         record_id: recordId,
@@ -126,7 +145,7 @@ export default function CreateRecordPage() {
             initialContent={initialValues.content}
             initialMainCards={initialValues.mainCards}
             initialSubCards={initialValues.subCards}
-            initialImages={initialValues.images}
+            initialImageUrls={initialValues.imageUrls}
             onSubmit={handleCreate}
             redirectPathOnSuccess="/record"
           />

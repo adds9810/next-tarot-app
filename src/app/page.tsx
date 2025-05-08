@@ -16,9 +16,6 @@ export default function Home() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("📦 Auth Event:", _event);
-      console.log("📦 Session from onAuthStateChange:", session);
-
       if (session?.user) {
         setUser(session.user);
 

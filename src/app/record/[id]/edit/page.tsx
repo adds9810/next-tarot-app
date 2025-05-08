@@ -14,6 +14,18 @@ interface PageProps {
   };
 }
 
+type RawRecordCardLink = {
+  type: "main" | "sub";
+  cards: {
+    id: string;
+    name: string;
+    keywords: string[];
+    image_url: string;
+    deck_id: string;
+    deck_name: string;
+  } | null;
+};
+
 export default function EditRecordPage({ params }: PageProps) {
   const router = useRouter();
   const supabase = createClientComponentClient();
@@ -23,7 +35,7 @@ export default function EditRecordPage({ params }: PageProps) {
   const [record, setRecord] = useState<{
     title: string;
     content: string;
-    images: string[];
+    image_urls: string[];
     mainCards: Card[];
     subCards: Card[];
   } | null>(null);
@@ -41,23 +53,54 @@ export default function EditRecordPage({ params }: PageProps) {
 
         const { data: cardLinks, error: linkError } = await supabase
           .from("record_cards")
-          .select("type, cards(id, name, keywords)")
+          .select(
+            `
+            type,
+            cards:card_id (
+              id, name, keywords, image_url, deck_id, deck_name
+            )
+          `
+          )
           .eq("record_id", params.id);
 
         if (linkError) throw linkError;
 
-        const mainCards = cardLinks
-          .filter((c) => c.type === "main")
-          .map((c) => c.cards);
+        const safeCardLinks = (cardLinks ?? []) as {
+          type: "main" | "sub";
+          cards: Partial<Card> | null;
+        }[];
 
-        const subCards = cardLinks
-          .filter((c) => c.type === "sub")
-          .map((c) => c.cards);
+        const mainCards: Card[] = safeCardLinks
+          .filter(
+            (c) =>
+              c.type === "main" && c.cards && typeof c.cards.id === "string"
+          )
+          .map((c) => ({
+            id: c.cards!.id ?? "",
+            name: c.cards!.name ?? "",
+            keywords: c.cards!.keywords ?? [],
+            image_url: c.cards!.image_url ?? "",
+            deck_id: c.cards!.deck_id ?? "",
+            deck_name: c.cards!.deck_name ?? "",
+          }));
+
+        const subCards: Card[] = safeCardLinks
+          .filter(
+            (c) => c.type === "sub" && c.cards && typeof c.cards.id === "string"
+          )
+          .map((c) => ({
+            id: c.cards!.id ?? "",
+            name: c.cards!.name ?? "",
+            keywords: c.cards!.keywords ?? [],
+            image_url: c.cards!.image_url ?? "",
+            deck_id: c.cards!.deck_id ?? "",
+            deck_name: c.cards!.deck_name ?? "",
+          }));
 
         setRecord({
           title: recordData.title,
           content: recordData.content,
-          images: recordData.images || [],
+          image_urls: recordData.image_urls || [],
           mainCards,
           subCards,
         });
@@ -79,22 +122,28 @@ export default function EditRecordPage({ params }: PageProps) {
   const handleUpdate = async ({
     title,
     content,
-    images,
+    imageUrls,
     mainCards,
     subCards,
-  }: any) => {
+  }: {
+    title: string;
+    content: string;
+    imageUrls: string[];
+    mainCards: Card[];
+    subCards: Card[];
+  }) => {
     try {
       const { error: updateError } = await supabase
         .from("records")
-        .update({ title, content, images })
+        .update({ title, content, image_urls: imageUrls })
         .eq("id", params.id);
 
       if (updateError) throw updateError;
 
       await supabase.from("record_cards").delete().eq("record_id", params.id);
 
-      const mainIds = mainCards.map((c: Card) => c.id);
-      const subIds = subCards.map((c: Card) => c.id);
+      const mainIds = mainCards.map((c) => c.id);
+      const subIds = subCards.map((c) => c.id);
       const allIds = [...mainIds, ...subIds];
 
       const { data: fullCards, error: cardFetchError } = await supabase
@@ -142,7 +191,7 @@ export default function EditRecordPage({ params }: PageProps) {
           <RecordForm
             initialTitle={record.title}
             initialContent={record.content}
-            initialImages={record.images}
+            initialImageUrls={record.image_urls}
             initialMainCards={record.mainCards}
             initialSubCards={record.subCards}
             onSubmit={handleUpdate}

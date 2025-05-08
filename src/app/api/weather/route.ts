@@ -6,7 +6,6 @@ const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
 export async function GET(req: NextRequest) {
   const city = req.nextUrl.searchParams.get("city") || "Seoul";
-  console.log("서버 API_KEY 확인:", API_KEY);
 
   if (!API_KEY) {
     return NextResponse.json(

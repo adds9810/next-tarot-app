@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/types/card";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -18,13 +19,27 @@ export default function TarotPage() {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [fortuneText, setFortuneText] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+  const supabase = createBrowserSupabaseClient();
 
   // 카드 JSON 불러오기
   useEffect(() => {
-    fetch("/data/cards-major.json")
-      .then((res) => res.json())
-      .then((data) => setCards(data))
-      .catch((err) => console.error("카드 데이터 로딩 실패:", err));
+    const fetchCards = async () => {
+      const { data, error } = await supabase
+        .from("cards")
+        .select("*")
+        .eq("deck_id", "00000000-0000-0000-0000-000000000001") // 유니버셜 덱
+        .order("order_index", { ascending: true });
+
+      if (error) {
+        console.error("카드 불러오기 실패:", error.message);
+      } else {
+        setCards(data || []);
+      }
+    };
+
+    fetchCards();
   }, []);
 
   // Step 3에서 카드 섞기 & 애니메이션
@@ -43,6 +58,11 @@ export default function TarotPage() {
       return () => clearTimeout(timer);
     }
   }, [step, cards]);
+
+  useEffect(() => {
+    if (type === "today") setStep(3);
+    else if (type === "custom") setStep(2);
+  }, [type]);
 
   // 카드 선택 시 OpenAI 분석
   const handleCardSelect = async (card: Card) => {
@@ -75,8 +95,9 @@ export default function TarotPage() {
     const payload = {
       title: question || "오늘의 운세",
       content: fortuneText,
+      main_card_id: selectedCard.id,
       main_card_name: selectedCard.name,
-      main_card_image: selectedCard.image,
+      main_card_image: selectedCard.image_url,
       main_card_keywords: selectedCard.keywords,
     };
 
@@ -221,7 +242,7 @@ export default function TarotPage() {
               {selectedCard?.name}
             </h2>
             <img
-              src={selectedCard?.image}
+              src={selectedCard?.image_url}
               alt={selectedCard?.name}
               className="w-40 mx-auto rounded-lg border border-[#FFD700]/20"
             />

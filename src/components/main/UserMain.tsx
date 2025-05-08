@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { fetchWeather } from "@/lib/weather";
+import { getWeatherEmoji } from "@/lib/getWeatherEmoji";
 
 type Messages = {
   [key: string]: {
@@ -17,6 +18,7 @@ interface UserMainProps {
 export default function UserMain({ nickname }: UserMainProps) {
   const [weatherData, setWeatherData] = useState<any>(null);
   const [messages, setMessages] = useState<Messages | null>(null);
+  const [isAnimated, setIsAnimated] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -28,7 +30,18 @@ export default function UserMain({ nickname }: UserMainProps) {
       setMessages(json);
     };
     loadData();
-  }, []);
+  }, []); // 상태 추가
+
+  // 날씨 데이터 로딩 완료 후 애니메이션 시작
+  useEffect(() => {
+    if (weatherData) {
+      const timer = setTimeout(() => {
+        setIsAnimated(true);
+      }, 100); // 약간의 여유 시간 (0.1초 정도)
+
+      return () => clearTimeout(timer);
+    }
+  }, [weatherData]);
 
   const getTimeSlot = (
     hour: number
@@ -61,7 +74,20 @@ export default function UserMain({ nickname }: UserMainProps) {
       ? "thunderstorm"
       : "clear"; // fallback
 
-    const line1 = `${weatherData.city}의 날씨는 ${weatherData.description}, ${weatherData.temp}°C입니다.`;
+    const emoji = getWeatherEmoji(weatherData.description);
+    const line1 = (
+      <span className="inline-flex items-center justify-center text-white text-lg md:text-xl font-semibold">
+        {`${weatherData.city}의 날씨는`}
+        <span
+          role="img"
+          aria-label={weatherData.description}
+          className="ml-2 text-2xl md:text-3xl"
+        >
+          {emoji}
+        </span>
+        {`${weatherData.description}, ${weatherData.temp}°C입니다.`}
+      </span>
+    );
     const line2 =
       messages?.[timeSlot]?.[weatherKey] ||
       "오늘도 조용히 나만의 속도로 흘러가요.";
@@ -82,42 +108,67 @@ export default function UserMain({ nickname }: UserMainProps) {
         {/* 환영 메시지 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center space-y-4"
+          animate={isAnimated ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.1, duration: 0.8 }}
+          className="text-center space-y-6 px-4 md:px-8"
         >
-          <h1 className="font-title text-4xl md:text-5xl lg:text-6xl text-[#FFD700] leading-tight tracking-wide">
+          {/* 1. 타이틀 */}
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={isAnimated ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="font-title text-4xl md:text-5xl lg:text-6xl text-[#FFD700] leading-tight tracking-wide"
+          >
             {nickname}님의 별빛 일기장
-          </h1>
-          {weatherData ? (
-            <>
-              <p className="text-white text-lg font-semibold">{line1}</p>
-              <p className="text-[#BFA2DB] text-base">{line2}</p>
-            </>
-          ) : (
-            <p className="text-gray-400">날씨 정보를 불러오는 중입니다...</p>
+          </motion.h1>
+
+          {/* 2. 날씨 안내 */}
+          {isAnimated && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={weatherData ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="max-w-xl mx-auto space-y-2"
+            >
+              {weatherData ? (
+                <>
+                  <p className="text-white text-lg font-semibold">{line1}</p>
+                  <p className="text-[#BFA2DB] text-base">{line2}</p>
+                </>
+              ) : (
+                <p className="text-gray-400 text-base">
+                  날씨 정보를 불러오는 중입니다...
+                </p>
+              )}
+            </motion.div>
           )}
-          {/* 서비스 소개 문구 */}
-          <section className="mt-6 space-y-4" aria-label="서비스 소개">
+
+          {/* 3. 소개 문구 */}
+          <motion.section
+            initial={{ opacity: 0, y: 10 }}
+            animate={isAnimated ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="mt-6 space-y-4"
+            aria-label="서비스 소개"
+          >
             <p className="font-body text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
               오늘의 흐름을 카드에 담고,
               <br className="md:hidden" /> 감정과 질문을 별에 남겨보세요.
               <br />
               당신의 리딩은 별빛처럼 쌓여갑니다.
             </p>
-          </section>
+          </motion.section>
         </motion.div>
-
         {/* 메인 버튼 그룹 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          animate={isAnimated ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.6, duration: 0.8 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto px-4"
         >
           {/* 별의 흐름 따라가기 */}
           <Link
-            href="/tarot"
+            href="/tarot?type=today"
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
           >
             <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
@@ -141,7 +192,7 @@ export default function UserMain({ nickname }: UserMainProps) {
 
           {/* 별에게 묻기 */}
           <Link
-            href="/tarot"
+            href="/tarot?type=custom"
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
           >
             <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
@@ -191,8 +242,8 @@ export default function UserMain({ nickname }: UserMainProps) {
         {/* 최근 기록 미리보기 */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          animate={isAnimated ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 1.0, duration: 0.8 }}
           className="max-w-5xl mx-auto px-4"
           aria-label="최근 기록"
         >

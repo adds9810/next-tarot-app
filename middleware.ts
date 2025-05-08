@@ -10,28 +10,28 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  console.log("🔥 [middleware] session:", session);
+  const pathname = req.nextUrl.pathname;
 
-  const { pathname } = req.nextUrl;
+  // 보호된 경로
+  const protectedRoutes = ["/record", "/record/create", "/record/", "/profile"];
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
 
-  // 인증이 필요한 페이지 경로
-  const protectedPaths = [
-    "/dashboard",
-    "/profile",
-    "/record",
-    "/reading",
-    "/community",
-  ];
-  const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
+  // 보호된 경로인데 세션이 없으면 로그인 페이지로 리디렉트
+  if (isProtectedRoute && !session) {
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("message", "회원만 접근 가능한 페이지입니다.");
+    return NextResponse.redirect(loginUrl);
+  }
 
-  // 인증이 필요한데 로그인 안된 경우
-  if (isProtected && !session) {
+  // /auth 경로 → /login 또는 /signup 으로 정리
+  if (pathname === "/auth/login") {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // 이미 로그인된 사용자가 /login, /signup 접근 시 리디렉트
-  if ((pathname === "/login" || pathname === "/signup") && session) {
-    return NextResponse.redirect(new URL("/", req.url)); // 또는 /dashboard 등 원하는 위치
+  if (pathname === "/auth/signup") {
+    return NextResponse.redirect(new URL("/signup", req.url));
   }
 
   return res;
@@ -39,19 +39,10 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/",
-    "/dashboard",
-    "/dashboard/:path*",
-    "/profile",
-    "/profile/:path*",
     "/record",
     "/record/:path*",
-    "/reading",
-    "/reading/:path*",
-    "/community",
-    "/community/:path*",
-    "/login",
-    "/signup",
-    "/auth/callback",
+    "/profile",
+    "/auth/login",
+    "/auth/signup",
   ],
 };
