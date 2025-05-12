@@ -21,10 +21,7 @@ export default function GuestMain() {
           >
             <h1 className="font-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#FFD700] leading-tight tracking-wide">
               오늘 별이 속삭인다면,
-              <br className="md:hidden" />{" "}
-              <span className="block mt-2 md:mt-4">
-                당신의 하루는 어떻게 달라질까요?
-              </span>
+              <br className="md:hidden" /> 당신의 하루는 어떻게 달라질까요?
             </h1>
 
             {/* 서비스 소개 문구 */}
@@ -139,23 +136,19 @@ export default function GuestMain() {
           >
             <Link
               href="/login"
-              className="group relative px-6 py-3 w-full sm:w-auto min-w-[200px] bg-[#FFD700] text-[#0B0C2A] rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
+              className="group px-6 py-3 w-full sm:w-auto min-w-[200px] bg-[#FFD700] text-[#0B0C2A] font-body text-base sm:text-lg  font-medium tracking-wide rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
               aria-label="로그인하고 별의 문 열기"
               role="button"
             >
-              <span className="relative font-body text-base sm:text-lg text-[#0B0C2A] font-medium tracking-wide">
-                별의 문을 열기
-              </span>
+              별의 문을 열기
             </Link>
             <Link
               href="/signup"
-              className="group relative px-6 py-3 w-full sm:w-auto min-w-[200px] bg-transparent border border-[#FFD700] text-[#FFD700] rounded-lg hover:border-[#FFE566] hover:text-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
+              className="group px-6 py-3 w-full sm:w-auto min-w-[200px] font-body text-base sm:text-lg font-medium tracking-wide bg-transparent border border-[#FFD700] text-[#FFD700] rounded-lg hover:border-[#FFE566] hover:text-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
               aria-label="회원가입하고 나만의 여정 시작하기"
               role="button"
             >
-              <span className="relative font-body text-base sm:text-lg font-medium tracking-wide">
-                나만의 여정 시작하기
-              </span>
+              나만의 여정 시작하기
             </Link>
           </motion.div>
         </div>

@@ -47,8 +47,8 @@ export default function Home() {
   }
 
   return (
-    <main className=" text-white overflow-hidden">
+    <div className=" text-white overflow-hidden">
       {user ? <UserMain nickname={nickname} /> : <GuestMain />}
-    </main>
+    </div>
   );
 }

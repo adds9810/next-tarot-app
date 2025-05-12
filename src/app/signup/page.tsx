@@ -260,11 +260,10 @@ export default function SignUp() {
                   {error}
                 </div>
               )}
-
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#FFD700] font-medium text-[#0B0C2A] hover:bg-[#FFE566] transition-colors focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 transition-all duration-300"
+                className="group px-6 py-3 w-full min-w-[200px] bg-[#FFD700] text-[#0B0C2A]  rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
               >
                 {loading ? "별자리 생성 중..." : "나만의 별자리 완성하기"}
               </Button>
