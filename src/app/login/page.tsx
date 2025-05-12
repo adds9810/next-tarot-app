@@ -16,6 +16,7 @@ export default function Login() {
   const router = useRouter();
   const supabase = createClientComponentClient();
   const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
   const message = searchParams.get("message");
   const { toast } = useToast();
 
@@ -34,7 +35,7 @@ export default function Login() {
         return;
       }
 
-      router.push("/");
+      router.push(redirect);
     } catch (err) {
       console.error("Login error:", err);
       setError("로그인 중 오류가 발생했습니다.");

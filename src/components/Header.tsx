@@ -86,12 +86,11 @@ export default function Header() {
     ? [
         { href: "/tarot", label: "당신을 위한 카드" },
         { href: "/record", label: "속삭임의 흔적" },
-        { href: "/post", label: "커뮤니티" },
+        { href: "/post", label: "별의 메아리" },
       ]
     : [
         { href: "/tarot", label: "당신을 위한 카드" },
-        { href: "/record", label: "속삭임의 흔적" },
-        { href: "/post", label: "커뮤니티" },
+        { href: "/post", label: "별의 메아리" },
       ];
 
   return (

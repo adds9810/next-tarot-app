@@ -22,6 +22,13 @@ export default function TarotPage() {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
   const supabase = createPagesBrowserClient();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setIsLoggedIn(!!data.session);
+    });
+  }, []);
 
   // 카드 JSON 불러오기
   useEffect(() => {
@@ -89,10 +96,13 @@ export default function TarotPage() {
       setStep(5);
     }
   };
-  const saveToSessionAndGo = () => {
+  const saveToSessionAndGo = async () => {
     if (!selectedCard || !fortuneText) return;
 
-    // 질문이 없으면 "오늘의 운세", 있으면 "기타"
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
     const isToday = question.trim() === "";
 
     const payload = {
@@ -107,10 +117,13 @@ export default function TarotPage() {
       category: isToday ? "오늘의 운세" : "기타",
     };
 
-    console.log("🧾 저장할 payload:", payload);
-
     sessionStorage.setItem("tarot_temp_record", JSON.stringify(payload));
-    router.push("/record/create");
+
+    if (session) {
+      router.push("/record/create");
+    } else {
+      router.push("/login?redirect=/record/create");
+    }
   };
 
   const renderStep = () => {
@@ -180,9 +193,7 @@ export default function TarotPage() {
           >
             {isShuffling ? (
               <>
-                <h2 className="text-xl text-[#FFD700]">
-                  카드를 섞고 있어요...
-                </h2>
+                <h2 className="text-xl text-[#FFD700]">카드를 섞고 있어요.</h2>
                 <div className="flex flex-wrap justify-center gap-2">
                   {shuffledCards.slice(0, 12).map((_, i) => (
                     <motion.div
@@ -260,14 +271,24 @@ export default function TarotPage() {
             <div className="max-w-2xl mx-auto p-6 bg-[#1C1635]/50 border border-[#FFD700]/10 rounded-lg">
               <p className="text-white leading-relaxed">{fortuneText}</p>
             </div>
+
             <p className="text-[#BFA2DB]">이 리딩을 마음속에 간직하시겠어요?</p>
             <div className="flex gap-4 justify-center">
-              <Button
-                onClick={saveToSessionAndGo}
-                className="bg-[#FFD700] text-[#0B0C2A]"
-              >
-                저장하기
-              </Button>
+              {isLoggedIn ? (
+                <Button
+                  onClick={saveToSessionAndGo}
+                  className="bg-[#FFD700] text-[#0B0C2A]"
+                >
+                  저장하기
+                </Button>
+              ) : (
+                <Button
+                  onClick={saveToSessionAndGo}
+                  className="bg-[#FFD700] text-[#0B0C2A]"
+                >
+                  로그인하고 저장하기
+                </Button>
+              )}
               <Button className="border border-[#FFD700]/10 text-white">
                 메인으로
               </Button>
