@@ -146,7 +146,7 @@ export default function Login() {
               )}
               <Button
                 type="submit"
-                className=" bg-[#FFD700] font-medium text-[#0B0C2A]   hover:bg-[#FFE566] transition-colors focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 transition-all duration-300"
+                className="w-full bg-[#FFD700] font-medium text-[#0B0C2A]hover:bg-[#FFE566] transition-colors focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 transition-all duration-300"
               >
                 별의 문 열기
               </Button>
@@ -165,7 +165,7 @@ export default function Login() {
               type="button"
               variant="outline"
               onClick={() => handleSocialLogin("google" as Provider)}
-              className="flex items-center justify-center gap-3 bg-white/90 text-gray-800  hover:bg-white transition-colors  text-base focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
+              className="w-full flex items-center justify-center gap-3 bg-white/90 text-gray-800  hover:bg-white transition-colors  text-base focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
               aria-label="Google로 별자리 연결하기"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
@@ -184,7 +184,7 @@ export default function Login() {
                   href="/signup"
                   className="text-[#FFD700] hover:text-[#FFE566] transition-colors hover:underline decoration-[#FFD700]/30 underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-sm block md:inline"
                 >
-                  새로운 별자리 등록하기
+                  내 별자리 등록하기
                 </Link>
               </p>
             </div>

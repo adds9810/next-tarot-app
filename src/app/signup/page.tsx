@@ -134,7 +134,7 @@ export default function SignUp() {
                 type="button"
                 variant="outline"
                 onClick={handleGoogleSignUp}
-                className="flex items-center justify-center gap-3 bg-white/90 text-gray-800  hover:bg-white transition-colors  text-base focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
+                className="w-full flex items-center justify-center gap-3 bg-white/90 text-gray-800 hover:bg-white transition-colors text-base focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
                 aria-label="Google로 별자리 등록하기"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -264,7 +264,7 @@ export default function SignUp() {
               <Button
                 type="submit"
                 disabled={loading}
-                className=" bg-[#FFD700] font-medium text-[#0B0C2A]   hover:bg-[#FFE566] transition-colors focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 transition-all duration-300"
+                className="w-full bg-[#FFD700] font-medium text-[#0B0C2A] hover:bg-[#FFE566] transition-colors focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 transition-all duration-300"
               >
                 {loading ? "별자리 생성 중..." : "나만의 별자리 완성하기"}
               </Button>
