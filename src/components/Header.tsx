@@ -253,11 +253,11 @@ export default function Header() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="md:hidden mt-4 py-4 bg-[#1C1635]/95 backdrop-blur-sm rounded-lg border border-[#FFD700]/10 overflow-hidden"
+              className="md:hidden mt-4 rounded-lg"
               role="menu"
             >
               {user && (
-                <div className="flex items-center space-x-3 px-4 mb-4 pb-4 border-b border-[#FFD700]/10">
+                <div className="flex items-center space-x-3 mb-4 pb-4 border-b border-[#FFD700]/10">
                   <div className="relative w-10 h-10 rounded-full overflow-hidden border border-[#FFD700]/20 glow-sm">
                     <Image
                       src={
@@ -272,12 +272,12 @@ export default function Header() {
                   <span className="font-body text-[#EAE7FF]">{nickname}님</span>
                 </div>
               )}
-              <div className="flex flex-col space-y-4 px-4">
+              <div className="flex flex-col space-y-4">
                 {menuItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
+                    className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg py-2"
                     aria-label={`${item.label} 페이지로 이동`}
                   >
                     {item.label}
@@ -287,14 +287,14 @@ export default function Header() {
                   <>
                     <Link
                       href="/profile"
-                      className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
+                      className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg py-2"
                       aria-label="개인정보 수정 페이지로 이동"
                     >
                       개인정보 수정
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2 text-left"
+                      className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg pt-2 text-left"
                       aria-label="로그아웃"
                     >
                       로그아웃
