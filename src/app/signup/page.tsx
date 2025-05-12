@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { AuthError } from "@supabase/supabase-js";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export default function SignUp() {
   const router = useRouter();
@@ -70,9 +73,7 @@ export default function SignUp() {
         email,
         password,
         options: {
-          data: {
-            nickname: name,
-          },
+          data: { nickname: name },
           emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
@@ -114,7 +115,7 @@ export default function SignUp() {
   };
 
   return (
-    <section className="relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+    <section className="relative py-10 px-4 w-dvw sm:px-6 lg:px-8 flex flex-col items-center justify-center">
       <div className="relative z-20 text-center w-full max-w-lg mx-auto animate-fade-in">
         <section className="mb-8 space-y-4" aria-label="서비스 소개">
           <h1 className="font-title text-3xl md:text-4xl text-[#FFD700] mb-4 drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
@@ -125,13 +126,16 @@ export default function SignUp() {
           </p>
         </section>
 
-        <div className="w-full animate-fade-in-delay">
+        <div className="w-full max-w-sm mx-auto animate-fade-in-delay">
           <div className="p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-200">
             {/* 소셜 회원가입 */}
             <div className="space-y-3 mb-6">
-              <button
+              <Button
+                type="button"
+                variant="outline"
                 onClick={handleGoogleSignUp}
-                className="w-full flex items-center justify-center gap-2 bg-white/90 text-gray-800 px-4 py-3 rounded-lg hover:bg-white transition-colors font-body"
+                className="flex items-center justify-center gap-3 bg-white/90 text-gray-800  hover:bg-white transition-colors  text-base focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
+                aria-label="Google로 별자리 등록하기"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
@@ -140,7 +144,7 @@ export default function SignUp() {
                   />
                 </svg>
                 Google로 별자리 등록하기
-              </button>
+              </Button>
             </div>
 
             <div className="relative flex items-center justify-center mb-6">
@@ -152,15 +156,19 @@ export default function SignUp() {
               </div>
             </div>
 
-            <form onSubmit={handleSignUp} className="space-y-6">
+            <form
+              onSubmit={handleSignUp}
+              className="space-y-6"
+              aria-label="회원가입 폼"
+            >
               <div className="text-left">
-                <label
+                <Label
                   htmlFor="name"
                   className="block font-body text-base text-[#BFA2DB] mb-2"
                 >
                   당신을 부를 이름은?
-                </label>
-                <input
+                </Label>
+                <Input
                   id="name"
                   type="text"
                   value={name}
@@ -173,13 +181,13 @@ export default function SignUp() {
               </div>
 
               <div className="text-left">
-                <label
+                <Label
                   htmlFor="email"
                   className="block font-body text-base text-[#BFA2DB] mb-2"
                 >
                   별빛을 받을 주소는?
-                </label>
-                <input
+                </Label>
+                <Input
                   id="email"
                   type="email"
                   value={email}
@@ -192,13 +200,13 @@ export default function SignUp() {
               </div>
 
               <div className="text-left">
-                <label
+                <Label
                   htmlFor="password"
                   className="block font-body text-base text-[#BFA2DB] mb-2"
                 >
                   당신만의 비밀 열쇠
-                </label>
-                <input
+                </Label>
+                <Input
                   id="password"
                   type="password"
                   value={password}
@@ -208,6 +216,7 @@ export default function SignUp() {
                   } rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700]/30 transition-all duration-300 font-body text-base`}
                   placeholder="비밀번호를 입력해주세요"
                   required
+                  aria-required="true"
                 />
                 {passwordError && (
                   <p className="mt-1 text-xs text-red-400 font-body">
@@ -217,16 +226,15 @@ export default function SignUp() {
               </div>
 
               <div className="text-left">
-                <label
+                <Label
                   htmlFor="confirmPassword"
                   className="block font-body text-base text-[#BFA2DB] mb-2"
                 >
                   비밀 열쇠 재확인
-                </label>
-                <input
+                </Label>
+                <Input
                   id="confirmPassword"
                   type="password"
-                  required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className={`w-full px-4 py-3 bg-[#0B0C2A]/80 border ${
@@ -253,13 +261,13 @@ export default function SignUp() {
                 </div>
               )}
 
-              <button
+              <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#FFD700] text-[#0B0C2A] px-6 py-4 rounded-lg hover:bg-[#FFE566] transition-colors font-body font-medium text-lg transform hover:translate-y-[-2px] hover:shadow-[0_4px_12px_rgba(255,215,0,0.3)] focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 transition-all duration-300"
+                className=" bg-[#FFD700] font-medium text-[#0B0C2A]   hover:bg-[#FFE566] transition-colors focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 transition-all duration-300"
               >
                 {loading ? "별자리 생성 중..." : "나만의 별자리 완성하기"}
-              </button>
+              </Button>
             </form>
 
             <div className="mt-6 text-center text-base text-[#BFA2DB] font-body">

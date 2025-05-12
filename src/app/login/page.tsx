@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { Provider } from "@supabase/supabase-js";
-
 import { useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -78,11 +80,10 @@ export default function Login() {
 
   return (
     <section
-      className="relative relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      className="relative py-10 px-4 w-dvw sm:px-6 lg:px-8 flex flex-col items-center justify-center"
       aria-label="로그인 섹션"
     >
       <div className="relative z-20 text-center w-full max-w-lg mx-auto">
-        {/* 감성적 소개 문구 */}
         <section
           className="mb-8 space-y-4 animate-fade-in"
           aria-label="서비스 소개"
@@ -95,18 +96,17 @@ export default function Login() {
           </p>
         </section>
 
-        {/* 로그인 폼 */}
-        <div className="w-full animate-fade-in-delay">
+        <div className="w-full max-w-sm mx-auto animate-fade-in-delay">
           <div className="p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-200">
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="text-left">
-                <label
+                <Label
                   htmlFor="email"
                   className="block font-body text-base text-[#BFA2DB] mb-2"
                 >
                   당신의 별자리 주소는?
-                </label>
-                <input
+                </Label>
+                <Input
                   id="email"
                   type="email"
                   value={email}
@@ -118,13 +118,13 @@ export default function Login() {
                 />
               </div>
               <div className="text-left">
-                <label
+                <Label
                   htmlFor="password"
                   className="block font-body text-base text-[#BFA2DB] mb-2"
                 >
                   별빛을 열 수 있는 비밀 열쇠
-                </label>
-                <input
+                </Label>
+                <Input
                   id="password"
                   type="password"
                   value={password}
@@ -144,12 +144,12 @@ export default function Login() {
                   {error}
                 </div>
               )}
-              <button
+              <Button
                 type="submit"
-                className="w-full bg-[#FFD700] text-[#0B0C2A] px-6 py-4 rounded-lg hover:bg-[#FFE566] transition-colors font-body font-medium text-lg transform hover:translate-y-[-2px] hover:shadow-[0_4px_12px_rgba(255,215,0,0.3)] focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 transition-all duration-300"
+                className=" bg-[#FFD700] font-medium text-[#0B0C2A]   hover:bg-[#FFE566] transition-colors focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 transition-all duration-300"
               >
                 별의 문 열기
-              </button>
+              </Button>
             </form>
 
             <div className="relative flex items-center justify-center my-6">
@@ -161,10 +161,12 @@ export default function Login() {
               </div>
             </div>
 
-            {/* 소셜 로그인 버튼 */}
-            <button
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => handleSocialLogin("google" as Provider)}
-              className="w-full flex items-center justify-center gap-3 bg-white/90 text-gray-800 px-6 py-4 rounded-lg hover:bg-white transition-colors font-body text-base focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
+              className="flex items-center justify-center gap-3 bg-white/90 text-gray-800  hover:bg-white transition-colors  text-base focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
+              aria-label="Google로 별자리 연결하기"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
                 <path
@@ -173,7 +175,7 @@ export default function Login() {
                 />
               </svg>
               Google로 별자리 연결하기
-            </button>
+            </Button>
 
             <div className="mt-6 text-center text-base text-[#BFA2DB] font-body">
               <p>

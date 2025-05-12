@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 export default function GuestMain() {
   return (
     <section
-      className="relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      className="relative py-10 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
       role="main"
       aria-label="방문자 메인 페이지"
     >
