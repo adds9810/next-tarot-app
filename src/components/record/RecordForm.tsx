@@ -11,6 +11,14 @@ import { useToast } from "@/hooks/use-toast";
 import CardSelector from "@/components/record/CardSelector";
 import { Plus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { RecordCategory } from "@/types/record";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 interface RecordFormProps {
   initialTitle?: string;
@@ -20,6 +28,7 @@ interface RecordFormProps {
   initialImageUrls?: string[];
   initialMainCards?: Card[];
   initialSubCards?: Card[];
+  initialCategory?: RecordCategory;
   onSubmit: (formData: {
     title: string;
     content: string;
@@ -28,6 +37,7 @@ interface RecordFormProps {
     imageUrls: string[];
     mainCards: Card[];
     subCards: Card[];
+    category: RecordCategory;
   }) => Promise<void>;
   isLoading?: boolean;
   redirectPathOnSuccess?: string;
@@ -41,6 +51,7 @@ export default function RecordForm({
   initialImageUrls = [],
   initialMainCards = [],
   initialSubCards = [],
+  initialCategory = "기타",
   onSubmit,
   isLoading = false,
   redirectPathOnSuccess = "/record",
@@ -52,6 +63,11 @@ export default function RecordForm({
   const [imageUrls, setImageUrls] = useState<string[]>(initialImageUrls);
   const [mainCards, setMainCards] = useState<Card[]>(initialMainCards);
   const [subCards, setSubCards] = useState<Card[]>(initialSubCards);
+  const [category, setCategory] = useState<RecordCategory>(
+    () => initialCategory || "기타"
+  );
+  useEffect(() => {}, [initialCategory, category]);
+
   const { toast } = useToast();
   const router = useRouter();
 
@@ -108,6 +124,7 @@ export default function RecordForm({
       imageUrls,
       mainCards,
       subCards,
+      category,
     });
 
     if (redirectPathOnSuccess) {
@@ -119,6 +136,7 @@ export default function RecordForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div>
+          {/* 제목 */}
           <div className="space-y-2">
             <Label htmlFor="title" className="text-white">
               제목
@@ -142,6 +160,41 @@ export default function RecordForm({
             )}
           </div>
 
+          {/* 카테고리 */}
+          <div className="space-y-2 mt-4">
+            <Label htmlFor="category" className="text-white">
+              카테고리
+            </Label>
+            <Select
+              value={category}
+              onValueChange={(value) => {
+                setCategory(value as RecordCategory);
+              }}
+            >
+              <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                <SelectValue placeholder="카테고리를 선택하세요" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#1C1635]/90 text-white border-white/10">
+                {(
+                  [
+                    "오늘의 운세",
+                    "연애 / 관계",
+                    "진로 / 직업",
+                    "건강 / 감정",
+                    "재정 / 돈",
+                    "자기 성찰",
+                    "기타",
+                  ] as RecordCategory[]
+                ).map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    {cat}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* 해석 */}
           <div className="space-y-2 mt-4">
             <Label htmlFor="interpretation" className="text-white">
               카드 해석
@@ -155,6 +208,7 @@ export default function RecordForm({
             />
           </div>
 
+          {/* 조언 및 내용 */}
           <div className="space-y-2 mt-4">
             <Label htmlFor="content" className="text-white">
               조언 및 내용
@@ -178,6 +232,7 @@ export default function RecordForm({
             )}
           </div>
 
+          {/* 피드백 */}
           <div className="space-y-2 mt-4">
             <Label htmlFor="feedback" className="text-white">
               후기 / 피드백
@@ -191,6 +246,7 @@ export default function RecordForm({
             />
           </div>
 
+          {/* 이미지 */}
           <div className="space-y-2 mt-4">
             <Label className="text-white">이미지 (최대 5장)</Label>
             <Input
@@ -232,6 +288,7 @@ export default function RecordForm({
           </div>
         </div>
 
+        {/* 카드 선택 */}
         <div className="space-y-2">
           <Label className="text-white">메인 카드</Label>
           <CardSelector

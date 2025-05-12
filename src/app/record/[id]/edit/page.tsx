@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Card } from "@/types/card";
+import { RecordCategory } from "@/types/record";
 import RecordForm from "@/components/record/RecordForm";
 import ClientStarryBackground from "@/components/ClientStarryBackground";
 
@@ -28,12 +29,12 @@ export default function EditRecordPage({ params }: PageProps) {
     image_urls: string[];
     mainCards: Card[];
     subCards: Card[];
+    category: RecordCategory;
   } | null>(null);
 
   useEffect(() => {
     const fetchRecord = async () => {
       try {
-        // 1. 기록 본문 불러오기
         const { data: recordData, error: recordError } = await supabase
           .from("records")
           .select("*")
@@ -42,7 +43,6 @@ export default function EditRecordPage({ params }: PageProps) {
 
         if (recordError) throw recordError;
 
-        // 2. 연결된 카드들 불러오기
         const { data: cardLinks, error: linkError } = await supabase
           .from("record_cards")
           .select(
@@ -57,27 +57,37 @@ export default function EditRecordPage({ params }: PageProps) {
 
         if (linkError) throw linkError;
 
-        const mainCards: Card[] = [];
-        const subCards: Card[] = [];
+        const safeCardLinks = (cardLinks ?? []) as {
+          type: "main" | "sub";
+          cards: Partial<Card> | null;
+        }[];
 
-        (cardLinks ?? []).forEach((link: any) => {
-          const c = link.cards;
-          if (c && typeof c.id === "string") {
-            const card: Card = {
-              id: c.id,
-              name: c.name ?? "",
-              keywords: c.keywords ?? [],
-              image_url: c.image_url ?? "",
-              deck_id: c.deck_id ?? "",
-              deck_name: c.deck_name ?? "",
-            };
-            if (link.type === "main") {
-              mainCards.push(card);
-            } else if (link.type === "sub") {
-              subCards.push(card);
-            }
-          }
-        });
+        const mainCards: Card[] = safeCardLinks
+          .filter(
+            (c) =>
+              c.type === "main" && c.cards && typeof c.cards.id === "string"
+          )
+          .map((c) => ({
+            id: c.cards!.id ?? "",
+            name: c.cards!.name ?? "",
+            keywords: c.cards!.keywords ?? [],
+            image_url: c.cards!.image_url ?? "",
+            deck_id: c.cards!.deck_id ?? "",
+            deck_name: c.cards!.deck_name ?? "",
+          }));
+
+        const subCards: Card[] = safeCardLinks
+          .filter(
+            (c) => c.type === "sub" && c.cards && typeof c.cards.id === "string"
+          )
+          .map((c) => ({
+            id: c.cards!.id ?? "",
+            name: c.cards!.name ?? "",
+            keywords: c.cards!.keywords ?? [],
+            image_url: c.cards!.image_url ?? "",
+            deck_id: c.cards!.deck_id ?? "",
+            deck_name: c.cards!.deck_name ?? "",
+          }));
 
         setRecord({
           title: recordData.title,
@@ -87,6 +97,7 @@ export default function EditRecordPage({ params }: PageProps) {
           image_urls: recordData.image_urls || [],
           mainCards,
           subCards,
+          category: recordData.category || "기타",
         });
       } catch (error: any) {
         toast({
@@ -111,6 +122,7 @@ export default function EditRecordPage({ params }: PageProps) {
     imageUrls,
     mainCards,
     subCards,
+    category,
   }: {
     title: string;
     content: string;
@@ -119,6 +131,7 @@ export default function EditRecordPage({ params }: PageProps) {
     imageUrls: string[];
     mainCards: Card[];
     subCards: Card[];
+    category: RecordCategory;
   }) => {
     try {
       const { error: updateError } = await supabase
@@ -129,6 +142,7 @@ export default function EditRecordPage({ params }: PageProps) {
           interpretation,
           feedback,
           image_urls: imageUrls,
+          category,
         })
         .eq("id", params.id);
 
@@ -190,6 +204,7 @@ export default function EditRecordPage({ params }: PageProps) {
             initialImageUrls={record.image_urls}
             initialMainCards={record.mainCards}
             initialSubCards={record.subCards}
+            initialCategory={record.category}
             onSubmit={handleUpdate}
             isLoading={isLoading}
             redirectPathOnSuccess={`/record/${params.id}`}

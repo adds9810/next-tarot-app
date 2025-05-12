@@ -14,7 +14,18 @@ export interface RecordDetail {
   updated_at: string;
   main_cards_data?: Card[];
   sub_cards_data?: Card[];
+  category?: string;
 }
+
+export type RecordCategory =
+  | "오늘의 운세"
+  | "연애 / 관계"
+  | "진로 / 직업"
+  | "건강 / 감정"
+  | "재정 / 돈"
+  | "자기 성찰"
+  | "기타";
+
 export interface RecordSummary {
   id: string;
   title: string;
@@ -22,4 +33,5 @@ export interface RecordSummary {
   created_at: string;
   cards?: string[];
   image_urls: string[];
+  category?: string;
 }

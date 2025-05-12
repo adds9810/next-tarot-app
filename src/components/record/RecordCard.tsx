@@ -40,12 +40,17 @@ export default function RecordCard({ record }: RecordCardProps) {
               <Image
                 src="/images/them/board.png"
                 alt="기본 썸네일 이미지"
-                layout="fill"
+                fill
                 objectFit="cover"
                 className="group-hover:scale-105 transition-transform duration-300"
               />
             )}
           </div>
+          {record.category && (
+            <span className="text-xs text-[#FFD700] bg-[#FFD70020] px-2 py-1 rounded-full inline-block mb-1">
+              {record.category}
+            </span>
+          )}
           <h3 className="text-lg font-semibold text-white truncate">
             {record.title}
           </h3>

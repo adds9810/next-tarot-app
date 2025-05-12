@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import RecordForm from "@/components/record/RecordForm";
 import { useToast } from "@/hooks/use-toast";
 import ClientStarryBackground from "@/components/ClientStarryBackground";
 import { Card } from "@/types/card";
+import { RecordCategory } from "@/types/record";
 
 type RecordFormData = {
   title: string;
@@ -17,29 +17,28 @@ type RecordFormData = {
   imageUrls: string[];
   mainCards: Card[];
   subCards: Card[];
+  category: RecordCategory;
 };
 
 export default function CreateRecordPage() {
-  const supabase = createPagesBrowserClient();
+  const supabase = createClientComponentClient();
   const router = useRouter();
   const { toast } = useToast();
 
-  const [initialValues, setInitialValues] = useState<Partial<RecordFormData>>(
-    {}
-  );
+  const [initialValues, setInitialValues] =
+    useState<Partial<RecordFormData> | null>(null);
+
   useEffect(() => {
     const saved = sessionStorage.getItem("tarot_temp_record");
-    console.log("📦 등록 페이지에서 sessionStorage 내용:", saved);
-
     if (saved) {
       const parsed = JSON.parse(saved);
-      console.log("📌 parsed session data:", parsed); // ✅ 여기는 확인 가능
 
-      const next = {
+      setInitialValues({
         title: parsed.title || "오늘의 운세",
         content: parsed.content || "",
         interpretation: parsed.interpretation || "",
         feedback: parsed.feedback || "",
+        category: parsed.category || "기타",
         mainCards: [
           {
             id: parsed.main_card_id,
@@ -52,16 +51,15 @@ export default function CreateRecordPage() {
         ],
         subCards: [],
         imageUrls: [],
-      };
-
-      console.log("📌 about to set:", next); // ✅ 이걸로 확인하자
-      setInitialValues(next);
+      });
+      // sessionStorage.removeItem("tarot_temp_record");
     } else {
       setInitialValues({
         title: "",
         content: "",
         interpretation: "",
         feedback: "",
+        category: "기타",
         mainCards: [],
         subCards: [],
         imageUrls: [],
@@ -77,6 +75,7 @@ export default function CreateRecordPage() {
     imageUrls,
     mainCards,
     subCards,
+    category,
   }: RecordFormData) => {
     try {
       const {
@@ -97,6 +96,7 @@ export default function CreateRecordPage() {
           image_urls: imageUrls,
           user_id: session.user.id,
           created_at: new Date(),
+          category,
         })
         .select()
         .single();
@@ -155,12 +155,13 @@ export default function CreateRecordPage() {
           <h1 className="text-4xl font-bold text-white mb-2">새로운 기록</h1>
           <p className="text-gray-400">타로 카드 기록을 남겨보세요</p>
         </div>
-        {initialValues.title !== undefined && (
+        {initialValues && initialValues.category !== undefined && (
           <RecordForm
             initialTitle={initialValues.title}
             initialContent={initialValues.content}
             initialInterpretation={initialValues.interpretation}
             initialFeedback={initialValues.feedback}
+            initialCategory={initialValues.category}
             initialMainCards={initialValues.mainCards}
             initialSubCards={initialValues.subCards}
             initialImageUrls={initialValues.imageUrls}

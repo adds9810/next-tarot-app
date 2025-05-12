@@ -92,7 +92,8 @@ export default function TarotPage() {
   const saveToSessionAndGo = () => {
     if (!selectedCard || !fortuneText) return;
 
-    console.log("✅ 저장 시작"); // 이거 안 찍히면 버튼이 안 눌린 거야
+    // 질문이 없으면 "오늘의 운세", 있으면 "기타"
+    const isToday = question.trim() === "";
 
     const payload = {
       title: question || "오늘의 운세",
@@ -103,6 +104,7 @@ export default function TarotPage() {
       main_card_name: selectedCard.name,
       main_card_image: selectedCard.image_url,
       main_card_keywords: selectedCard.keywords,
+      category: isToday ? "오늘의 운세" : "기타",
     };
 
     console.log("🧾 저장할 payload:", payload);
