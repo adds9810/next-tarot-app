@@ -5,7 +5,11 @@ import { motion } from "framer-motion";
 
 export default function GuestMain() {
   return (
-    <section className="relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+    <section
+      className="relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      role="main"
+      aria-label="방문자 메인 페이지"
+    >
       <div className="relative z-20 w-full max-w-6xl mx-auto space-y-12">
         <div className="text-center space-y-8 md:space-y-12">
           {/* 메인 타이틀 */}
@@ -130,30 +134,26 @@ export default function GuestMain() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8"
+            role="group"
+            aria-label="서비스 이용 시작하기"
           >
             <Link
               href="/login"
-              className="group relative px-8 py-4 w-full sm:w-auto min-w-[200px] bg-gradient-to-r from-[#FFD700] to-[#FFA500] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
+              className="group relative px-6 py-3 w-full sm:w-auto min-w-[200px] bg-[#FFD700] text-[#0B0C2A] rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
               aria-label="로그인하고 별의 문 열기"
+              role="button"
             >
-              <div
-                className="absolute inset-0 bg-white/20 transform -skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-500"
-                aria-hidden="true"
-              />
-              <span className="relative font-body text-lg text-[#0B0C2A] font-medium tracking-wide">
+              <span className="relative font-body text-base sm:text-lg text-[#0B0C2A] font-medium tracking-wide">
                 별의 문을 열기
               </span>
             </Link>
             <Link
               href="/signup"
-              className="group relative px-8 py-4 w-full sm:w-auto min-w-[200px] bg-transparent border-2 border-[#FFD700] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,215,0,0.2)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
+              className="group relative px-6 py-3 w-full sm:w-auto min-w-[200px] bg-transparent border border-[#FFD700] text-[#FFD700] rounded-lg hover:border-[#FFE566] hover:text-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
               aria-label="회원가입하고 나만의 여정 시작하기"
+              role="button"
             >
-              <div
-                className="absolute inset-0 bg-[#FFD700]/10 transform -skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-500"
-                aria-hidden="true"
-              />
-              <span className="relative font-body text-lg text-[#FFD700] font-medium tracking-wide">
+              <span className="relative font-body text-base sm:text-lg font-medium tracking-wide">
                 나만의 여정 시작하기
               </span>
             </Link>

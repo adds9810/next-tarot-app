@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { User, AuthChangeEvent, Session } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -86,11 +87,11 @@ export default function Header() {
     ? [
         { href: "/tarot", label: "당신을 위한 카드" },
         { href: "/record", label: "속삭임의 흔적" },
-        { href: "/post", label: "별의 메아리" },
+        // { href: "/post", label: "별의 메아리" },
       ]
     : [
         { href: "/tarot", label: "당신을 위한 카드" },
-        { href: "/post", label: "별의 메아리" },
+        // { href: "/post", label: "별의 메아리" },
       ];
 
   return (
@@ -107,7 +108,7 @@ export default function Header() {
           {/* 로고 */}
           <Link
             href="/"
-            className="font-logo text-xl md:text-3xl text-[#FDF9E9] hover:text-[#FFE566] transition-all duration-300 tracking-wider focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg"
+            className="font-title text-xl md:text-3xl text-[#FDF9E9] hover:text-[#FFE566] transition-all duration-300 tracking-wider focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg"
             aria-label="Whispers of the Stars - 홈으로 이동"
           >
             <h1 className="drop-shadow-[0_0_8px_rgba(255,215,0,0.3)]">
@@ -178,13 +179,6 @@ export default function Header() {
                       role="menu"
                     >
                       <Link
-                        href="/record"
-                        className="block px-4 py-2 text-sm text-[#EAE7FF] hover:bg-[#FFD700]/10 font-body transition-colors duration-200 focus:outline-none focus:bg-[#FFD700]/20"
-                        role="menuitem"
-                      >
-                        내 리딩
-                      </Link>
-                      <Link
                         href="/profile"
                         className="block px-4 py-2 text-sm text-[#EAE7FF] hover:bg-[#FFD700]/10 font-body transition-colors duration-200 focus:outline-none focus:bg-[#FFD700]/20"
                         role="menuitem"
@@ -226,6 +220,7 @@ export default function Header() {
           <button
             className="md:hidden p-2 text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onBlur={() => setIsMenuOpen(false)}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
@@ -247,125 +242,86 @@ export default function Header() {
               )}
             </svg>
           </button>
+        </nav>
 
-          {/* 모바일 메뉴 */}
-          <div
-            id="mobile-menu"
-            className={`md:hidden absolute top-full left-0 right-0 bg-[#1C1635]/95 backdrop-blur-sm border-b border-[#FFD700]/10 transition-all duration-300 ease-in-out ${
-              isMenuOpen
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 -translate-y-4 pointer-events-none"
-            }`}
-            role="menu"
-          >
-            <div className="px-4 py-4 space-y-4">
-              {user ? (
-                <>
-                  {/* 사용자 프로필 정보 */}
-                  <div className="flex items-center space-x-3 px-3 py-2">
-                    <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[#FFD700]/30 glow-sm">
-                      <Image
-                        src={
-                          user.user_metadata.avatar_url ||
-                          "/images/them/profile.png"
-                        }
-                        alt={`${nickname}님의 프로필 이미지`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-body text-[#FFD700] text-lg">
-                        {nickname}님
-                      </span>
-                      <span className="font-body text-[#EAE7FF]/70 text-sm">
-                        {user.email}
-                      </span>
-                    </div>
+        {/* 모바일 메뉴 */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              id="mobile-menu"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="md:hidden mt-4 py-4 bg-[#1C1635]/95 backdrop-blur-sm rounded-lg border border-[#FFD700]/10 overflow-hidden"
+              role="menu"
+            >
+              {user && (
+                <div className="flex items-center space-x-3 px-4 mb-4 pb-4 border-b border-[#FFD700]/10">
+                  <div className="relative w-10 h-10 rounded-full overflow-hidden border border-[#FFD700]/20 glow-sm">
+                    <Image
+                      src={
+                        user.user_metadata.avatar_url ||
+                        "/images/them/profile.png"
+                      }
+                      alt={`${nickname}님의 프로필 이미지`}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-
-                  <div className="space-y-2 border-t border-[#FFD700]/10 pt-4">
-                    {menuItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="block font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
-                        role="menuitem"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-
-                  <div className="space-y-2 border-t border-[#FFD700]/10 pt-4">
-                    <Link
-                      href="/record"
-                      className="block font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
-                      role="menuitem"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      내 리딩
-                    </Link>
+                  <span className="font-body text-[#EAE7FF]">{nickname}님</span>
+                </div>
+              )}
+              <div className="flex flex-col space-y-4 px-4">
+                {menuItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
+                    aria-label={`${item.label} 페이지로 이동`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                {user ? (
+                  <>
                     <Link
                       href="/profile"
-                      className="block font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
-                      role="menuitem"
-                      onClick={() => setIsMenuOpen(false)}
+                      className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
+                      aria-label="개인정보 수정 페이지로 이동"
                     >
                       개인정보 수정
                     </Link>
                     <button
-                      onClick={() => {
-                        handleLogout();
-                        setIsMenuOpen(false);
-                      }}
-                      className="w-full text-left font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
-                      role="menuitem"
+                      onClick={handleLogout}
+                      className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2 text-left"
+                      aria-label="로그아웃"
                     >
                       로그아웃
                     </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="space-y-2">
-                    {menuItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="block font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
-                        role="menuitem"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-
-                  <div className="space-y-2 pt-4 border-t border-[#FFD700]/10">
+                  </>
+                ) : (
+                  <>
                     <Link
                       href="/login"
-                      className="block w-full px-4 py-2 font-body text-center text-[#EAE7FF] hover:text-[#FFD700] border border-[#FFD700]/20 rounded-lg hover:border-[#FFD700]/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
-                      role="menuitem"
-                      onClick={() => setIsMenuOpen(false)}
+                      className="px-4 py-2 font-body text-[#EAE7FF] hover:text-[#FFD700] border border-[#FFD700]/20 rounded-lg hover:border-[#FFD700]/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 text-center"
+                      aria-label="로그인 페이지로 이동"
                     >
                       로그인
                     </Link>
                     <Link
                       href="/signup"
-                      className="block w-full px-4 py-2 font-body text-center bg-[#FFD700] text-[#0B0C2A] rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700] shadow-lg shadow-[#FFD700]/20"
-                      role="menuitem"
-                      onClick={() => setIsMenuOpen(false)}
+                      className="px-4 py-2 font-body bg-[#FFD700] text-[#0B0C2A] rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700] shadow-lg shadow-[#FFD700]/20 text-center"
+                      aria-label="회원가입 페이지로 이동"
                     >
                       회원가입
                     </Link>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </nav>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );

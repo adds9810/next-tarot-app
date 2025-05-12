@@ -159,6 +159,7 @@ export default function UserMain({ nickname }: UserMainProps) {
             </p>
           </motion.section>
         </motion.div>
+
         {/* 메인 버튼 그룹 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -170,6 +171,7 @@ export default function UserMain({ nickname }: UserMainProps) {
           <Link
             href="/tarot?type=today"
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
+            aria-label="오늘의 운세 확인하기"
           >
             <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
               <motion.div
@@ -194,6 +196,7 @@ export default function UserMain({ nickname }: UserMainProps) {
           <Link
             href="/tarot?type=custom"
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
+            aria-label="별에게 질문하기"
           >
             <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
               <motion.div
@@ -218,6 +221,7 @@ export default function UserMain({ nickname }: UserMainProps) {
           <Link
             href="/record"
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
+            aria-label="이전 리딩 기록 보기"
           >
             <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
               <motion.div
@@ -248,24 +252,10 @@ export default function UserMain({ nickname }: UserMainProps) {
           aria-label="최근 기록"
         >
           <h2 className="font-title text-2xl text-[#FFD700] mb-6 text-center">
-            최근의 별빛 기록
+            최근 남긴 속삭임
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* 최근 기록 카드 */}
-            <article
-              className="p-6 bg-[#1C1635]/30 backdrop-blur-sm rounded-xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 focus-within:ring-2 focus-within:ring-[#FFD700]/30"
-              tabIndex={0}
-            >
-              <time className="text-sm text-[#BFA2DB] mb-2 block">
-                2024년 3월 21일
-              </time>
-              <h3 className="font-title text-lg text-[#FFD700] mb-2">
-                오늘의 운세
-              </h3>
-              <p className="font-body text-white/80 text-sm line-clamp-3">
-                새로운 시작을 알리는 별들의 움직임이 보입니다...
-              </p>
-            </article>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* 여기에 최근 기록 카드들이 들어갈 예정 */}
           </div>
         </motion.section>
       </div>
