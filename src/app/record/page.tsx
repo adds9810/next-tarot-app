@@ -92,7 +92,7 @@ export default function RecordPage() {
 
   return (
     <section
-      className="relative py-12 px-4 w-screen sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      className="relative py-10 px-4 w-dvw sm:px-6 lg:px-8 flex flex-col items-center justify-center"
       aria-label="기록하기 섹션"
     >
       {/* 메인 콘텐츠 */}

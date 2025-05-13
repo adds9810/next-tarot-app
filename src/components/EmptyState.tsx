@@ -31,15 +31,9 @@ export default function EmptyState({
       >
         <Link
           href={buttonLink}
-          className="group relative px-8 py-4 w-full sm:w-auto min-w-[200px] bg-gradient-to-r from-[#FFD700] to-[#FFA500] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
+          className="px-6 py-3 w-full min-w-[200px] lg:max-w-xs bg-[#FFD700] text-[#0B0C2A]  rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
         >
-          <div
-            className="absolute inset-0 bg-white/20 transform -skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-500"
-            aria-hidden="true"
-          />
-          <span className="relative text-lg text-[#0B0C2A] font-medium tracking-wide">
-            {buttonText}
-          </span>
+          {buttonText}
         </Link>
       </MotionDiv>
     </div>

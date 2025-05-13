@@ -146,7 +146,7 @@ export default function Login() {
               )}
               <Button
                 type="submit"
-                className="group px-6 py-3 w-full min-w-[200px] bg-[#FFD700] text-[#0B0C2A]  rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
+                className="px-6 py-3 w-full min-w-[200px] bg-[#FFD700] text-[#0B0C2A]  rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
               >
                 별의 문 열기
               </Button>

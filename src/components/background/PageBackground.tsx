@@ -54,7 +54,12 @@ export default function PageBackground({ children }: PageBackgroundProps) {
   }, []);
 
   return (
-    <div className="relative overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className="relative overflow-hidden"
+    >
       {/* 배경 이미지 */}
       <div className="fixed inset-0 z-0">
         <Image
@@ -138,6 +143,6 @@ export default function PageBackground({ children }: PageBackgroundProps) {
       <div className="relative min-h-screen w-full pt-16 md:pt-20 flex items-center justify-center z-20">
         {children}
       </div>
-    </div>
+    </motion.div>
   );
 }

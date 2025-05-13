@@ -24,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-[#070817]`}>
         <Providers>
           <Header />
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>

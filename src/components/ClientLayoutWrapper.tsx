@@ -17,9 +17,8 @@ export default function ClientLayoutWrapper({
       <main>{children}</main>
     </PageBackground>
   ) : (
-    <>
-      <ClientStarryBackground />
+    <ClientStarryBackground>
       <main>{children}</main>
-    </>
+    </ClientStarryBackground>
   );
 }
