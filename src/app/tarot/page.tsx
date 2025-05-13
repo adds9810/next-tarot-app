@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/types/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+import MysticSpinner from "@/components/MysticSpinner";
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -314,9 +315,7 @@ export default function TarotPage() {
                 별들이 당신의 운명을 읽고 있습니다.
               </h2>
             </motion.div>
-            <div className="flex justify-center">
-              <div className="w-16 h-16 border-4 border-[#FFD700] border-t-transparent rounded-full animate-spin" />
-            </div>
+            <MysticSpinner />;
           </div>
         );
 

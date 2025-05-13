@@ -137,7 +137,7 @@ export default function UserMain({ nickname }: UserMainProps) {
                 </>
               ) : (
                 <p className="text-gray-400 text-base">
-                  날씨 정보를 불러오는 중입니다...
+                  날씨 정보를 불러오는 중입니다.
                 </p>
               )}
             </motion.div>
@@ -244,7 +244,7 @@ export default function UserMain({ nickname }: UserMainProps) {
         </motion.div>
 
         {/* 최근 기록 미리보기 */}
-        <motion.section
+        {/* <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={isAnimated ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 1.0, duration: 0.8 }}
@@ -255,9 +255,9 @@ export default function UserMain({ nickname }: UserMainProps) {
             최근 남긴 속삭임
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* 여기에 최근 기록 카드들이 들어갈 예정 */}
+            {/* 여기에 최근 기록 카드들이 들어갈 예정 
           </div>
-        </motion.section>
+        </motion.section> */}
       </div>
     </section>
   );

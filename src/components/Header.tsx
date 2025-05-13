@@ -117,12 +117,12 @@ export default function Header() {
           </Link>
 
           {/* 데스크톱 메뉴 */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
             {menuItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
+                className="font-body text-[#EAE7FF] hover:text-[#FFD700] text-center transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg px-3 py-2"
                 aria-label={`${item.label} 페이지로 이동`}
               >
                 {item.label}

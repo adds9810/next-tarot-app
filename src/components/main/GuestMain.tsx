@@ -74,7 +74,7 @@ export default function GuestMain() {
                 오늘의 카드
               </h3>
               <p className="font-body text-white/80">
-                매일 새로운 카드가 당신의 하루를 비춰줍니다
+                매일 새로운 카드가 당신 하루를 비춰줍니다
               </p>
             </motion.div>
 
@@ -97,7 +97,7 @@ export default function GuestMain() {
                 질문 기반 리딩
               </h3>
               <p className="font-body text-white/80">
-                당신만의 특별한 질문에 카드가 답해드립니다
+                당신의 특별한 질문에 카드가 답해드립니다
               </p>
             </motion.div>
 

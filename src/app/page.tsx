@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import GuestMain from "@/components/main/GuestMain";
 import UserMain from "@/components/main/UserMain";
+import MysticSpinner from "@/components/MysticSpinner";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -39,11 +40,7 @@ export default function Home() {
   }, []);
 
   if (!mounted || isLoading) {
-    return (
-      <div className="flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#FFD700]" />
-      </div>
-    );
+    return <MysticSpinner />;
   }
 
   return (
