@@ -99,7 +99,7 @@ export default function CardSelector({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between bg-[#1C1635]/50 border-[#FFD700]/10 text-white hover:bg-[#1C1635]/70 hover:border-[#FFD700]/30"
+            className="w-full justify-between bg-[#1C1635]/50 border-[#FFD700]/20 text-white hover:bg-[#1C1635]/70 hover:border-[#FFD700]/30"
           >
             {type === "main" ? "메인 카드 선택" : "서브 카드 선택"}
             <span className="text-[#BFA2DB] text-sm">
@@ -147,7 +147,7 @@ export default function CardSelector({
           {selectedCards.map((card) => (
             <div
               key={card.id}
-              className="flex items-center justify-between p-3 bg-[#1C1635]/50 border border-[#FFD700]/10 rounded-lg"
+              className="flex items-center justify-between p-3 bg-[#1C1635]/50 border border-[#FFD700]/20 rounded-lg"
             >
               <div className="flex flex-col">
                 <span className="font-medium text-white">{card.name}</span>

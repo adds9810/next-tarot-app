@@ -173,7 +173,7 @@ export default function UserMain({ nickname }: UserMainProps) {
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
             aria-label="오늘의 운세 확인하기"
           >
-            <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
+            <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/20 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 className="text-4xl sm:text-5xl mb-2"
@@ -198,7 +198,7 @@ export default function UserMain({ nickname }: UserMainProps) {
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
             aria-label="별에게 질문하기"
           >
-            <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
+            <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/20 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 className="text-4xl sm:text-5xl mb-2"
@@ -223,7 +223,7 @@ export default function UserMain({ nickname }: UserMainProps) {
             className="group focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-2xl"
             aria-label="이전 리딩 기록 보기"
           >
-            <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
+            <div className="h-full p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/20 hover:border-[#FFD700]/30 transition-all duration-300 flex flex-col items-center text-center space-y-4">
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 className="text-4xl sm:text-5xl mb-2"

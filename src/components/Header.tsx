@@ -91,12 +91,13 @@ export default function Header() {
       ]
     : [
         { href: "/tarot", label: "당신을 위한 카드" },
+        { href: "/record", label: "속삭임의 흔적" },
         // { href: "/post", label: "별의 메아리" },
       ];
 
   return (
     <header
-      className="fixed w-full top-0 z-50 bg-gradient-to-b from-[#070817]/80 to-[#1C1635]/80 backdrop-blur-md border-b border-[#FFD700]/10 shadow-lg shadow-[#1C1635]/20"
+      className="fixed w-full top-0 z-50 bg-gradient-to-b from-[#070817]/80 to-[#1C1635]/80 backdrop-blur-md border-b border-[#FFD700]/20 shadow-lg shadow-[#1C1635]/20"
       role="banner"
     >
       <div className="container mx-auto px-4 py-3 md:py-4">

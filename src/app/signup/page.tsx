@@ -127,7 +127,7 @@ export default function SignUp() {
         </section>
 
         <div className="w-full max-w-sm mx-auto animate-fade-in-delay">
-          <div className="p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all duration-200">
+          <div className="p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/20 hover:border-[#FFD700]/30 transition-all duration-200">
             {/* 소셜 회원가입 */}
             <div className="space-y-3 mb-6">
               <Button
@@ -173,7 +173,7 @@ export default function SignUp() {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#0B0C2A]/80 border border-[#FFD700]/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700]/30 focus:border-[#FFD700]/30 hover:border-[#FFD700]/30 transition-all duration-300 font-body text-base"
+                  className="w-full px-4 py-3 bg-[#0B0C2A]/80 border border-[#FFD700]/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700]/30 focus:border-[#FFD700]/30 hover:border-[#FFD700]/30 transition-all duration-300 font-body text-base"
                   placeholder="닉네임을 입력해주세요"
                   required
                   aria-required="true"
@@ -192,7 +192,7 @@ export default function SignUp() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#0B0C2A]/80 border border-[#FFD700]/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700]/30 focus:border-[#FFD700]/30 hover:border-[#FFD700]/30 transition-all duration-300 font-body text-base"
+                  className="w-full px-4 py-3 bg-[#0B0C2A]/80 border border-[#FFD700]/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700]/30 focus:border-[#FFD700]/30 hover:border-[#FFD700]/30 transition-all duration-300 font-body text-base"
                   placeholder="이메일을 입력해주세요"
                   required
                   aria-required="true"

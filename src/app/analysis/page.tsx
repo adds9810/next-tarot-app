@@ -207,7 +207,7 @@ export default function AnalysisPage() {
                       onClick={() => setStartOpen(true)}
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left font-normal bg-[#1C1635]/50 border-[#FFD700]/10 text-white",
+                        "w-full justify-start text-left font-normal bg-[#1C1635]/50 border-[#FFD700]/20 text-white",
                         !startDate && "text-muted-foreground"
                       )}
                     >
@@ -242,7 +242,7 @@ export default function AnalysisPage() {
                       onClick={() => setEndOpen(true)}
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left font-normal bg-[#1C1635]/50 border-[#FFD700]/10 text-white",
+                        "w-full justify-start text-left font-normal bg-[#1C1635]/50 border-[#FFD700]/20 text-white",
                         !endDate && "text-muted-foreground"
                       )}
                     >
@@ -295,7 +295,7 @@ export default function AnalysisPage() {
                           );
                         }
                       }}
-                      className="border-[#FFD700]/10 data-[state=checked]:bg-[#FFD700] data-[state=checked]:text-[#0B0C2A]"
+                      className="border-[#FFD700]/20 data-[state=checked]:bg-[#FFD700] data-[state=checked]:text-[#0B0C2A]"
                     />
                     <Label
                       htmlFor={category.id}
@@ -313,7 +313,7 @@ export default function AnalysisPage() {
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 placeholder="기억에 남는 질문이나 키워드를 입력해보세요"
-                className="bg-[#1C1635]/50 border-[#FFD700]/10 text-white placeholder:text-[#BFA2DB]/50"
+                className="bg-[#1C1635]/50 border-[#FFD700]/20 text-white placeholder:text-[#BFA2DB]/50"
               />
             </div>
             <Button
@@ -394,7 +394,7 @@ export default function AnalysisPage() {
                     (q: string, i: number) => (
                       <li
                         key={i}
-                        className="text-[#BFA2DB] p-4 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg"
+                        className="text-[#BFA2DB] p-4 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg"
                       >
                         {q}
                       </li>
@@ -414,7 +414,7 @@ export default function AnalysisPage() {
                 {analysisResult.records.map((record: any) => (
                   <div
                     key={record.id}
-                    className="p-4 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg"
+                    className="p-4 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg"
                   >
                     <div className="flex justify-between items-start">
                       <div>

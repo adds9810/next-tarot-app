@@ -206,7 +206,7 @@ export default function TarotPage() {
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 placeholder="예: 내 연애운은 어떨까요?"
-                className="bg-[#1C1635]/50 border-[#FFD700]/10 text-white"
+                className="bg-[#1C1635]/50 border-[#FFD700]/20 text-white"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
@@ -248,7 +248,7 @@ export default function TarotPage() {
                       key={i}
                       animate={{ rotate: [0, 360], x: [0, 10, -10, 0] }}
                       transition={{ repeat: Infinity, duration: 1 }}
-                      className="w-16 h-24 bg-[#1C1635]/50 border border-[#FFD700]/10 rounded"
+                      className="w-16 h-24 bg-[#1C1635]/50 border border-[#FFD700]/20 rounded"
                     />
                   ))}
                 </div>
@@ -285,7 +285,7 @@ export default function TarotPage() {
                       onClick={() => handleCardSelect(card)}
                       className="cursor-pointer"
                     >
-                      <div className="aspect-[2/3] bg-[#1C1635]/50 border border-[#FFD700]/10 rounded overflow-hidden">
+                      <div className="aspect-[2/3] bg-[#1C1635]/50 border border-[#FFD700]/20 rounded overflow-hidden">
                         <img
                           src="/images/cards/card-back.png"
                           alt="card-back"
@@ -344,7 +344,7 @@ export default function TarotPage() {
               <p className="text-lg text-[#BFA2DB]">
                 {question || "오늘의 운세"}
               </p>
-              <div className="max-w-2xl mx-auto p-6 bg-[#1C1635]/50 border border-[#FFD700]/10 rounded-lg">
+              <div className="max-w-2xl mx-auto p-6 bg-[#1C1635]/50 border border-[#FFD700]/20 rounded-lg">
                 <p className="text-white leading-relaxed">{fortuneText}</p>
               </div>
             </motion.div>

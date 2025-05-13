@@ -113,7 +113,7 @@ export default function StyleGuidePage() {
                   <h3 className="text-xl text-[#BFA2DB]">텍스트 컬러</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
-                      <div className="h-24 bg-[#FFD700] rounded-lg border border-[#FFD700]/10 flex items-center justify-center">
+                      <div className="h-24 bg-[#FFD700] rounded-lg border border-[#FFD700]/20 flex items-center justify-center">
                         <p className="text-[#0B0C2A] font-medium">
                           강조 텍스트
                         </p>
@@ -122,7 +122,7 @@ export default function StyleGuidePage() {
                       <p className="text-sm text-[#BFA2DB]/70">#FFD700</p>
                     </div>
                     <div className="space-y-2">
-                      <div className="h-24 bg-[#BFA2DB] rounded-lg border border-[#FFD700]/10 flex items-center justify-center">
+                      <div className="h-24 bg-[#BFA2DB] rounded-lg border border-[#FFD700]/20 flex items-center justify-center">
                         <p className="text-[#0B0C2A] font-medium">
                           일반 텍스트
                         </p>
@@ -131,7 +131,7 @@ export default function StyleGuidePage() {
                       <p className="text-sm text-[#BFA2DB]/70">#BFA2DB</p>
                     </div>
                     <div className="space-y-2">
-                      <div className="h-24 bg-[#BFA2DB]/50 rounded-lg border border-[#FFD700]/10 flex items-center justify-center">
+                      <div className="h-24 bg-[#BFA2DB]/50 rounded-lg border border-[#FFD700]/20 flex items-center justify-center">
                         <p className="text-[#0B0C2A] font-medium">
                           보조 텍스트
                         </p>
@@ -266,7 +266,7 @@ export default function StyleGuidePage() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="border-[#FFD700]/10 text-white"
+                      className="border-[#FFD700]/20 text-white"
                     >
                       아웃라인 버튼
                     </Button>
@@ -284,13 +284,13 @@ export default function StyleGuidePage() {
                       <Label className="text-[#BFA2DB]">라벨</Label>
                       <Input
                         placeholder="플레이스홀더 텍스트"
-                        className="bg-[#1C1635]/50 border-[#FFD700]/10 text-white placeholder:text-[#BFA2DB]/50"
+                        className="bg-[#1C1635]/50 border-[#FFD700]/20 text-white placeholder:text-[#BFA2DB]/50"
                       />
                     </div>
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="terms"
-                        className="border-[#FFD700]/10 data-[state=checked]:bg-[#FFD700] data-[state=checked]:text-[#0B0C2A]"
+                        className="border-[#FFD700]/20 data-[state=checked]:bg-[#FFD700] data-[state=checked]:text-[#0B0C2A]"
                       />
                       <Label
                         htmlFor="terms"
@@ -310,7 +310,7 @@ export default function StyleGuidePage() {
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#BFA2DB]/50" />
                       <Input
                         placeholder="검색어를 입력하세요"
-                        className="pl-10 bg-[#1C1635]/50 border-[#FFD700]/10 text-white placeholder:text-[#BFA2DB]/50"
+                        className="pl-10 bg-[#1C1635]/50 border-[#FFD700]/20 text-white placeholder:text-[#BFA2DB]/50"
                       />
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -319,7 +319,7 @@ export default function StyleGuidePage() {
                           <Button
                             key={category}
                             variant="outline"
-                            className="border-[#FFD700]/10 text-[#BFA2DB] hover:bg-[#FFD700]/10"
+                            className="border-[#FFD700]/20 text-[#BFA2DB] hover:bg-[#FFD700]/10"
                           >
                             {category}
                           </Button>
@@ -420,13 +420,13 @@ export default function StyleGuidePage() {
                 <div className="space-y-4">
                   <h3 className="text-xl text-[#BFA2DB]">여백</h3>
                   <div className="space-y-4">
-                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg">
+                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg">
                       <p className="text-[#BFA2DB]">p-4 (1rem, 16px)</p>
                     </div>
-                    <div className="p-6 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg">
+                    <div className="p-6 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg">
                       <p className="text-[#BFA2DB]">p-6 (1.5rem, 24px)</p>
                     </div>
-                    <div className="p-8 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg">
+                    <div className="p-8 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg">
                       <p className="text-[#BFA2DB]">p-8 (2rem, 32px)</p>
                     </div>
                   </div>
@@ -469,7 +469,7 @@ export default function StyleGuidePage() {
                 {/* 기본 배경 */}
                 <div className="space-y-4">
                   <h3 className="text-xl text-[#BFA2DB]">기본 배경</h3>
-                  <div className="h-48 bg-[#0B0C2A] rounded-lg border border-[#FFD700]/10 flex items-center justify-center">
+                  <div className="h-48 bg-[#0B0C2A] rounded-lg border border-[#FFD700]/20 flex items-center justify-center">
                     <p className="text-[#BFA2DB]">bg-[#0B0C2A]</p>
                   </div>
                 </div>
@@ -477,7 +477,7 @@ export default function StyleGuidePage() {
                 {/* 카드 배경 */}
                 <div className="space-y-4">
                   <h3 className="text-xl text-[#BFA2DB]">카드 배경</h3>
-                  <div className="h-48 bg-[#1C1635]/50 backdrop-blur-sm rounded-lg border border-[#FFD700]/10 flex items-center justify-center">
+                  <div className="h-48 bg-[#1C1635]/50 backdrop-blur-sm rounded-lg border border-[#FFD700]/20 flex items-center justify-center">
                     <p className="text-[#BFA2DB]">
                       bg-[#1C1635]/50 backdrop-blur-sm
                     </p>
@@ -487,7 +487,7 @@ export default function StyleGuidePage() {
                 {/* 그라데이션 배경 */}
                 <div className="space-y-4">
                   <h3 className="text-xl text-[#BFA2DB]">그라데이션 배경</h3>
-                  <div className="h-48 bg-gradient-to-r from-[#1C1635]/50 to-[#0B0C2A]/50 backdrop-blur-sm rounded-lg border border-[#FFD700]/10 flex items-center justify-center">
+                  <div className="h-48 bg-gradient-to-r from-[#1C1635]/50 to-[#0B0C2A]/50 backdrop-blur-sm rounded-lg border border-[#FFD700]/20 flex items-center justify-center">
                     <p className="text-[#BFA2DB]">
                       bg-gradient-to-r from-[#1C1635]/50 to-[#0B0C2A]/50
                     </p>
@@ -510,17 +510,17 @@ export default function StyleGuidePage() {
                 <div className="space-y-4">
                   <h3 className="text-xl text-[#BFA2DB]">브레이크포인트</h3>
                   <div className="space-y-4">
-                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg">
+                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg">
                       <p className="text-[#BFA2DB]">모바일: ~ 640px</p>
                       <p className="text-sm text-[#BFA2DB]/70">sm: 640px</p>
                     </div>
-                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg">
+                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg">
                       <p className="text-[#BFA2DB]">태블릿: 641px ~ 1024px</p>
                       <p className="text-sm text-[#BFA2DB]/70">
                         md: 768px, lg: 1024px
                       </p>
                     </div>
-                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg">
+                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg">
                       <p className="text-[#BFA2DB]">데스크톱: 1025px ~</p>
                       <p className="text-sm text-[#BFA2DB]/70">
                         xl: 1280px, 2xl: 1536px
@@ -533,7 +533,7 @@ export default function StyleGuidePage() {
                 <div className="space-y-4">
                   <h3 className="text-xl text-[#BFA2DB]">접근성</h3>
                   <div className="space-y-4">
-                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg">
+                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg">
                       <p className="text-[#BFA2DB]">시맨틱 HTML</p>
                       <ul className="mt-2 space-y-2 text-sm text-[#BFA2DB]/70">
                         <li>
@@ -543,7 +543,7 @@ export default function StyleGuidePage() {
                         <li>• ARIA 레이블 및 역할 지정</li>
                       </ul>
                     </div>
-                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg">
+                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg">
                       <p className="text-[#BFA2DB]">키보드 접근성</p>
                       <ul className="mt-2 space-y-2 text-sm text-[#BFA2DB]/70">
                         <li>• 포커스 가능한 요소에 시각적 표시</li>
@@ -558,7 +558,7 @@ export default function StyleGuidePage() {
                 <div className="space-y-4">
                   <h3 className="text-xl text-[#BFA2DB]">SEO</h3>
                   <div className="space-y-4">
-                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg">
+                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg">
                       <p className="text-[#BFA2DB]">메타 정보</p>
                       <ul className="mt-2 space-y-2 text-sm text-[#BFA2DB]/70">
                         <li>• title, description, keywords 설정</li>
@@ -566,7 +566,7 @@ export default function StyleGuidePage() {
                         <li>• 구조화된 데이터 마크업</li>
                       </ul>
                     </div>
-                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/10 rounded-lg">
+                    <div className="p-4 bg-[#1C1635] border border-[#FFD700]/20 rounded-lg">
                       <p className="text-[#BFA2DB]">성능 최적화</p>
                       <ul className="mt-2 space-y-2 text-sm text-[#BFA2DB]/70">
                         <li>• 이미지 최적화</li>
