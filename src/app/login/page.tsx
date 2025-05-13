@@ -80,7 +80,7 @@ export default function Login() {
 
   return (
     <section
-      className="relative py-10 px-4 w-dvw sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      className="relative py-10 w-dvw px-6 lg:px-8 flex flex-col items-center justify-center"
       aria-label="로그인 섹션"
     >
       <div className="relative z-20 text-center w-full max-w-lg mx-auto">

@@ -6,7 +6,7 @@ import EmptyState from "@/components/EmptyState";
 export default function postsPage() {
   return (
     <section
-      className="relative py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      className="relative py-12 px-6 lg:px-8 flex flex-col items-center justify-center"
       aria-label="커뮤니티 섹션"
     >
       <div className="relative z-20 text-center w-full max-w-lg mx-auto animate-fade-in">

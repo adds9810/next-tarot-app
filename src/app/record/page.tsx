@@ -102,7 +102,7 @@ export default function RecordPage() {
 
   return (
     <section
-      className="relative py-10 px-4 w-dvw sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      className="relative py-10 w-dvw px-6 lg:px-8 flex flex-col items-center justify-center"
       aria-label="기록하기 섹션"
     >
       {/* 메인 콘텐츠 */}
@@ -133,7 +133,7 @@ export default function RecordPage() {
             }
           >
             <SelectTrigger
-              className="w-40 bg-white/5 text-white border-white/10"
+              className="w-full md:w-40 bg-white/5 text-white border-white/10"
               aria-label="카테고리 선택"
             >
               <SelectValue placeholder="카테고리 선택" />
@@ -157,7 +157,7 @@ export default function RecordPage() {
           </Select>
           <Input
             type="search"
-            className="max-w-md w-full md:w-80 text-white placeholder:text-white/50 bg-white/5 border-white/10"
+            className=" w-full md:w-80 text-white placeholder:text-white/50 bg-white/5 border-white/10"
             placeholder="제목, 내용, 키워드로 검색"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

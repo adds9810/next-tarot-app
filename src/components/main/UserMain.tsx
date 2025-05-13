@@ -99,7 +99,7 @@ export default function UserMain({ nickname }: UserMainProps) {
 
   return (
     <section
-      className="relative py-10 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      className="relative py-10 px-6 lg:px-8 flex flex-col items-center justify-center"
       role="main"
       aria-label="사용자 메인 페이지"
     >

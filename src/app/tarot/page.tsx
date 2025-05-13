@@ -385,7 +385,7 @@ export default function TarotPage() {
 
   return (
     <section
-      className="relative py-10 px-4 w-dvw sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      className="relative py-10 w-dvw px-6 lg:px-8 flex flex-col items-center justify-center"
       aria-label="타로 운세 보기"
     >
       <AnimatePresence mode="wait">{renderStep()}</AnimatePresence>

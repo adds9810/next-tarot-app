@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import RecordForm from "@/components/record/RecordForm";
 import { useToast } from "@/hooks/use-toast";
-import ClientStarryBackground from "@/components/background/ClientStarryBackground";
 import { Card } from "@/types/card";
 import { RecordCategory } from "@/types/record";
 
@@ -148,28 +147,39 @@ export default function CreateRecordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12">
-      <ClientStarryBackground />
-      <div className="w-full max-w-2xl p-8 space-y-8 bg-black/30 backdrop-blur-lg rounded-xl border border-white/10">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-white mb-2">새로운 기록</h1>
-          <p className="text-gray-400">타로 카드 기록을 남겨보세요</p>
+    <section
+      className="relative py-10 px-4 w-full sm:px-6 lg:px-8 flex flex-col items-center justify-center"
+      aria-label="기록 생성 섹션"
+    >
+      <div className="w-full max-w-3xl text-center mx-auto relative z-10 space-y-8">
+        {/* 제목 및 부제 */}
+        <div className="space-y-4 animate-fade-in">
+          <h1 className="font-title text-3xl md:text-4xl text-[#FFD700] drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
+            카드의 속삭임
+          </h1>
+          <p className="font-body text-lg md:text-xl text-white/90 leading-relaxed">
+            오늘의 이야기를 카드로 남겨보세요.
+          </p>
         </div>
-        {initialValues && initialValues.category !== undefined && (
-          <RecordForm
-            initialTitle={initialValues.title}
-            initialContent={initialValues.content}
-            initialInterpretation={initialValues.interpretation}
-            initialFeedback={initialValues.feedback}
-            initialCategory={initialValues.category}
-            initialMainCards={initialValues.mainCards}
-            initialSubCards={initialValues.subCards}
-            initialImageUrls={initialValues.imageUrls}
-            onSubmit={handleCreate}
-            redirectPathOnSuccess="/record"
-          />
-        )}
+
+        {/* 입력 폼 */}
+        <div className="w-full p-6 sm:p-8 bg-black/30 backdrop-blur-lg rounded-xl border border-white/10">
+          {initialValues && initialValues.category !== undefined && (
+            <RecordForm
+              initialTitle={initialValues.title}
+              initialContent={initialValues.content}
+              initialInterpretation={initialValues.interpretation}
+              initialFeedback={initialValues.feedback}
+              initialCategory={initialValues.category}
+              initialMainCards={initialValues.mainCards}
+              initialSubCards={initialValues.subCards}
+              initialImageUrls={initialValues.imageUrls}
+              onSubmit={handleCreate}
+              redirectPathOnSuccess="/record"
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

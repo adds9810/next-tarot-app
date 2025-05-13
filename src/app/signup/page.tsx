@@ -115,7 +115,7 @@ export default function SignUp() {
   };
 
   return (
-    <section className="relative py-10 px-4 w-dvw sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+    <section className="relative py-10 w-dvw px-6 lg:px-8 flex flex-col items-center justify-center">
       <div className="relative z-20 text-center w-full max-w-lg mx-auto animate-fade-in">
         <section className="mb-8 space-y-4" aria-label="서비스 소개">
           <h1 className="font-title text-3xl md:text-4xl text-[#FFD700] mb-4 drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
