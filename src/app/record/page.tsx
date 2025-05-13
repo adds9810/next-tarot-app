@@ -15,6 +15,15 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 
 const ITEMS_PER_PAGE = 9;
@@ -223,50 +232,52 @@ export default function RecordPage() {
             </div>
 
             {/* 페이지네이션 */}
-            <div className="flex flex-wrap justify-center items-center gap-2 mt-10">
-              <Button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(1)}
-                variant="outline"
-              >
-                처음
-              </Button>
-              <Button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((p) => p - 1)}
-                variant="outline"
-              >
-                이전
-              </Button>
+            <Pagination className="mt-10">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(1, prev - 1))
+                    }
+                    className="text-[#BFA2DB] hover:bg-[#FFD700]/10 cursor-pointer"
+                  />
+                </PaginationItem>
 
-              {Array.from({ length: endPage - startPage + 1 }).map((_, i) => {
-                const page = startPage + i;
-                return (
-                  <Button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    variant={page === currentPage ? "default" : "outline"}
-                  >
-                    {page}
-                  </Button>
-                );
-              })}
+                {Array.from({ length: endPage - startPage + 1 }).map((_, i) => {
+                  const page = startPage + i;
+                  const isActive = page === currentPage;
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        className={
+                          isActive
+                            ? "bg-[#FFD700] text-[#0B0C2A] cursor-pointer"
+                            : "text-[#BFA2DB] hover:bg-[#FFD700]/10 cursor-pointer"
+                        }
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
 
-              <Button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((p) => p + 1)}
-                variant="outline"
-              >
-                다음
-              </Button>
-              <Button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(totalPages)}
-                variant="outline"
-              >
-                끝
-              </Button>
-            </div>
+                {endPage < totalPages && (
+                  <PaginationItem>
+                    <PaginationEllipsis className="text-[#BFA2DB]" />
+                  </PaginationItem>
+                )}
+
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                    }
+                    className="text-[#BFA2DB] hover:bg-[#FFD700]/10 cursor-pointer"
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </>
         )}
       </div>

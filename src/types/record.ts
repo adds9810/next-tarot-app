@@ -32,7 +32,7 @@ export interface RecordSummary {
   content: string;
   created_at: string;
   cards?: string[];
-  main_card_image?: string;
+  main_card_image_url?: string;
   image_urls?: string[];
   category?: string;
 }

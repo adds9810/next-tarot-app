@@ -25,7 +25,7 @@ export default function RecordCard({ record }: RecordCardProps) {
       aria-label={`"${record.title}" 상세 보기`}
     >
       <MotionDiv
-        className="p-6 bg-[#0B0C2A] rounded-2xl border border-[#FFD70020] shadow-xl hover:shadow-2xl transition-all duration-300 space-y-3"
+        className="h-full p-6 bg-[#0B0C2A] rounded-2xl border border-[#FFD70020] shadow-xl hover:shadow-2xl transition-all duration-300 space-y-3"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.02 }}
