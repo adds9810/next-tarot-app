@@ -56,7 +56,7 @@ export default function PageBackground({ children }: PageBackgroundProps) {
   return (
     <div className="relative overflow-hidden">
       {/* 배경 이미지 */}
-      <div className="absolute inset-0 z-0">
+      <div className="fixed inset-0 z-0">
         <Image
           src="/images/starry-night.jpg"
           alt="Starry Night Background"

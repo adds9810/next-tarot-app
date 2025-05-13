@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import ClientStarryBackground from "@/components/ClientStarryBackground";
 import RecordCard from "@/components/record/RecordCard";
 import EmptyState from "@/components/EmptyState";
 import { RecordSummary, RecordCategory } from "@/types/record";
@@ -96,7 +95,7 @@ export default function RecordPage() {
       className="relative py-12 px-4 w-screen sm:px-6 lg:px-8 flex flex-col items-center justify-center"
       aria-label="기록하기 섹션"
     >
-      <ClientStarryBackground />
+      {/* 메인 콘텐츠 */}
       <div className="container w-full text-center mx-auto relative z-10">
         <section className="space-y-4 animate-fade-in" aria-label="서비스 소개">
           <h1 className="font-title text-3xl md:text-4xl text-[#FFD700] mb-4 drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">

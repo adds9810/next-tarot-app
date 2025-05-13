@@ -19,9 +19,9 @@ export default function GuestMain() {
             transition={{ duration: 0.8 }}
             className="space-y-4"
           >
-            <h1 className="font-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#FFD700] leading-tight tracking-wide">
+            <h1 className="font-title text-3xl/tight sm:text-4xl/tight md:text-5xl/tight lg:text-6xl/tight text-[#FFD700] tracking-wide">
               오늘 별이 속삭인다면,
-              <br className="md:hidden" /> 당신의 하루는 어떻게 달라질까요?
+              <br /> 당신의 하루는 어떻게 달라질까요?
             </h1>
 
             {/* 서비스 소개 문구 */}

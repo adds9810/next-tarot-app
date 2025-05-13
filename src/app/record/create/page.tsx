@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import RecordForm from "@/components/record/RecordForm";
 import { useToast } from "@/hooks/use-toast";
-import ClientStarryBackground from "@/components/ClientStarryBackground";
+import ClientStarryBackground from "@/components/background/ClientStarryBackground";
 import { Card } from "@/types/card";
 import { RecordCategory } from "@/types/record";
 

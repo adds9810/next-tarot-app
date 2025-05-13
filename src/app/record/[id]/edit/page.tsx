@@ -7,7 +7,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Card } from "@/types/card";
 import { RecordCategory } from "@/types/record";
 import RecordForm from "@/components/record/RecordForm";
-import ClientStarryBackground from "@/components/ClientStarryBackground";
+import ClientStarryBackground from "@/components/background/ClientStarryBackground";
 
 interface PageProps {
   params: {

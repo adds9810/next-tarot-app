@@ -154,7 +154,7 @@ export default function TarotPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 "
               role="group"
               aria-label="운세 종류 선택"
@@ -177,7 +177,14 @@ export default function TarotPage() {
 
       case 2:
         return (
-          <div className="text-center w-full sm:max-w-xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="text-center w-full sm:max-w-xl mx-auto"
+            role="group"
+            aria-label="운세 종류 선택"
+          >
             <section
               className="text-center space-y-4"
               aria-labelledby="step2-title"
@@ -213,18 +220,19 @@ export default function TarotPage() {
                 다음
               </Button>
             </div>
-          </div>
+          </motion.div>
         );
 
       case 3:
         return (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="space-y-8 text-center "
-          >
+          <div className="space-y-8 text-center ">
             {isShuffling ? (
-              <>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="space-y-8 "
+              >
                 <div aria-labelledby="step3-title">
                   <h2
                     id="step3-title"
@@ -243,10 +251,15 @@ export default function TarotPage() {
                     />
                   ))}
                 </div>
-              </>
+              </motion.div>
             ) : (
               <>
-                <div aria-labelledby="step3-title">
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, function: "ease" }}
+                  className="cursor-pointer"
+                >
                   <h2
                     id="step3-title"
                     className="font-title text-3xl font-medium text-[#FFD700]"
@@ -254,11 +267,18 @@ export default function TarotPage() {
                     당신에게 다가오는 카드를 <br className="md:hidden" /> 한 장
                     골라보세요
                   </h2>
-                </div>
+                </motion.div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                   {shuffledCards.map((card) => (
                     <motion.div
                       key={card.id}
+                      initial={{ opacity: 0, rotate: 45, scale: 0.5 }}
+                      animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                      transition={{
+                        duration: 0.2,
+                        function: "ease",
+                        delay: 0.4,
+                      }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => handleCardSelect(card)}
@@ -276,36 +296,37 @@ export default function TarotPage() {
                 </div>
               </>
             )}
-          </motion.div>
+          </div>
         );
 
       case 4:
         return (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center space-y-4 w-full sm:max-w-xl mx-auto"
-          >
-            <div aria-labelledby="step4-title">
+          <div className="text-center space-y-4 w-full sm:max-w-xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              aria-labelledby="step4-title"
+            >
               <h2
                 id="step4-title"
-                className="font-title text-3xl font-medium text-primary text-[#FFD700]"
+                className="font-title text-xl text-primary text-[#FFD700]"
               >
                 별들이 당신의 운명을 읽고 있습니다.
               </h2>
-            </div>
+            </motion.div>
             <div className="flex justify-center">
               <div className="w-16 h-16 border-4 border-[#FFD700] border-t-transparent rounded-full animate-spin" />
             </div>
-          </motion.div>
+          </div>
         );
 
       case 5:
         return (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="space-y-8 text-center w-full"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, function: "ease" }}
+            className="space-y-6 text-center w-full"
           >
             <h2 className="text-3xl font-medium text-[#FFD700]">
               {selectedCard?.name}
@@ -315,34 +336,49 @@ export default function TarotPage() {
               alt={selectedCard?.name}
               className="w-40 mx-auto rounded-lg border border-[#FFD700]/20"
             />
-            <p className="text-lg text-[#BFA2DB]">
-              {question || "오늘의 운세"}
-            </p>
-            <div className="max-w-2xl mx-auto p-6 bg-[#1C1635]/50 border border-[#FFD700]/10 rounded-lg">
-              <p className="text-white leading-relaxed">{fortuneText}</p>
-            </div>
-
-            <p className="text-[#BFA2DB]">이 리딩을 마음속에 간직하시겠어요?</p>
-            <div className="flex gap-4 justify-center flex-col sm:flex-row items-center sm:gap-6 ">
-              {isLoggedIn ? (
-                <Button
-                  onClick={saveToSessionAndGo}
-                  className="px-6 py-3 w-full sm:w-auto min-w-[200px] bg-[#FFD700] text-[#0B0C2A] font-body text-base sm:text-lg font-medium tracking-wide rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
-                >
-                  저장하기
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="space-y-6"
+            >
+              <p className="text-lg text-[#BFA2DB]">
+                {question || "오늘의 운세"}
+              </p>
+              <div className="max-w-2xl mx-auto p-6 bg-[#1C1635]/50 border border-[#FFD700]/10 rounded-lg">
+                <p className="text-white leading-relaxed">{fortuneText}</p>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="space-y-6"
+            >
+              <p className="text-[#BFA2DB]">
+                이 리딩을 마음속에 간직하시겠어요?
+              </p>
+              <div className="flex gap-4 justify-center flex-col sm:flex-row items-center sm:gap-6 ">
+                {isLoggedIn ? (
+                  <Button
+                    onClick={saveToSessionAndGo}
+                    className="px-6 py-3 w-full sm:w-auto min-w-[200px] bg-[#FFD700] text-[#0B0C2A] font-body text-base sm:text-lg font-medium tracking-wide rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
+                  >
+                    저장하기
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={saveToSessionAndGo}
+                    className="px-6 py-3 w-full sm:w-auto min-w-[200px] bg-[#FFD700] text-[#0B0C2A] font-body text-base sm:text-lg font-medium tracking-wide rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
+                  >
+                    로그인하고 저장하기
+                  </Button>
+                )}
+                <Button className="px-6 py-3 w-full sm:w-auto min-w-[200px] text-[#EAE7FF] hover:text-[#FFD700] border border-[#FFD700]/20 rounded-lg hover:border-[#FFD700]/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 text-center">
+                  메인으로
                 </Button>
-              ) : (
-                <Button
-                  onClick={saveToSessionAndGo}
-                  className="px-6 py-3 w-full sm:w-auto min-w-[200px] bg-[#FFD700] text-[#0B0C2A] font-body text-base sm:text-lg font-medium tracking-wide rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
-                >
-                  로그인하고 저장하기
-                </Button>
-              )}
-              <Button className="px-6 py-3 w-full sm:w-auto min-w-[200px] text-[#EAE7FF] hover:text-[#FFD700] border border-[#FFD700]/20 rounded-lg hover:border-[#FFD700]/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 text-center">
-                메인으로
-              </Button>
-            </div>
+              </div>
+            </motion.div>
           </motion.div>
         );
     }

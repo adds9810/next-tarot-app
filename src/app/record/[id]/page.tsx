@@ -12,7 +12,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Card as CardType } from "@/types/card";
 import { RecordDetail } from "@/types/record";
 import { useToast } from "@/hooks/use-toast";
-import ClientStarryBackground from "@/components/ClientStarryBackground";
+import ClientStarryBackground from "@/components/background/ClientStarryBackground";
 
 interface PageProps {
   params: {
