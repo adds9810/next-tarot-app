@@ -20,7 +20,7 @@
   --component-bg: #1c1635;
   --destructive: 0 100% 50%;
   --destructive-foreground: 0 100% 100%;
-  --popover: #f0f0f0;
+  --popover: rgb(0 0 0 / 0.3); /*#f0f0f0;*/
 }
 * {
   word-break: keep-all;

@@ -143,11 +143,11 @@ export default function CardSelector({
       </Popover>
 
       {selectedCards.length > 0 && (
-        <div className="space-y-2">
+        <div className="flex flex-col sm:flex-row items-stretch justify-stretch gap-2 flex-wrap">
           {selectedCards.map((card) => (
             <div
               key={card.id}
-              className="flex items-center justify-between p-3 bg-[#1C1635]/50 border border-[#FFD700]/20 rounded-lg"
+              className="w-auto flex items-center justify-between p-3 bg-[#1C1635]/50 border border-[#FFD700]/20 rounded-lg"
             >
               <div className="flex flex-col">
                 <span className="font-medium text-white">{card.name}</span>
