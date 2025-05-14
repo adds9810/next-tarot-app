@@ -100,7 +100,8 @@ export default function CardSelector({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between bg-[#1C1635]/50 border-[#FFD700]/20 text-white hover:bg-[#1C1635]/70 hover:border-[#FFD700]/30"
+            size={"sm"}
+            className="w-full justify-between bg-white/5 border-white/10 text-white hover:bg-white/10"
           >
             {type === "main" ? "메인 카드 선택" : "서브 카드 선택"}
             <span className="text-[#BFA2DB] text-sm">

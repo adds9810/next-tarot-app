@@ -338,6 +338,7 @@ export default function RecordForm({
                 <Button
                   type="button"
                   variant="outline"
+                  size={"sm"}
                   className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10"
                   onClick={() =>
                     document.getElementById("image-upload")?.click()
@@ -351,7 +352,7 @@ export default function RecordForm({
                       <img
                         src={url}
                         alt={`Uploaded ${index + 1}`}
-                        className="w-full h-[200px] object-cover rounded-md"
+                        className="w-full h-[200px] object-scale-down rounded-md"
                       />
                       <Button
                         type="button"
@@ -376,7 +377,9 @@ export default function RecordForm({
             <Label htmlFor={id} className="text-white sm:w-32 pt-2">
               {label}
             </Label>
-            <div className="sm:flex-1 space-y-2 w-full">{content}</div>
+            <div className="flex flex-col sm:flex-1 gap-2 w-full">
+              {content}
+            </div>
           </div>
         ))}
       </div>
