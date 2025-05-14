@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,7 +11,7 @@ import MysticSpinner from "@/components/MysticSpinner";
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
-export default function TarotPage() {
+function TarotContent() {
   const [step, setStep] = useState<Step>(1);
   const [question, setQuestion] = useState("");
   const [cards, setCards] = useState<Card[]>([]);
@@ -31,13 +31,12 @@ export default function TarotPage() {
     });
   }, []);
 
-  // 카드 JSON 불러오기
   useEffect(() => {
     const fetchCards = async () => {
       const { data, error } = await supabase
         .from("cards")
         .select("*")
-        .eq("deck_id", "00000000-0000-0000-0000-000000000001") // 유니버셜 덱
+        .eq("deck_id", "00000000-0000-0000-0000-000000000001")
         .order("order_index", { ascending: true });
 
       if (error) {
@@ -50,7 +49,6 @@ export default function TarotPage() {
     fetchCards();
   }, []);
 
-  // Step 3에서 카드 섞기 & 애니메이션
   useEffect(() => {
     if (step === 3 && cards.length > 0) {
       const shuffled = [...cards];
@@ -80,7 +78,6 @@ export default function TarotPage() {
     setStep(3);
   };
 
-  // 카드 선택 시 OpenAI 분석
   const handleCardSelect = async (card: Card) => {
     setSelectedCard(card);
     setStep(4);
@@ -128,7 +125,6 @@ export default function TarotPage() {
     };
 
     sessionStorage.setItem("tarot_temp_record", JSON.stringify(payload));
-
     if (session) {
       router.push("/record/create");
     } else {
@@ -382,7 +378,6 @@ export default function TarotPage() {
         );
     }
   };
-
   return (
     <section
       className="relative py-10 w-dvw px-6 lg:px-8 flex flex-col items-center justify-center"
@@ -390,5 +385,13 @@ export default function TarotPage() {
     >
       <AnimatePresence mode="wait">{renderStep()}</AnimatePresence>
     </section>
+  );
+}
+
+export default function TarotPage() {
+  return (
+    <Suspense fallback={<div className="text-white">로딩 중입니다...</div>}>
+      <TarotContent />
+    </Suspense>
   );
 }

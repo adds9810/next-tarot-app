@@ -51,7 +51,9 @@ export default function CreateRecordPage() {
         subCards: [],
         imageUrls: [],
       });
-      // sessionStorage.removeItem("tarot_temp_record");
+      setTimeout(() => {
+        sessionStorage.removeItem("tarot_temp_record");
+      }, 500);
     } else {
       setInitialValues({
         title: "",
@@ -96,6 +98,7 @@ export default function CreateRecordPage() {
           user_id: session.user.id,
           created_at: new Date(),
           category,
+          main_card_image_url: mainCards[0]?.image_url || null,
         })
         .select()
         .single();

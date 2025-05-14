@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
@@ -10,8 +10,9 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import LoadingIndicator from "@/components/LoadingIndicator";
 
-export default function Login() {
+function LoginInner() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -146,7 +147,7 @@ export default function Login() {
               )}
               <Button
                 type="submit"
-                className="px-6 py-3 w-full min-w-[200px] bg-[#FFD700] text-[#0B0C2A]  rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
+                className="px-6 py-3 w-full min-w-[200px] bg-[#FFD700] text-[#0B0C2A] rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
               >
                 별의 문 열기
               </Button>
@@ -165,7 +166,7 @@ export default function Login() {
               type="button"
               variant="outline"
               onClick={() => handleSocialLogin("google" as Provider)}
-              className="w-full flex items-center justify-center gap-3 bg-white/90 text-gray-800  hover:bg-white transition-colors  text-base focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
+              className="w-full flex items-center justify-center gap-3 bg-white/90 text-gray-800 hover:bg-white transition-colors text-base focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50"
               aria-label="Google로 별자리 연결하기"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
@@ -192,5 +193,15 @@ export default function Login() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense
+      fallback={<LoadingIndicator message="🌠 별빛을 모으는 중이에요" />}
+    >
+      <LoginInner />
+    </Suspense>
   );
 }
