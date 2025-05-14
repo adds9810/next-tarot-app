@@ -20,6 +20,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { supabase } from "@/lib/supabase";
 
 interface RecordFormProps {
   initialTitle?: string;
@@ -62,12 +63,12 @@ export default function RecordForm({
   const [interpretation, setInterpretation] = useState(initialInterpretation);
   const [feedback, setFeedback] = useState(initialFeedback);
   const [imageUrls, setImageUrls] = useState<string[]>(initialImageUrls);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [mainCards, setMainCards] = useState<Card[]>(initialMainCards);
   const [subCards, setSubCards] = useState<Card[]>(initialSubCards);
   const [category, setCategory] = useState<RecordCategory>(
     () => initialCategory || "기타"
   );
-  useEffect(() => {}, [initialCategory, category]);
 
   const { toast } = useToast();
   const router = useRouter();
@@ -78,51 +79,82 @@ export default function RecordForm({
     mainCards?: string;
   }>({});
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    if (imageUrls.length + files.length > 5) {
+    const maxUploads = 5 - imageUrls.length;
+
+    if (files.length > maxUploads) {
       toast({
-        title: "이미지는 최대 5장까지 업로드할 수 있습니다",
+        title: "이미지는 최대 5장까지 업로드할 수 있습니다.",
         variant: "destructive",
       });
       return;
     }
-    setImageUrls([
-      ...imageUrls,
-      ...files.map((file) => URL.createObjectURL(file)),
-    ]);
+
+    const previewUrls = files.map((file) => URL.createObjectURL(file));
+    setImageFiles((prev) => [...prev, ...files]);
+    setImageUrls((prev) => [...prev, ...previewUrls]);
   };
 
   const removeImage = (index: number) => {
-    setImageUrls(imageUrls.filter((_, i) => i !== index));
+    setImageUrls((prev) => prev.filter((_, i) => i !== index));
+    setImageFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const validateForm = () => {
-    const newErrors: {
-      title?: string;
-      content?: string;
-      mainCards?: string;
-    } = {};
-
+    const newErrors: { title?: string; content?: string; mainCards?: string } =
+      {};
     if (!title.trim()) newErrors.title = "제목을 입력해 주세요";
     if (!content.trim()) newErrors.content = "내용을 입력해 주세요";
     if (mainCards.length === 0)
       newErrors.mainCards = "메인 카드를 최소 1장 이상 선택해주세요";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+  const uploadImages = async (): Promise<string[]> => {
+    const uploaded: string[] = [];
+
+    for (const file of imageFiles) {
+      const timestamp = Date.now();
+      const ext = file.name.split(".").pop();
+      const path = `user-${timestamp}-${Math.random()
+        .toString(36)
+        .slice(2)}.${ext}`;
+      const { error } = await supabase.storage
+        .from("record-images")
+        .upload(path, file);
+      if (error) {
+        toast({
+          title: "이미지 업로드 실패",
+          description: file.name,
+          variant: "destructive",
+        });
+        continue;
+      }
+      const { data: urlData } = supabase.storage
+        .from("record-images")
+        .getPublicUrl(path);
+      if (urlData?.publicUrl) uploaded.push(urlData.publicUrl);
+    }
+
+    // 기존 이미지 URL과 새로 업로드한 URL 합쳐서 반환
+    return [
+      ...imageUrls.filter((url) => !url.startsWith("blob:")),
+      ...uploaded,
+    ];
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    const uploadedUrls = await uploadImages();
     await onSubmit({
       title,
       content,
       interpretation,
       feedback,
-      imageUrls,
+      imageUrls: uploadedUrls,
       mainCards,
       subCards,
       category,
@@ -133,6 +165,15 @@ export default function RecordForm({
     }
   };
 
+  const handleCancel = () => {
+    const confirm = window.confirm(
+      "저장하지 않은 내용은 사라집니다. 그래도 나가시겠습니까?"
+    );
+    if (confirm) router.push(redirectPathOnSuccess || "/record");
+  };
+
+  const isEditMode = !!initialTitle || !!initialContent;
+
   return (
     <motion.form
       onSubmit={handleSubmit}
@@ -140,7 +181,7 @@ export default function RecordForm({
       aria-label="타로 기록 작성 폼"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.6, delay: 1 }}
     >
       <div className="space-y-6">
         {[
@@ -339,14 +380,13 @@ export default function RecordForm({
           </div>
         ))}
       </div>
-
       <div className="flex justify-between pt-4 border-t border-white/10 flex-col sm:flex-row gap-4">
         <Button
           type="button"
-          onClick={() => router.push("/record")}
+          onClick={handleCancel}
           className="px-4 py-2 font-body text-[#EAE7FF] hover:text-[#FFD700] border border-[#FFD700]/20 rounded-lg hover:border-[#FFD700]/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 w-full sm:w-auto text-center"
         >
-          취소하고 목록으로
+          {isEditMode ? "취소하고 목록으로" : "취소하고 목록으로"}
         </Button>
 
         <Button
@@ -354,7 +394,7 @@ export default function RecordForm({
           className="px-4 py-2 font-body bg-[#FFD700] text-[#0B0C2A] rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700] shadow-lg shadow-[#FFD700]/20 w-full sm:w-auto text-center"
           disabled={isLoading}
         >
-          {isLoading ? "저장 중..." : "저장"}
+          {isLoading ? "저장 중..." : isEditMode ? "수정하기" : "남기기"}
         </Button>
       </div>
     </motion.form>

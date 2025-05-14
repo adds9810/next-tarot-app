@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import type { Card } from "@/types/card";
+import Image from "next/image";
 import {
   Command,
   CommandEmpty,
@@ -149,6 +150,26 @@ export default function CardSelector({
               key={card.id}
               className="w-auto flex items-center justify-between p-3 bg-[#1C1635]/50 border border-[#FFD700]/20 rounded-lg"
             >
+              {card.image_url ? (
+                <div className="relative w-16 h-16 flex-shrink-0">
+                  {card.image_url?.startsWith("http") ? (
+                    <img
+                      src={card.image_url}
+                      alt={card.name || "타로 카드 이미지"}
+                      className="w-full h-auto object-scale-down rounded"
+                    />
+                  ) : (
+                    <Image
+                      src={card.image_url || "/images/default-card.jpg"}
+                      alt={card.name || "타로 카드 이미지"}
+                      priority
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      fill
+                      className="object-scale-down"
+                    />
+                  )}
+                </div>
+              ) : null}
               <div className="flex flex-col">
                 <span className="font-medium text-white">{card.name}</span>
                 <span className="text-sm text-[#BFA2DB]">

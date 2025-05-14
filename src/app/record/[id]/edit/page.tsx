@@ -7,7 +7,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Card } from "@/types/card";
 import { RecordCategory } from "@/types/record";
 import RecordForm from "@/components/record/RecordForm";
-import ClientStarryBackground from "@/components/background/ClientStarryBackground";
+import { motion } from "framer-motion";
 
 interface PageProps {
   params: {
@@ -63,10 +63,7 @@ export default function EditRecordPage({ params }: PageProps) {
         }[];
 
         const mainCards: Card[] = safeCardLinks
-          .filter(
-            (c) =>
-              c.type === "main" && c.cards && typeof c.cards.id === "string"
-          )
+          .filter((c) => c.type === "main" && c.cards?.id)
           .map((c) => ({
             id: c.cards!.id ?? "",
             name: c.cards!.name ?? "",
@@ -77,9 +74,7 @@ export default function EditRecordPage({ params }: PageProps) {
           }));
 
         const subCards: Card[] = safeCardLinks
-          .filter(
-            (c) => c.type === "sub" && c.cards && typeof c.cards.id === "string"
-          )
+          .filter((c) => c.type === "sub" && c.cards?.id)
           .map((c) => ({
             id: c.cards!.id ?? "",
             name: c.cards!.name ?? "",
@@ -174,7 +169,7 @@ export default function EditRecordPage({ params }: PageProps) {
       if (insertError) throw insertError;
 
       toast({ title: "수정 완료" });
-      router.push("/record");
+      router.push(`/record/${params.id}`);
     } catch (error: any) {
       toast({
         title: "수정 실패",
@@ -184,18 +179,35 @@ export default function EditRecordPage({ params }: PageProps) {
     }
   };
 
-  if (isLoading || !record)
-    return <div className="text-white text-center py-12">불러오는 중...</div>;
+  if (isLoading || !record) {
+    return (
+      <div className="text-white text-center py-12" aria-live="polite">
+        불러오는 중...
+      </div>
+    );
+  }
 
   return (
-    <>
-      <ClientStarryBackground />
-      <div className="min-h-screen flex items-center justify-center py-12">
-        <div className="w-full max-w-2xl p-8 space-y-8 bg-black/50 backdrop-blur-lg rounded-xl border border-white/10">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-white mb-2">기록 수정</h1>
-            <p className="text-gray-400">이전에 작성한 내용을 수정해보세요</p>
-          </div>
+    <section
+      className="relative py-10 w-dvw max-w-6xl px-6 lg:px-8 flex flex-col items-center justify-center"
+      aria-label="기록 생성 섹션"
+    >
+      <div className="w-full text-center mx-auto relative z-10 space-y-8">
+        {/* 제목 및 부제 */}
+        <div className="space-y-4 animate-fade-in">
+          <h1
+            id="edit-title"
+            className="font-title text-3xl md:text-4xl text-[#FFD700] drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]"
+          >
+            속삭임을 다시 꺼내며
+          </h1>
+          <p className="font-body text-lg md:text-xl text-white/90 leading-relaxed">
+            그날의 이야기와 감정을 새롭게 담아보세요.
+          </p>
+        </div>
+
+        {/* 입력 폼 */}
+        <div className="w-full p-6 sm:p-8 bg-black/30 backdrop-blur-lg rounded-xl border border-white/10">
           <RecordForm
             initialTitle={record.title}
             initialContent={record.content}
@@ -211,6 +223,6 @@ export default function EditRecordPage({ params }: PageProps) {
           />
         </div>
       </div>
-    </>
+    </section>
   );
 }
