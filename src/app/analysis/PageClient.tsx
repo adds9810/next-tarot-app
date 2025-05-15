@@ -19,7 +19,6 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-// 🚨 category는 그대로 유지
 const categories = [
   { id: "today", label: "오늘의 운세" },
   { id: "love", label: "연애 / 관계" },
@@ -227,7 +226,7 @@ export default function PageClient() {
                         selected={startDate}
                         onSelect={(date) => {
                           setStartDate(date);
-                          setStartOpen(false); // 선택 후 닫기
+                          setStartOpen(false);
                         }}
                         disabled={(date) => !!endDate && date > endDate}
                         initialFocus

@@ -24,7 +24,7 @@ interface CardSelectorProps {
   selectedCards: Card[];
   onChange: (cards: Card[]) => void;
   maxCards?: number;
-  excludeCardIds?: string[]; // ✅ 추가
+  excludeCardIds?: string[];
 }
 
 export default function CardSelector({
@@ -60,11 +60,11 @@ export default function CardSelector({
   const filteredCards = cards.filter((card) => {
     const searchLower = searchQuery.toLowerCase();
 
-    // 🔽 1. excludeCardIds에 포함된 카드면 제외
+    // excludeCardIds에 포함된 카드면 제외
     const isExcluded = excludeCardIds?.includes(card.id);
     if (isExcluded) return false;
 
-    // 🔽 2. 검색 필터
+    // 검색 필터
     return (
       card.name.toLowerCase().includes(searchLower) ||
       card.keywords.some((keyword) =>

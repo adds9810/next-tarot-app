@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
-// OpenAI 초기화
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// POST 요청 처리
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { card, questionType } = body;

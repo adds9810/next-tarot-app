@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     siteName: "Whispers of the Stars",
     images: [
       {
-        url: "/images/them/og-default.png", // metadataBase 기준 절대 경로로 처리됨
+        url: "/images/them/og-default.png",
         width: 1200,
         height: 630,
         alt: "Whispers of the Stars 대표 이미지",
