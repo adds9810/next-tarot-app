@@ -15,7 +15,7 @@ export async function uploadImageToSupabase(
   const fileName = `${userId}/${timestamp}.${fileExt}`;
 
   const { data, error } = await supabase.storage
-    .from("record-images") // 🔁 실제 버킷 이름으로 바꿔야 함
+    .from("record-images")
     .upload(fileName, file);
 
   if (error) {
@@ -25,9 +25,7 @@ export async function uploadImageToSupabase(
 
   const {
     data: { publicUrl },
-  } = supabase.storage
-    .from("record-images") // 🔁 동일하게 버킷 이름 일치
-    .getPublicUrl(fileName);
+  } = supabase.storage.from("record-images").getPublicUrl(fileName);
 
   return publicUrl;
 }
