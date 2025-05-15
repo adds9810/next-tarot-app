@@ -27,9 +27,46 @@ function TarotContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setIsLoggedIn(!!data.session);
-    });
+    const fetchCards = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        setIsLoggedIn(true);
+
+        const { data: cardsData, error } = await supabase
+          .from("cards")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .eq("deck_id", "00000000-0000-0000-0000-000000000001") // Universal 덱
+          .eq("is_active", true)
+          .order("order_index", { ascending: true });
+
+        if (error) {
+          console.error("회원 카드 불러오기 실패:", error.message);
+        } else {
+          setCards(cardsData || []);
+        }
+      } else {
+        setIsLoggedIn(false);
+
+        const { data: baseCards, error } = await supabase
+          .from("base_cards")
+          .select("*")
+          .eq("deck_id", "00000000-0000-0000-0000-000000000001") // Universal 덱
+          .eq("is_active", true)
+          .order("order_index", { ascending: true });
+
+        if (error) {
+          console.error("비회원 카드 불러오기 실패:", error.message);
+        } else {
+          setCards(baseCards || []);
+        }
+      }
+    };
+
+    fetchCards();
   }, []);
 
   useEffect(() => {
