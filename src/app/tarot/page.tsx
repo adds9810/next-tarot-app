@@ -1,8 +1,29 @@
-// app/tarot/page.tsx
 export const metadata = {
-  title: "오늘의 타로운세 | Whispers of the Stars",
+  title: "오늘의 타로 운세 | Whispers of the Stars",
   description:
-    "카드를 뽑고 별들이 전하는 메시지를 확인해보세요. 감성적인 리딩과 맞춤형 해석이 준비되어 있어요.",
+    "78장의 타로카드로 오늘의 운세를 확인하고, 감성적인 메시지를 받아보세요.",
+  openGraph: {
+    title: "오늘의 타로 운세 | Whispers of the Stars",
+    description: "카드를 한 장 뽑고, 별들이 전하는 오늘의 메시지를 들어보세요.",
+    url: "https://your-domain.com/tarot",
+    siteName: "Whispers of the Stars",
+    images: [
+      {
+        url: "https://your-domain.com/images/them/og-default.png",
+        width: 1200,
+        height: 630,
+        alt: "Whispers of the Stars 대표 이미지",
+      },
+    ],
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "오늘의 타로 운세 | Whispers of the Stars",
+    description: "카드를 한 장 뽑고, 별들이 전하는 오늘의 메시지를 들어보세요.",
+    images: ["https://your-domain.com/images/them/og-default.png"],
+  },
 };
 
 import PageClient from "./PageClient";
