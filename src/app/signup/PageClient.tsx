@@ -98,10 +98,14 @@ export default function PageClient() {
 
   const handleGoogleSignUp = async () => {
     try {
+      localStorage.setItem(
+        "signup_message",
+        "Google 계정으로 가입이 완료되었습니다. 로그인해 주세요."
+      );
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback?from=oauth`,
           queryParams: {
             access_type: "offline",
             prompt: "consent",

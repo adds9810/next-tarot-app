@@ -48,7 +48,10 @@ function LoginInner() {
         provider,
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
-          queryParams: { access_type: "offline", prompt: "consent" },
+          queryParams: {
+            access_type: "offline",
+            prompt: "select_account",
+          },
         },
       });
 
@@ -60,10 +63,19 @@ function LoginInner() {
   };
 
   useEffect(() => {
+    const storedMessage = localStorage.getItem("signup_message");
+    if (storedMessage) {
+      toast({
+        title: "회원가입 완료",
+        description: storedMessage,
+      });
+      localStorage.removeItem("signup_message");
+    }
+
     if (message) {
       toast({
         title: "로그인이 필요합니다.",
-        description: "회원만 접근 가능한 페이지입니다.",
+        description: message,
         variant: "destructive",
       });
       window.history.replaceState({}, "", window.location.pathname);

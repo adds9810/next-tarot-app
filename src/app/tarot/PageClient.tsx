@@ -34,22 +34,29 @@ function TarotContent() {
 
   useEffect(() => {
     const fetchCards = async () => {
-      const { data, error } = await supabase
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) return;
+
+      const { data: cardsData, error } = await supabase
         .from("cards")
         .select("*")
-        .eq("deck_id", "00000000-0000-0000-0000-000000000001")
+        .eq("user_id", session.user.id)
+        .eq("deck_id", "00000000-0000-0000-0000-000000000001") // Universal 덱 ID
+        .eq("is_active", true)
         .order("order_index", { ascending: true });
 
       if (error) {
         console.error("카드 불러오기 실패:", error.message);
       } else {
-        setCards(data || []);
+        setCards(cardsData || []);
       }
     };
 
     fetchCards();
   }, []);
-
   useEffect(() => {
     if (step === 3 && cards.length > 0) {
       const shuffled = [...cards];
