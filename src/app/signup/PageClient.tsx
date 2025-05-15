@@ -130,7 +130,7 @@ export default function PageClient() {
           </p>
         </section>
 
-        <div className="w-full max-w-sm mx-auto animate-fade-in-delay">
+        <div className="w-full max-w-sm mx-auto animate-fade-up">
           <div className="p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/20 hover:border-[#FFD700]/30 transition-all duration-200">
             <div className="space-y-3 mb-6">
               <Button

@@ -64,23 +64,31 @@ function LoginInner() {
 
   useEffect(() => {
     const storedMessage = localStorage.getItem("signup_message");
+    const redirectMessage = searchParams.get("message");
+
     if (storedMessage) {
       toast({
         title: "회원가입 완료",
         description: storedMessage,
+        duration: 5000,
       });
       localStorage.removeItem("signup_message");
     }
 
-    if (message) {
+    if (redirectMessage) {
       toast({
         title: "로그인이 필요합니다.",
-        description: message,
+        description: redirectMessage,
         variant: "destructive",
+        duration: 5000,
       });
-      window.history.replaceState({}, "", window.location.pathname);
+
+      // URL 파라미터 제거
+      const url = new URL(window.location.href);
+      url.searchParams.delete("message");
+      window.history.replaceState({}, "", url.toString());
     }
-  }, [message]);
+  }, []);
 
   return (
     <section
@@ -100,7 +108,7 @@ function LoginInner() {
           </p>
         </section>
 
-        <div className="w-full max-w-sm mx-auto animate-fade-in-delay">
+        <div className="w-full max-w-sm mx-auto animate-fade-up ">
           <div className="p-8 bg-[#1C1635]/50 backdrop-blur-sm rounded-2xl border border-[#FFD700]/20 hover:border-[#FFD700]/30 transition-all duration-200">
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="text-left">

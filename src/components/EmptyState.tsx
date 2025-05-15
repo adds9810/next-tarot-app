@@ -19,7 +19,7 @@ export default function EmptyState({
   buttonLink,
 }: EmptyStateProps) {
   return (
-    <div className="text-center py-12 px-6 animate-fade-in-delay">
+    <div className="text-center py-12 px-6 animate-fade-up">
       <p className="text-gray-500 text-lg">{title}</p>
       <p className="text-sm text-gray-400 mt-2">{description}</p>
 

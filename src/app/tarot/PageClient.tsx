@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/types/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "@/lib/supabase";
 import MysticSpinner from "@/components/MysticSpinner";
 import LoadingIndicator from "@/components/LoadingIndicator";
 
@@ -25,6 +26,7 @@ function TarotContent() {
   const type = searchParams.get("type");
   const supabase = createPagesBrowserClient();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const UNIVERSAL_DECK_ID = "00000000-0000-0000-0000-000000000001";
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -32,68 +34,34 @@ function TarotContent() {
         data: { session },
       } = await supabase.auth.getSession();
 
-      if (session) {
-        setIsLoggedIn(true);
+      const isLoggedIn = !!session;
+      setIsLoggedIn(isLoggedIn);
 
-        const { data: cardsData, error } = await supabase
-          .from("cards")
-          .select("*")
-          .eq("user_id", session.user.id)
-          .eq("deck_id", "00000000-0000-0000-0000-000000000001") // Universal 덱
-          .eq("is_active", true)
-          .order("order_index", { ascending: true });
+      const tableName = isLoggedIn ? "cards" : "base_cards";
+      const userCondition = isLoggedIn ? { user_id: session.user.id } : {};
 
-        if (error) {
-          console.error("회원 카드 불러오기 실패:", error.message);
-        } else {
-          setCards(cardsData || []);
-        }
-      } else {
-        setIsLoggedIn(false);
-
-        const { data: baseCards, error } = await supabase
-          .from("base_cards")
-          .select("*")
-          .eq("deck_id", "00000000-0000-0000-0000-000000000001") // Universal 덱
-          .eq("is_active", true)
-          .order("order_index", { ascending: true });
-
-        if (error) {
-          console.error("비회원 카드 불러오기 실패:", error.message);
-        } else {
-          setCards(baseCards || []);
-        }
-      }
-    };
-
-    fetchCards();
-  }, []);
-
-  useEffect(() => {
-    const fetchCards = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session) return;
-
-      const { data: cardsData, error } = await supabase
-        .from("cards")
+      const { data, error } = await supabase
+        .from(tableName)
         .select("*")
-        .eq("user_id", session.user.id)
-        .eq("deck_id", "00000000-0000-0000-0000-000000000001") // Universal 덱 ID
-        .eq("is_active", true)
+        .match({
+          ...userCondition,
+          deck_id: UNIVERSAL_DECK_ID,
+        })
         .order("order_index", { ascending: true });
 
       if (error) {
-        console.error("카드 불러오기 실패:", error.message);
+        console.error(
+          `${isLoggedIn ? "회원" : "비회원"} 카드 불러오기 실패:`,
+          error.message
+        );
       } else {
-        setCards(cardsData || []);
+        setCards(data || []);
       }
     };
 
     fetchCards();
   }, []);
+
   useEffect(() => {
     if (step === 3 && cards.length > 0) {
       const shuffled = [...cards];
