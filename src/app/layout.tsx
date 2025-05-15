@@ -10,6 +10,9 @@ import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app"
+  ),
   title: "Whispers of the Stars | 오늘의 타로 운세",
   description:
     "78장의 타로카드로 오늘의 운세를 확인하고, 나만의 타로 기록을 남겨보세요. 감성적인 리딩과 맞춤형 분석까지 한 번에.",
@@ -21,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "Whispers of the Stars",
     images: [
       {
-        url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
+        url: "/images/them/og-default.png", // 절대 경로 자동 생성됨
         width: 1200,
         height: 630,
         alt: "Whispers of the Stars 대표 이미지",
@@ -35,14 +38,13 @@ export const metadata: Metadata = {
     title: "Whispers of the Stars | 오늘의 타로 운세",
     description:
       "78장의 타로카드로 오늘의 운세를 확인하고, 나만의 타로 기록을 남겨보세요. 감성적인 리딩과 맞춤형 분석까지 한 번에.",
-    images: [
-      "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
-    ],
+    images: ["/images/them/og-default.png"], // metadataBase와 합쳐져 절대 경로로 처리됨
   },
   icons: {
-    icon: [{ url: "/images/favicon.ico", href: "/images/favicon.ico" }],
+    icon: "/images/favicon.ico", // 이건 단일 URL이면 배열이 아니라 string으로 처리
   },
 };
+
 export default function RootLayout({
   children,
 }: {

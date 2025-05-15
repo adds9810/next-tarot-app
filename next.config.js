@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    // domains: ["trtzgvoupylowvjxtisg.supabase.co"],
-    domains: ["lh3.googleusercontent.com"],
+    domains: ["lh3.googleusercontent.com", "trtzgvoupylowvjxtisg.supabase.co"],
   },
   // experimental: {
   //   appDir: true,

@@ -1,4 +1,10 @@
-export const metadata = {
+import type { Metadata } from "next";
+import PageClient from "./PageClient";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(
+    "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app"
+  ),
   title: "나의 타로 기록 | Whispers of the Stars",
   description:
     "지금까지 저장한 타로 운세 기록을 한눈에 확인하고 다시 돌아볼 수 있어요.",
@@ -6,11 +12,11 @@ export const metadata = {
     title: "나의 타로 기록 | Whispers of the Stars",
     description:
       "지금까지 저장한 타로 운세 기록을 한눈에 확인하고 다시 돌아볼 수 있어요.",
-    url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/record",
+    url: "/record",
     siteName: "Whispers of the Stars",
     images: [
       {
-        url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
+        url: "/images/them/og-default.png",
         width: 1200,
         height: 630,
         alt: "Whispers of the Stars 대표 이미지",
@@ -24,13 +30,12 @@ export const metadata = {
     title: "나의 타로 기록 | Whispers of the Stars",
     description:
       "지금까지 저장한 타로 운세 기록을 한눈에 확인하고 다시 돌아볼 수 있어요.",
-    images: [
-      "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
-    ],
+    images: ["/images/them/og-default.png"],
+  },
+  icons: {
+    icon: "/images/favicon.ico",
   },
 };
-
-import PageClient from "./PageClient";
 
 export default function RecordPage() {
   return <PageClient />;
