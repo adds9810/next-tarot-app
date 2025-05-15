@@ -6,11 +6,11 @@ export const metadata = {
     title: "회원가입 | Whispers of the Stars",
     description:
       "Whispers of the Stars에 가입하고, 감성적인 타로 여정을 시작하세요.",
-    url: "https://your-domain.com/signup",
+    url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/signup",
     siteName: "Whispers of the Stars",
     images: [
       {
-        url: "https://your-domain.com/images/them/og-default.png",
+        url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
         width: 1200,
         height: 630,
         alt: "Whispers of the Stars 대표 이미지",
@@ -24,7 +24,9 @@ export const metadata = {
     title: "회원가입 | Whispers of the Stars",
     description:
       "Whispers of the Stars에 가입하고, 감성적인 타로 여정을 시작하세요.",
-    images: ["https://your-domain.com/images/them/og-default.png"],
+    images: [
+      "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
+    ],
   },
 };
 

@@ -17,11 +17,11 @@ export const metadata: Metadata = {
     title: "Whispers of the Stars | 오늘의 타로 운세",
     description:
       "78장의 타로카드로 오늘의 운세를 확인하고, 나만의 타로 기록을 남겨보세요. 감성적인 리딩과 맞춤형 분석까지 한 번에.",
-    url: "https://your-domain.com/",
+    url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/",
     siteName: "Whispers of the Stars",
     images: [
       {
-        url: "https://your-domain.com/images/them/og-default.png",
+        url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
         width: 1200,
         height: 630,
         alt: "Whispers of the Stars 대표 이미지",
@@ -35,7 +35,9 @@ export const metadata: Metadata = {
     title: "Whispers of the Stars | 오늘의 타로 운세",
     description:
       "78장의 타로카드로 오늘의 운세를 확인하고, 나만의 타로 기록을 남겨보세요. 감성적인 리딩과 맞춤형 분석까지 한 번에.",
-    images: ["https://your-domain.com/images/them/og-default.png"],
+    images: [
+      "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
+    ],
   },
   icons: {
     icon: [{ url: "/images/favicon.ico", href: "/images/favicon.ico" }],

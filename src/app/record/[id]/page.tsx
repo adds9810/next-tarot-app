@@ -6,11 +6,11 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     openGraph: {
       title: "타로 기록 상세보기 | Whispers of the Stars",
       description: "감성적인 타로 해석과 기록을 확인해보세요.",
-      url: `https://your-domain.com/record/${params.id}`,
+      url: `https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/record/${params.id}`,
       siteName: "Whispers of the Stars",
       images: [
         {
-          url: "https://your-domain.com/images/them/og-default.png",
+          url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
           width: 1200,
           height: 630,
           alt: "Whispers of the Stars 대표 이미지",
@@ -23,7 +23,9 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       card: "summary_large_image",
       title: "타로 기록 상세보기 | Whispers of the Stars",
       description: "감성적인 타로 해석과 기록을 확인해보세요.",
-      images: ["https://your-domain.com/images/them/og-default.png"],
+      images: [
+        "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
+      ],
     },
   };
 }

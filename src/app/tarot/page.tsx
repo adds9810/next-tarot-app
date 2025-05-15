@@ -5,11 +5,11 @@ export const metadata = {
   openGraph: {
     title: "오늘의 타로 운세 | Whispers of the Stars",
     description: "카드를 한 장 뽑고, 별들이 전하는 오늘의 메시지를 들어보세요.",
-    url: "https://your-domain.com/tarot",
+    url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/tarot",
     siteName: "Whispers of the Stars",
     images: [
       {
-        url: "https://your-domain.com/images/them/og-default.png",
+        url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
         width: 1200,
         height: 630,
         alt: "Whispers of the Stars 대표 이미지",
@@ -22,7 +22,9 @@ export const metadata = {
     card: "summary_large_image",
     title: "오늘의 타로 운세 | Whispers of the Stars",
     description: "카드를 한 장 뽑고, 별들이 전하는 오늘의 메시지를 들어보세요.",
-    images: ["https://your-domain.com/images/them/og-default.png"],
+    images: [
+      "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/images/them/og-default.png",
+    ],
   },
 };
 
