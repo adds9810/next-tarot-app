@@ -2,9 +2,7 @@ import { Metadata } from "next";
 import PageClient from "./PageClient";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app"
-  ),
+  metadataBase: new URL("https://next-tarot-app.vercel.app/"),
   title: "타로 기록 저장하기 | Whispers of the Stars",
   description:
     "지금 뽑은 타로카드와 해석을 기록으로 남기고 나만의 타로 아카이브를 만들어보세요.",

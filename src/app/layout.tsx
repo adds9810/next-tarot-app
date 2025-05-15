@@ -1,4 +1,3 @@
-// src/app/layout.tsx (서버 컴포넌트 유지)
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -10,9 +9,7 @@ import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app"
-  ),
+  metadataBase: new URL("https://next-tarot-app.vercel.app/"),
   title: "Whispers of the Stars | 오늘의 타로 운세",
   description:
     "78장의 타로카드로 오늘의 운세를 확인하고, 나만의 타로 기록을 남겨보세요. 감성적인 리딩과 맞춤형 분석까지 한 번에.",
@@ -20,11 +17,11 @@ export const metadata: Metadata = {
     title: "Whispers of the Stars | 오늘의 타로 운세",
     description:
       "78장의 타로카드로 오늘의 운세를 확인하고, 나만의 타로 기록을 남겨보세요. 감성적인 리딩과 맞춤형 분석까지 한 번에.",
-    url: "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app/",
+    url: "https://next-tarot-app.vercel.app//",
     siteName: "Whispers of the Stars",
     images: [
       {
-        url: "/images/them/og-default.png", // 절대 경로 자동 생성됨
+        url: "/images/them/og-default.png",
         width: 1200,
         height: 630,
         alt: "Whispers of the Stars 대표 이미지",
@@ -38,10 +35,10 @@ export const metadata: Metadata = {
     title: "Whispers of the Stars | 오늘의 타로 운세",
     description:
       "78장의 타로카드로 오늘의 운세를 확인하고, 나만의 타로 기록을 남겨보세요. 감성적인 리딩과 맞춤형 분석까지 한 번에.",
-    images: ["/images/them/og-default.png"], // metadataBase와 합쳐져 절대 경로로 처리됨
+    images: ["/images/them/og-default.png"],
   },
   icons: {
-    icon: "/images/favicon.ico", // 이건 단일 URL이면 배열이 아니라 string으로 처리
+    icon: "/images/favicon.ico",
   },
 };
 

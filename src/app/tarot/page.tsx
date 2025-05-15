@@ -2,9 +2,7 @@ import { Metadata } from "next";
 import PageClient from "./PageClient";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app"
-  ),
+  metadataBase: new URL("https://next-tarot-app.vercel.app/"),
   title: "오늘의 타로 운세 | Whispers of the Stars",
   description:
     "78장의 타로카드로 오늘의 운세를 확인하고, 감성적인 메시지를 받아보세요.",

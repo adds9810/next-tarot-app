@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import PageClient from "./PageClient";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    "https://next-tarot-83fwiwbsh-adds9810s-projects.vercel.app"
-  ),
+  metadataBase: new URL("https://next-tarot-app.vercel.app/"),
   title: "로그인 | Whispers of the Stars",
   description: "로그인하고 나만의 타로 기록을 저장하고 분석해보세요.",
   openGraph: {
