@@ -18,45 +18,48 @@ export default function DeckCard({ deck, cards, onDelete }: DeckCardProps) {
   const router = useRouter();
 
   return (
-    <Card className="p-6 bg-white/5 border border-white/10 text-white space-y-4 hover:shadow-lg transition-shadow">
-      {/* 덱 제목 및 설명 */}
-      <div className="flex justify-between items-start">
+    <Card className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow">
+      <div className="flex justify-between items-start mb-2">
         <div
-          className="space-y-1 cursor-pointer"
           onClick={() => router.push(`/cards/${deck.id}`)}
+          className="cursor-pointer"
+          role="button"
+          tabIndex={0}
         >
-          <h3 className="text-lg font-semibold text-white hover:text-[#FFD700] transition-colors">
-            {deck.title}
+          <h3 className="text-white font-semibold text-lg mb-1 line-clamp-1">
+            {deck.title || "제목 없음"}
           </h3>
-          <p className="text-sm text-white/70">{deck.description}</p>
+          <p className="text-white/70 text-sm line-clamp-2">
+            {deck.description || "설명이 없습니다."}
+          </p>
         </div>
         <Button
           variant="destructive"
           size="sm"
           onClick={onDelete}
-          className="text-sm"
           aria-label={`${deck.title} 덱 삭제하기`}
         >
           삭제
         </Button>
       </div>
 
-      {/* 카드 미리보기 */}
-      <div className="space-y-2 mt-2">
-        <p className="text-sm text-white/60">카드 {cards.length}장</p>
-        {cards.slice(0, 3).map((card) => (
-          <div
-            key={card.id}
-            className="px-3 py-2 bg-white/10 text-sm rounded border border-white/10 text-white/90"
-          >
-            {card.title}
-          </div>
-        ))}
-        {cards.length > 3 && (
-          <p className="text-sm text-white/50">
-            외 {cards.length - 3}장의 카드가 더 있습니다
-          </p>
-        )}
+      <div className="text-sm text-white/80 mt-3">
+        <p className="mb-2">카드 {cards.length}장</p>
+        <div className="space-y-1">
+          {cards.slice(0, 3).map((card) => (
+            <p
+              key={card.id}
+              className="truncate bg-white/10 text-white px-3 py-1 rounded"
+            >
+              {card.title || "제목 없음"}
+            </p>
+          ))}
+          {cards.length > 3 && (
+            <p className="text-xs text-white/60 mt-1">
+              외 {cards.length - 3}장의 카드가 더 있습니다
+            </p>
+          )}
+        </div>
       </div>
     </Card>
   );
