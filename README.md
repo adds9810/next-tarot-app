@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌌 Whispers of the Stars - 감성 타로 기록 웹앱
 
-## Getting Started
+나의 감정을 기록하고 되돌아볼 수 있는  
+개인 맞춤형 타로 리딩 웹사이트입니다.  
+78장의 카드로 오늘의 운세 또는 원하는 주제의 리딩을 받고,  
+감성적인 UI로 기록을 저장하고 관리할 수 있어요. ✨
 
-First, run the development server:
+> 포트폴리오 제출용 프로젝트이며, [Vercel](https://next-tarot-app.vercel.app/)에 배포되어 있습니다.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 주요 기능
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **운세 리딩**:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+  - 오늘의 운세 또는 사용자가 원하는 질문 선택
+  - 카드 한 장 선택 후 AI 기반 리딩 제공
 
-## Learn More
+- **기록 기능**:
 
-To learn more about Next.js, take a look at the following resources:
+  - 감정과 카드 해석, 조언 등을 자유롭게 작성
+  - 이미지 최대 5장까지 첨부 가능
+  - 메인/서브 카드 선택 및 시각적 미리보기 제공
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **기록 조회 및 상세 페이지**:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+  - 리딩 날짜, 제목, 카드 정보, 키워드, 이미지, 감정 기록 포함
+  - 감성적인 레이아웃으로 구성된 카드 중심의 상세 페이지 제공
 
-## Deploy on Vercel
+- **반응형 UI & 접근성 대응**
+  - 모든 화면에서 모바일/데스크탑 대응
+  - 시멘틱 마크업, aria-label, 키보드 접근성 고려
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/create?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ 기술 스택
+
+| 구분           | 사용 기술                                            |
+| -------------- | ---------------------------------------------------- |
+| 프레임워크     | Next.js 14 (App Router 기반)                         |
+| 스타일         | Tailwind CSS, shadcn/ui                              |
+| 인증 및 데이터 | Supabase (Auth, DB, Storage)                         |
+| 배포           | Vercel                                               |
+| 기타           | OpenAI API (텍스트 리딩), Framer Motion (애니메이션) |
+
+---
+
+## 🔄 향후 계획
+
+- **검색 및 필터 기능 보완**:
+
+  - 사용자 기록 필터링 기능 (카테고리, 날짜, 키워드 기반)
+
+- **사용자 인터페이스 개선**:
+
+  - 카드 선택, 이미지 업로드 영역의 UX 개선
+  - 모바일 편의성 추가 고려
+
+- **리팩토링**:
+
+  - 컴포넌트 분리 및 코드 정리
+  - 레이아웃 및 상태 관리 구조 재정비
+
+- **성능 최적화**:
+  - 데이터 로딩 최적화 및 렌더링 성능 향상
+
+---
+
+## 🔗 프로젝트 링크
+
+- **배포 링크**: [https://next-tarot-app.vercel.app/](https://next-tarot-app.vercel.app/)
+- **개발 회고록 (주차별 정리)**: 추후 링크 삽입 예정
+
+---
+
+## 📌 기타 사항
+
+- TypeScript 기반으로 개발되었으며, 전반적인 감성과 사용자 경험 중심의 구성에 집중했습니다.
+- 본 프로젝트는 개인 포트폴리오용으로 진행되었으며, 추후 기능 확장을 염두에 두고 설계되었습니다.
