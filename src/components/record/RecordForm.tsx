@@ -109,6 +109,15 @@ export default function RecordForm({
     if (mainCards.length === 0)
       newErrors.mainCards = "메인 카드를 최소 1장 이상 선택해주세요";
     setErrors(newErrors);
+
+    const firstErrorField = Object.keys(newErrors)[0];
+    if (firstErrorField) {
+      const el = document.getElementById(firstErrorField);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.focus?.();
+      }
+    }
     return Object.keys(newErrors).length === 0;
   };
   const uploadImages = async (): Promise<string[]> => {
@@ -159,6 +168,8 @@ export default function RecordForm({
       subCards,
       category,
     });
+    console.log("🔥 mainCards:", mainCards);
+    console.log("🔥 subCards:", subCards);
 
     if (redirectPathOnSuccess) {
       router.push(redirectPathOnSuccess);

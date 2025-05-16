@@ -178,6 +178,7 @@ export default function Header() {
                       id="user-menu"
                       className="absolute right-0 mt-2 w-48 py-2 bg-[#1C1635]/95 backdrop-blur-sm rounded-lg shadow-xl border border-[#FFD700]/10"
                       role="menu"
+                      onMouseLeave={() => setIsMenuOpen(false)}
                     >
                       <Link
                         href="/cards"

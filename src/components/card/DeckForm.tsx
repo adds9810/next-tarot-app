@@ -26,14 +26,14 @@ type Deck = Database["public"]["Tables"]["decks"]["Row"];
 type CardType = Database["public"]["Tables"]["cards"]["Row"];
 
 const cardSchema = z.object({
-  title: z.string().min(1, "카드 제목을 입력해주세요"),
+  name: z.string().min(1, "카드 이름을 입력해주세요"),
   content: z.string().min(1, "카드 내용을 입력해주세요"),
   keywords: z.array(z.string()).optional(),
   image_url: z.string().url().optional(),
 });
 
 const formSchema = z.object({
-  title: z.string().min(1, "덱 제목을 입력해주세요"),
+  name: z.string().min(1, "덱 이름을 입력해주세요"),
   description: z.string().optional(),
   cards: z.array(cardSchema),
 });
@@ -49,12 +49,14 @@ export default function DeckForm({ deckId }: DeckFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const supabase = createClientComponentClient<Database>();
 
+  const isEditMode = deckId !== "create";
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
+      name: "",
       description: "",
-      cards: [{ title: "", content: "", keywords: [], image_url: "" }],
+      cards: [{ name: "", content: "", keywords: [], image_url: "" }],
     },
   });
 
@@ -69,7 +71,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
         return;
       }
 
-      if (deckId !== "new") {
+      if (isEditMode) {
         try {
           const { data: deck } = await supabase
             .from("decks")
@@ -83,14 +85,14 @@ export default function DeckForm({ deckId }: DeckFormProps) {
             .eq("deck_id", deckId);
 
           form.reset({
-            title: deck?.title || "",
+            name: deck?.name || "",
             description: deck?.description || "",
             cards:
               cards?.map((card) => ({
-                title: card.title,
+                name: card.name,
                 content: card.content,
-                keywords: [],
-                image_url: "",
+                keywords: card.keywords || [],
+                image_url: card.image_url || "",
               })) || [],
           });
         } catch {
@@ -119,11 +121,11 @@ export default function DeckForm({ deckId }: DeckFormProps) {
     if (!session) return;
 
     try {
-      if (deckId === "new") {
+      if (!isEditMode) {
         const { data: deck } = await supabase
           .from("decks")
           .insert({
-            title: values.title,
+            name: values.name,
             description: values.description,
             user_id: session.user.id,
           })
@@ -132,7 +134,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
 
         await supabase.from("cards").insert(
           values.cards.map((card) => ({
-            title: card.title,
+            name: card.name,
             content: card.content,
             deck_id: deck.id,
             user_id: session.user.id,
@@ -142,7 +144,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
         await supabase
           .from("decks")
           .update({
-            title: values.title,
+            name: values.name,
             description: values.description,
           })
           .eq("id", deckId);
@@ -151,7 +153,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
 
         await supabase.from("cards").insert(
           values.cards.map((card) => ({
-            title: card.title,
+            name: card.name,
             content: card.content,
             deck_id: deckId,
             user_id: session.user.id,
@@ -183,18 +185,17 @@ export default function DeckForm({ deckId }: DeckFormProps) {
     <Card className="p-6 md:p-8 bg-white/5 border border-white/10 text-white space-y-10 backdrop-blur-sm">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          {/* Deck Info */}
           <div className="space-y-4">
             <FormField
               control={form.control}
-              name="title"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>덱 제목</FormLabel>
+                  <FormLabel>덱 이름</FormLabel>
                   <FormControl>
                     <Input
                       className="bg-white/10 border-white/20 placeholder:text-white/40 text-white"
-                      placeholder="덱의 제목을 입력하세요"
+                      placeholder="덱의 이름을 입력하세요"
                       {...field}
                     />
                   </FormControl>
@@ -222,7 +223,6 @@ export default function DeckForm({ deckId }: DeckFormProps) {
             />
           </div>
 
-          {/* Cards Section */}
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold text-white">카드 목록</h3>
@@ -233,7 +233,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
                   const cards = form.getValues("cards");
                   form.setValue("cards", [
                     ...cards,
-                    { title: "", content: "", keywords: [], image_url: "" },
+                    { name: "", content: "", keywords: [], image_url: "" },
                   ]);
                 }}
               >
@@ -265,14 +265,14 @@ export default function DeckForm({ deckId }: DeckFormProps) {
 
                 <FormField
                   control={form.control}
-                  name={`cards.${index}.title`}
+                  name={`cards.${index}.name`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>카드 제목</FormLabel>
+                      <FormLabel>카드 이름</FormLabel>
                       <FormControl>
                         <Input
                           className="bg-white/10 border-white/20 text-white"
-                          placeholder="카드의 제목을 입력하세요"
+                          placeholder="카드의 이름을 입력하세요"
                           {...field}
                         />
                       </FormControl>
@@ -308,10 +308,14 @@ export default function DeckForm({ deckId }: DeckFormProps) {
               variant="outline"
               onClick={() => router.push("/cards")}
             >
-              취소
+              {isEditMode ? "취소하고 돌아가기" : "취소"}
             </Button>
             <Button type="submit" disabled={submitting}>
-              {submitting ? "저장 중..." : "저장하기"}
+              {submitting
+                ? "저장 중..."
+                : isEditMode
+                ? "수정 완료"
+                : "덱 생성하기"}
             </Button>
           </div>
         </form>

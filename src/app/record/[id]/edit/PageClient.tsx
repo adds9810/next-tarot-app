@@ -30,7 +30,7 @@ export default function PageClient({ id }: PageClientProps) {
   } | null>(null);
 
   useEffect(() => {
-    const fetchRecord = useCallback(async () => {
+    const fetchRecord = async () => {
       try {
         const { data: recordData, error: recordError } = await supabase
           .from("records")
@@ -92,38 +92,28 @@ export default function PageClient({ id }: PageClientProps) {
       } finally {
         setIsLoading(false);
       }
-    }, [id, router, supabase, toast]);
+    };
 
     const checkAuth = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-        if (!session) {
-          toast({
-            title: "로그인이 필요합니다.",
-            description: "기록을 수정하려면 먼저 로그인해주세요.",
-            variant: "destructive",
-          });
-          router.replace(`/login?redirect=/record/${id}/edit`);
-          return;
-        }
-
-        await fetchRecord();
-      } catch (error) {
-        console.error("Auth check error:", error);
+      if (!session) {
         toast({
-          title: "인증 오류",
-          description: "세션 정보를 불러오는 중 문제가 발생했습니다.",
+          title: "로그인이 필요합니다.",
+          description: "기록을 수정하려면 먼저 로그인해주세요.",
           variant: "destructive",
         });
         router.replace(`/login?redirect=/record/${id}/edit`);
+        return;
       }
+
+      await fetchRecord(); // ✅ 여기서 실행
     };
 
     checkAuth();
-  }, [id, router, supabase, toast]);
+  }, [id, supabase, toast, router]);
 
   const handleUpdate = async ({
     title,
@@ -166,7 +156,7 @@ export default function PageClient({ id }: PageClientProps) {
       const allIds = [...mainIds, ...subIds];
 
       const { data: fullCards, error: cardFetchError } = await supabase
-        .from("cards")
+        .from("base_cards")
         .select("id")
         .in("id", allIds);
 

@@ -30,6 +30,10 @@ export default function PageClient() {
   useEffect(() => {
     const checkSession = async () => {
       const {
+        /**
+         * If the user is not logged in, redirect them to the login page and
+         * show a toast message prompting them to log in.
+         */
         data: { session },
       } = await supabase.auth.getSession();
 
@@ -46,7 +50,6 @@ export default function PageClient() {
 
     checkSession();
 
-    // 기존 저장된 세션 불러오는 로직 유지
     const saved = sessionStorage.getItem("tarot_temp_record");
     if (saved) {
       const parsed = JSON.parse(saved);
@@ -70,6 +73,7 @@ export default function PageClient() {
         subCards: [],
         imageUrls: [],
       });
+
       setTimeout(() => {
         sessionStorage.removeItem("tarot_temp_record");
       }, 500);
@@ -144,11 +148,21 @@ export default function PageClient() {
       if (cardFetchError) throw cardFetchError;
       if (!cards) throw new Error("카드 정보를 불러오지 못했습니다.");
 
-      const rows = cards.map((card) => ({
-        record_id: recordId,
-        card_id: card.id,
-        type: mainIds.includes(card.id) ? "main" : "sub",
-      }));
+      const uniqueCardIds = new Set<string>();
+
+      const rows = [
+        ...mainCards.map((card) => {
+          uniqueCardIds.add(card.id);
+          return { record_id: recordId, card_id: card.id, type: "main" };
+        }),
+        ...subCards
+          .filter((card) => !uniqueCardIds.has(card.id))
+          .map((card) => ({
+            record_id: recordId,
+            card_id: card.id,
+            type: "sub",
+          })),
+      ];
 
       const { error: linkError } = await supabase
         .from("record_cards")
@@ -174,7 +188,6 @@ export default function PageClient() {
       aria-label="기록 생성 섹션"
     >
       <div className="w-full text-center mx-auto relative z-10 space-y-8">
-        {/* 제목 및 부제 */}
         <div className="space-y-4 animate-fade-in">
           <h1 className="font-title text-3xl md:text-4xl text-[#FFD700] drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
             카드의 속삭임
@@ -184,9 +197,8 @@ export default function PageClient() {
           </p>
         </div>
 
-        {/* 입력 폼 */}
         <div className="w-full p-6 sm:p-8 bg-black/30 backdrop-blur-lg rounded-xl border border-white/10">
-          {initialValues && initialValues.category !== undefined && (
+          {initialValues?.category !== undefined && (
             <RecordForm
               initialTitle={initialValues.title}
               initialContent={initialValues.content}

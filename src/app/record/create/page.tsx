@@ -1,40 +1,25 @@
 import { Metadata } from "next";
-import PageClient from "./PageClient";
+import dynamic from "next/dynamic";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://next-tarot-app.vercel.app/"),
-  title: "타로 기록 저장하기 | Whispers of the Stars",
-  description:
-    "지금 뽑은 타로카드와 해석을 기록으로 남기고 나만의 타로 아카이브를 만들어보세요.",
+  title: "기록 남기기 | Whispers of the Stars",
+  description: "오늘의 타로 리딩을 기록해보세요.",
   openGraph: {
-    title: "타로 기록 저장하기 | Whispers of the Stars",
-    description:
-      "지금 뽑은 타로카드와 해석을 기록으로 남기고 나만의 타로 아카이브를 만들어보세요.",
+    title: "기록 남기기",
+    description: "오늘의 타로 리딩을 기록해보세요.",
     url: "/record/create",
-    siteName: "Whispers of the Stars",
-    images: [
-      {
-        url: "/images/them/og-default.png",
-        width: 1200,
-        height: 630,
-        alt: "Whispers of the Stars 대표 이미지",
-      },
-    ],
-    locale: "ko_KR",
-    type: "website",
+    images: ["/images/them/og-default.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "타로 기록 저장하기 | Whispers of the Stars",
-    description:
-      "지금 뽑은 타로카드와 해석을 기록으로 남기고 나만의 타로 아카이브를 만들어보세요.",
+    title: "기록 남기기",
+    description: "오늘의 타로 리딩을 기록해보세요.",
     images: ["/images/them/og-default.png"],
-  },
-  icons: {
-    icon: "/images/favicon.ico",
   },
 };
 
-export default function CreateRecordPage() {
+const PageClient = dynamic(() => import("./PageClient"), { ssr: false });
+
+export default function Page() {
   return <PageClient />;
 }

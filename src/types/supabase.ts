@@ -13,21 +13,21 @@ export interface Database {
         Row: {
           id: string;
           created_at: string;
-          title: string;
+          name: string;
           description: string | null;
           user_id: string;
         };
         Insert: {
           id?: string;
           created_at?: string;
-          title: string;
+          name: string;
           description?: string | null;
           user_id: string;
         };
         Update: {
           id?: string;
           created_at?: string;
-          title?: string;
+          name?: string;
           description?: string | null;
           user_id?: string;
         };
@@ -36,7 +36,7 @@ export interface Database {
         Row: {
           id: string;
           created_at: string;
-          title: string;
+          name: string;
           content: string;
           deck_id: string;
           user_id: string;
@@ -44,7 +44,7 @@ export interface Database {
         Insert: {
           id?: string;
           created_at?: string;
-          title: string;
+          name: string;
           content: string;
           deck_id: string;
           user_id: string;
@@ -52,7 +52,7 @@ export interface Database {
         Update: {
           id?: string;
           created_at?: string;
-          title?: string;
+          name?: string;
           content?: string;
           deck_id?: string;
           user_id?: string;

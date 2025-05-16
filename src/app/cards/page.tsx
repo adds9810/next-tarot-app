@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import DeckList from "@/components/card/DeckList";
+import PageClient from "./PageClient";
 
 export const metadata: Metadata = {
   title: "내 덱과 카드 관리 | Whispers of the Stars",
@@ -18,10 +18,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function DeckPage() {
+export default function Page() {
   return (
     <main className="container mx-auto px-4 py-8">
-      <DeckList />
+      <PageClient />
     </main>
   );
 }
