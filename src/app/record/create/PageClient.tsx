@@ -91,6 +91,10 @@ export default function PageClient() {
     }
   }, []);
 
+  const now = new Date();
+  // 한국 시간으로 변환 (UTC+9)
+  const koreaTime = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+
   const handleCreate = async ({
     title,
     content,
@@ -110,6 +114,10 @@ export default function PageClient() {
       if (sessionError || !session)
         throw new Error("인증되지 않은 사용자입니다.");
 
+      // 한국 시간으로 변환
+      const now = new Date();
+      const koreaTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC +9 (한국 시간)
+
       const { data: insertedRecord, error: insertError } = await supabase
         .from("records")
         .insert({
@@ -119,7 +127,7 @@ export default function PageClient() {
           feedback,
           image_urls: imageUrls,
           user_id: session.user.id,
-          created_at: new Date(),
+          created_at: koreaTime, // 한국 시간으로 저장
           category,
           main_card_image_url: mainCards[0]?.image_url || null,
         })

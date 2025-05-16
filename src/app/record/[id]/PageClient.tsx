@@ -288,24 +288,31 @@ export default function PageClient({ id }: PageClientProps) {
             )}
         </section>
 
-        <div className="flex justify-end gap-4 pt-6 border-t border-white/10">
-          <Link href={`/record/${id}/edit`}>
-            <Button
-              variant="outline"
-              className="bg-white/5 border-white/10 text-white hover:bg-white/10"
-              aria-label="기록 수정하기"
-            >
-              <Pencil className="w-4 h-4 mr-2" /> 수정
+        <div className="flex justify-between gap-4 pt-6 border-t border-white/10">
+          <Link href={`/record/`}>
+            <Button className="w-full text-[#EAE7FF] hover:text-[#FFD700] border border-[#FFD700]/20 hover:border-[#FFD700]/40">
+              목록으로
             </Button>
           </Link>
-          <Button
-            onClick={handleDelete}
-            variant="destructive"
-            className="bg-red-500/10 border-red-500/20 text-red-500 hover:bg-red-500/20"
-            aria-label="기록 삭제하기"
-          >
-            <Trash2 className="w-4 h-4 mr-2" /> 삭제
-          </Button>
+          <div className="space-x-2">
+            <Link href={`/record/${id}/edit`}>
+              <Button
+                variant="outline"
+                className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                aria-label="기록 수정하기"
+              >
+                <Pencil className="w-4 h-4 mr-2" /> 수정
+              </Button>
+            </Link>
+            <Button
+              onClick={handleDelete}
+              variant="destructive"
+              className="bg-red-500/10 border-red-500/20 text-red-500 hover:bg-red-500/20"
+              aria-label="기록 삭제하기"
+            >
+              <Trash2 className="w-4 h-4 mr-2" /> 삭제
+            </Button>
+          </div>
         </div>
       </div>
     </motion.section>

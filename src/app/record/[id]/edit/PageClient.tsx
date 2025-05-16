@@ -1,16 +1,28 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import RecordForm from "@/components/record/RecordForm";
+import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/types/card";
 import { RecordCategory } from "@/types/record";
-import RecordForm from "@/components/record/RecordForm";
+import LoadingIndicator from "@/components/LoadingIndicator";
 
 interface PageClientProps {
   id: string;
 }
+
+type RecordFormData = {
+  title: string;
+  content: string;
+  interpretation: string;
+  feedback: string;
+  imageUrls: string[];
+  mainCards: Card[];
+  subCards: Card[];
+  category: RecordCategory;
+};
 
 export default function PageClient({ id }: PageClientProps) {
   const router = useRouter();
@@ -109,7 +121,7 @@ export default function PageClient({ id }: PageClientProps) {
         return;
       }
 
-      await fetchRecord(); // ✅ 여기서 실행
+      await fetchRecord(); // Fetch record data after checking auth
     };
 
     checkAuth();
@@ -124,18 +136,9 @@ export default function PageClient({ id }: PageClientProps) {
     mainCards,
     subCards,
     category,
-  }: {
-    title: string;
-    content: string;
-    interpretation: string;
-    feedback: string;
-    imageUrls: string[];
-    mainCards: Card[];
-    subCards: Card[];
-    category: RecordCategory;
-  }) => {
+  }: RecordFormData) => {
     try {
-      // Step 1: 기록을 업데이트
+      // Step 1: Update the main record information
       const { error: updateError } = await supabase
         .from("records")
         .update({
@@ -145,51 +148,58 @@ export default function PageClient({ id }: PageClientProps) {
           feedback,
           image_urls: imageUrls,
           category,
+          main_card_image_url: mainCards[0]?.image_url || null, // 메인 카드 이미지 업데이트
         })
-        .eq("id", id); // 기존 레코드 업데이트
+        .eq("id", id); // Make sure this is targeting the correct record id
 
       if (updateError) throw updateError;
 
-      // Step 2: 기존 카드 삭제 (record_cards 테이블에서 삭제)
+      // Step 2: Remove old card data from record_cards
       const { error: deleteError } = await supabase
         .from("record_cards")
         .delete()
-        .eq("record_id", id); // 해당 기록에 관련된 카드 삭제
+        .eq("record_id", id); // Ensure this deletes old record cards before updating
 
       if (deleteError) throw deleteError;
 
-      // Step 3: 카드 IDs 처리
-      const mainIds = mainCards.map((c) => c.id);
-      const subIds = subCards.map((c) => c.id);
+      // Step 3: Insert new card data (main + sub cards)
+      const mainIds = mainCards.map((card) => card.id);
+      const subIds = subCards.map((card) => card.id);
       const allIds = [...mainIds, ...subIds];
 
-      // Step 4: base_cards 테이블에서 카드 ID 목록 조회
       const { data: fullCards, error: cardFetchError } = await supabase
-        .from("base_cards")
+        .from("cards")
         .select("id")
-        .in("id", allIds); // 해당 ID들이 존재하는지 확인
+        .in("id", allIds);
 
       if (cardFetchError) throw cardFetchError;
 
-      // Step 5: 새로 삽입할 카드 데이터 생성
       const newRows = fullCards.map((card) => ({
         record_id: id,
         card_id: card.id,
-        type: mainIds.includes(card.id) ? "main" : "sub", // 타입에 맞게 구분
+        type: mainIds.includes(card.id) ? "main" : "sub",
       }));
 
-      // Step 6: 새로운 카드 데이터 삽입
-      const { error: insertError } = await supabase
+      const { error: linkError } = await supabase
         .from("record_cards")
-        .insert(newRows); // 새 카드 데이터 삽입
+        .insert(newRows);
 
-      if (insertError) throw insertError;
+      if (linkError) throw linkError;
 
-      // Step 7: 성공적인 업데이트 후, 피드백과 리디렉션
+      // **새로 데이터를 fetch한 후 상태 업데이트**
+      const { data: updatedRecord } = await supabase
+        .from("records")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (updatedRecord) {
+        setRecord(updatedRecord); // 상태를 갱신하여 화면을 리렌더링합니다.
+      }
+
       toast({ title: "수정 완료" });
-      router.push(`/record/${id}`); // 수정 후, 해당 기록 페이지로 이동
+      router.push(`/record/${id}`); // Redirect to the updated record page
     } catch (error: any) {
-      // 오류 처리
       toast({
         title: "수정 실패",
         description: error.message,
@@ -199,11 +209,7 @@ export default function PageClient({ id }: PageClientProps) {
   };
 
   if (isLoading || !record) {
-    return (
-      <div className="text-white text-center py-12" aria-live="polite">
-        불러오는 중...
-      </div>
-    );
+    return <LoadingIndicator message="🔮 신비로운 데이터를 소환 중입니다..." />;
   }
 
   return (
@@ -213,10 +219,7 @@ export default function PageClient({ id }: PageClientProps) {
     >
       <div className="w-full text-center mx-auto relative z-10 space-y-8">
         <div className="space-y-4 animate-fade-in">
-          <h1
-            id="edit-title"
-            className="font-title text-3xl md:text-4xl text-[#FFD700] drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]"
-          >
+          <h1 className="font-title text-3xl md:text-4xl text-[#FFD700] drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
             속삭임을 다시 꺼내며
           </h1>
           <p className="font-body text-lg md:text-xl text-white/90 leading-relaxed">
