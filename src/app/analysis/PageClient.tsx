@@ -347,7 +347,6 @@ export default function PageClient() {
 
         {analysisResult && (
           <section>
-            {" "}
             <Card className="bg-[#1C1635]/50 border-[#FFD700]/10">
               <CardHeader>
                 <CardTitle className="text-xl font-medium text-[#FFD700]">

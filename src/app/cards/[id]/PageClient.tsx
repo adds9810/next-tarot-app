@@ -5,6 +5,8 @@ import DeckForm from "@/components/card/DeckForm";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useToast } from "@/hooks/use-toast";
 import { Database } from "@/types/supabase";
+import LoadingIndicator from "@/components/LoadingIndicator";
+
 export type CardType = {
   name: string;
   notes: string;
@@ -77,7 +79,7 @@ export default function PageClient() {
   }, [id, supabase, toast]);
 
   if (loading) {
-    return <p>로딩 중...</p>; // 로딩 중 메시지
+    return <LoadingIndicator message="🌠 별빛을 모으는 중이에요" />; // 로딩 중 메시지
   }
 
   if (!deck) {

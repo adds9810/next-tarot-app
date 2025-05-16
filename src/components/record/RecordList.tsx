@@ -6,6 +6,7 @@ import RecordCard from "./RecordCard";
 import EmptyState from "../EmptyState";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import LoadingIndicator from "../LoadingIndicator";
 
 interface Record {
   id: string;
@@ -55,11 +56,7 @@ export default function RecordList() {
   }, [supabase]);
 
   if (loading) {
-    return (
-      <div className="text-center py-8">
-        <p>로딩 중...</p>
-      </div>
-    );
+    return <LoadingIndicator message="🔮 신비로운 데이터를 소환 중입니다..." />;
   }
 
   if (error) {
@@ -83,7 +80,6 @@ export default function RecordList() {
 
   return (
     <>
-      {" "}
       {/* CTA 버튼 그룹 */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
