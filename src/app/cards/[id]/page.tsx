@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import DeckForm from "@/components/deck/DeckForm";
+import DeckForm from "@/components/card/DeckForm";
 
 export const metadata: Metadata = {
   title: "덱 생성 및 수정 | Whispers of the Stars",

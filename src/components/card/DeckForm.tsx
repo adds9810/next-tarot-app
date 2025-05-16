@@ -23,7 +23,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import type { Database } from "@/types/supabase";
 
 type Deck = Database["public"]["Tables"]["decks"]["Row"];
-type Card = Database["public"]["Tables"]["cards"]["Row"];
+type CardType = Database["public"]["Tables"]["cards"]["Row"];
 
 const cardSchema = z.object({
   title: z.string().min(1, "카드 제목을 입력해주세요"),
@@ -71,35 +71,33 @@ export default function DeckForm({ deckId }: DeckFormProps) {
 
       if (deckId !== "new") {
         try {
-          const { data: deck, error: deckError } = await supabase
+          const { data: deck } = await supabase
             .from("decks")
             .select("*")
             .eq("id", deckId)
             .single();
-          if (deckError) throw deckError;
 
-          const { data: cards, error: cardsError } = await supabase
+          const { data: cards } = await supabase
             .from("cards")
             .select("*")
             .eq("deck_id", deckId);
-          if (cardsError) throw cardsError;
 
           form.reset({
-            title: deck.title,
-            description: deck.description || "",
-            cards: cards.map((card) => ({
-              title: card.title,
-              content: card.content,
-              keywords: [],
-              image_url: "",
-            })),
+            title: deck?.title || "",
+            description: deck?.description || "",
+            cards:
+              cards?.map((card) => ({
+                title: card.title,
+                content: card.content,
+                keywords: [],
+                image_url: "",
+              })) || [],
           });
-        } catch (error) {
-          console.error("Error fetching data:", error);
+        } catch {
           toast({
             variant: "destructive",
             title: "불러오기 실패",
-            description: "덱과 카드를 불러오는데 실패했습니다.",
+            description: "덱 정보를 가져오지 못했습니다.",
           });
           router.push("/deck");
         }
@@ -109,7 +107,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
     };
 
     checkSessionAndFetch();
-  }, [deckId, router, supabase, form, toast]);
+  }, [deckId]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setSubmitting(true);
@@ -117,31 +115,22 @@ export default function DeckForm({ deckId }: DeckFormProps) {
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    if (!session) {
-      toast({
-        title: "인증 오류",
-        description: "로그인이 필요합니다.",
-        variant: "destructive",
-      });
-      return;
-    }
+
+    if (!session) return;
 
     try {
       if (deckId === "new") {
-        const { data: deck, error: deckError } = await supabase
+        const { data: deck } = await supabase
           .from("decks")
-          .insert([
-            {
-              title: values.title,
-              description: values.description,
-              user_id: session.user.id,
-            },
-          ])
+          .insert({
+            title: values.title,
+            description: values.description,
+            user_id: session.user.id,
+          })
           .select()
           .single();
-        if (deckError) throw deckError;
 
-        const { error: cardsError } = await supabase.from("cards").insert(
+        await supabase.from("cards").insert(
           values.cards.map((card) => ({
             title: card.title,
             content: card.content,
@@ -149,20 +138,18 @@ export default function DeckForm({ deckId }: DeckFormProps) {
             user_id: session.user.id,
           }))
         );
-        if (cardsError) throw cardsError;
       } else {
-        const { error: deckError } = await supabase
+        await supabase
           .from("decks")
           .update({
             title: values.title,
             description: values.description,
           })
           .eq("id", deckId);
-        if (deckError) throw deckError;
 
         await supabase.from("cards").delete().eq("deck_id", deckId);
 
-        const { error: cardsError } = await supabase.from("cards").insert(
+        await supabase.from("cards").insert(
           values.cards.map((card) => ({
             title: card.title,
             content: card.content,
@@ -170,7 +157,6 @@ export default function DeckForm({ deckId }: DeckFormProps) {
             user_id: session.user.id,
           }))
         );
-        if (cardsError) throw cardsError;
       }
 
       toast({
@@ -178,12 +164,11 @@ export default function DeckForm({ deckId }: DeckFormProps) {
         description: "덱이 저장되었습니다.",
       });
       router.push("/deck");
-    } catch (error) {
-      console.error("Error saving deck:", error);
+    } catch (e) {
       toast({
         variant: "destructive",
         title: "저장 실패",
-        description: "덱을 저장하는데 실패했습니다.",
+        description: "덱 저장 중 문제가 발생했습니다.",
       });
     } finally {
       setSubmitting(false);
@@ -195,9 +180,10 @@ export default function DeckForm({ deckId }: DeckFormProps) {
   }
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 md:p-8 bg-white/5 border border-white/10 text-white space-y-10 backdrop-blur-sm">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {/* Deck Info */}
           <div className="space-y-4">
             <FormField
               control={form.control}
@@ -206,7 +192,11 @@ export default function DeckForm({ deckId }: DeckFormProps) {
                 <FormItem>
                   <FormLabel>덱 제목</FormLabel>
                   <FormControl>
-                    <Input placeholder="덱의 제목을 입력하세요" {...field} />
+                    <Input
+                      className="bg-white/10 border-white/20 placeholder:text-white/40 text-white"
+                      placeholder="덱의 제목을 입력하세요"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -221,6 +211,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
                   <FormLabel>덱 설명</FormLabel>
                   <FormControl>
                     <Textarea
+                      className="bg-white/10 border-white/20 placeholder:text-white/40 text-white"
                       placeholder="덱에 대한 설명을 입력하세요"
                       {...field}
                     />
@@ -231,9 +222,10 @@ export default function DeckForm({ deckId }: DeckFormProps) {
             />
           </div>
 
-          <div className="space-y-4">
+          {/* Cards Section */}
+          <div className="space-y-6">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold">카드 목록</h3>
+              <h3 className="text-lg font-semibold text-white">카드 목록</h3>
               <Button
                 type="button"
                 variant="outline"
@@ -250,9 +242,9 @@ export default function DeckForm({ deckId }: DeckFormProps) {
             </div>
 
             {form.watch("cards").map((_, index) => (
-              <Card key={index} className="p-4 space-y-4">
-                <div className="flex justify-between items-center">
-                  <h4 className="font-medium">카드 {index + 1}</h4>
+              <Card key={index} className="p-4 bg-white/10 border-white/20">
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="font-medium text-white">카드 {index + 1}</h4>
                   {index > 0 && (
                     <Button
                       type="button"
@@ -279,6 +271,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
                       <FormLabel>카드 제목</FormLabel>
                       <FormControl>
                         <Input
+                          className="bg-white/10 border-white/20 text-white"
                           placeholder="카드의 제목을 입력하세요"
                           {...field}
                         />
@@ -296,6 +289,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
                       <FormLabel>카드 내용</FormLabel>
                       <FormControl>
                         <Textarea
+                          className="bg-white/10 border-white/20 text-white"
                           placeholder="카드의 내용을 입력하세요"
                           {...field}
                         />
