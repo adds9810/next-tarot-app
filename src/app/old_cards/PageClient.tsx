@@ -51,7 +51,7 @@ export default function PageClient() {
           description: "덱과 카드를 관리하려면 로그인해주세요.",
           variant: "destructive",
         });
-        router.replace("/login?redirect=/deck");
+        router.replace("/login?redirect=/cards");
         return;
       }
 

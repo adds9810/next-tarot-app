@@ -65,7 +65,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        router.push(`/login?redirect=/deck/${deckId}`);
+        router.push(`/login?redirect=/cards/${deckId}`);
         return;
       }
 
@@ -99,7 +99,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
             title: "불러오기 실패",
             description: "덱 정보를 가져오지 못했습니다.",
           });
-          router.push("/deck");
+          router.push("/cards");
         }
       }
 
@@ -163,7 +163,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
         title: "저장 완료",
         description: "덱이 저장되었습니다.",
       });
-      router.push("/deck");
+      router.push("/cards");
     } catch (e) {
       toast({
         variant: "destructive",
@@ -306,7 +306,7 @@ export default function DeckForm({ deckId }: DeckFormProps) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.push("/deck")}
+              onClick={() => router.push("/cards")}
             >
               취소
             </Button>

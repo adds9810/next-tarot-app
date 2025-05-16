@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import DeckList from "@/components/card/DeckList";
+import DeckList from "@/components/card/cardsList";
 
 export const metadata: Metadata = {
   title: "내 덱과 카드 관리 | Whispers of the Stars",
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "내 덱과 카드 관리",
     description: "등록한 덱과 카드를 관리하세요.",
-    url: "/deck",
+    url: "/cards",
     images: ["/images/them/og-default.png"],
   },
   twitter: {

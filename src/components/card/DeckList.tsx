@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import DeckCard from "@/components/card/DeckCard";
+import DeckCard from "@/components/card/cardsCard";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import type { Database } from "@/types/supabase";
 
@@ -95,7 +95,7 @@ export default function CardsPage() {
         <h1 className="text-3xl font-title text-[#FFD700]">
           내 덱과 카드 관리
         </h1>
-        <Button onClick={() => router.push("/deck/new")}>새 덱 만들기</Button>
+        <Button onClick={() => router.push("/cards/new")}>새 덱 만들기</Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

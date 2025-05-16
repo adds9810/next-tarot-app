@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import DeckForm from "@/components/card/DeckForm";
+import DeckForm from "@/components/card/cardsForm";
 
 export const metadata: Metadata = {
   title: "덱 생성 및 수정 | Whispers of the Stars",
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "덱 생성 및 수정",
     description: "나만의 타로 덱과 카드를 등록하고 관리해보세요.",
-    url: "/deck/new",
+    url: "/cards/new",
     images: ["/images/them/og-default.png"],
   },
   twitter: {
