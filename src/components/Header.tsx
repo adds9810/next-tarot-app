@@ -180,7 +180,7 @@ export default function Header() {
                       role="menu"
                     >
                       <Link
-                        href="/cards"
+                        href="/my-cards"
                         className="block px-4 py-2 text-sm text-[#EAE7FF] hover:bg-[#FFD700]/10 font-body transition-colors duration-200 focus:outline-none focus:bg-[#FFD700]/20"
                         role="menuitem"
                       >
@@ -293,6 +293,13 @@ export default function Header() {
                 ))}
                 {user ? (
                   <>
+                    <Link
+                      href="/my-cards"
+                      className="block px-4 py-2 text-sm text-[#EAE7FF] hover:bg-[#FFD700]/10 font-body transition-colors duration-200 focus:outline-none focus:bg-[#FFD700]/20"
+                      role="menuitem"
+                    >
+                      내 덱/카드 관리
+                    </Link>
                     {/* <Link
                       href="/profile"
                       className="font-body text-[#EAE7FF] hover:text-[#FFD700] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 rounded-lg py-2"
