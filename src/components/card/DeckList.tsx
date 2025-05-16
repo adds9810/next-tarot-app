@@ -18,7 +18,7 @@ import type { Database } from "@/types/supabase";
 type Deck = Database["public"]["Tables"]["decks"]["Row"];
 type Card = Database["public"]["Tables"]["cards"]["Row"];
 
-export default function CardsPage() {
+export default function DeckList() {
   const [decks, setDecks] = useState<Deck[]>([]);
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
@@ -49,8 +49,12 @@ export default function CardsPage() {
           .select("*")
           .eq("user_id", session.user.id);
 
+        const cleanedCards = (cardsData || []).filter(
+          (card) => card.title?.trim() !== "" && card.content?.trim() !== ""
+        );
+
         setDecks(decksData || []);
-        setCards(cardsData || []);
+        setCards(cleanedCards);
       } catch (err) {
         console.error(err);
         toast({
@@ -84,10 +88,6 @@ export default function CardsPage() {
       setDeleteTarget(null);
     }
   };
-
-  if (loading) {
-    return <LoadingIndicator message="🌠 별빛을 모으는 중이에요" />;
-  }
 
   return (
     <section className="py-10 px-4 md:px-8 max-w-6xl mx-auto space-y-8 text-white">

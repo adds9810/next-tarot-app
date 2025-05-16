@@ -16,7 +16,6 @@ interface DeckCardProps {
 
 export default function DeckCard({ deck, cards, onDelete }: DeckCardProps) {
   const router = useRouter();
-
   return (
     <Card className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-start mb-2">
