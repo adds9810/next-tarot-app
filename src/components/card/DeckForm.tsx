@@ -18,6 +18,13 @@ export type CardType = {
   keywords: string[];
   image_url: string;
 };
+type Deck = {
+  id: string;
+  name: string;
+  description: string;
+  image_url: string;
+  user_id: string;
+};
 
 type DeckFormProps = {
   deck?: {
@@ -55,7 +62,7 @@ export default function DeckForm({
     cards.map(() => null)
   );
   const [loading, setLoading] = useState(false);
-  const [decks, setDecks] = useState([]);
+  const [decks, setDecks] = useState<Deck[]>([]);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
