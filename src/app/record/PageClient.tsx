@@ -306,7 +306,7 @@ export default function PageClient() {
                 </Pagination>
               </>
             )}
-          </div>{" "}
+          </div>
         </>
       )}
     </section>

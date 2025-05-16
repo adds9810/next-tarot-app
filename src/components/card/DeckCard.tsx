@@ -7,36 +7,56 @@ import type { Database } from "@/types/supabase";
 
 type Deck = Database["public"]["Tables"]["decks"]["Row"];
 type CardType = Database["public"]["Tables"]["cards"]["Row"];
-
+type ExtendedDeck = Deck & {
+  image_url?: string;
+};
 interface DeckCardProps {
-  deck: Deck;
+  deck: ExtendedDeck;
   cards: CardType[];
   onDelete: () => void;
 }
 
 export default function DeckCard({ deck, cards, onDelete }: DeckCardProps) {
+  const defaultImage = "/images/them/default-deck.png";
   const router = useRouter();
+  const handleCardClick = () => {
+    router.push(`/cards/${deck.id}`);
+  };
+  console.log("Deck image URL: ", deck.image_url);
 
   return (
     <Card
-      onClick={() => router.push(`/cards/${deck.id}`)}
+      onClick={handleCardClick}
       className="cursor-pointer bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow"
       tabIndex={0}
       role="button"
     >
       <div className="flex justify-between items-start mb-2">
-        <div>
-          <h3 className="text-white font-semibold text-lg mb-1 line-clamp-1">
-            {deck.name || "제목 없음"}
-          </h3>
-          <p className="text-white/70 text-sm line-clamp-2">
-            {deck.description || "설명이 없습니다."}
-          </p>
+        <div className="flex justify-between items-start gap-2">
+          <div className="flex items-center">
+            {/* 덱 이미지 */}
+            <img
+              src={deck.image_url || defaultImage} // image_url이 없으면 기본 이미지로 표시
+              alt={deck.name}
+              className="object-cover w-16 h-16 rounded-md"
+            />
+          </div>
+          <div>
+            <h3 className="text-white font-semibold text-lg mb-1 line-clamp-1">
+              {deck.name || "제목 없음"}
+            </h3>
+            <p className="text-white/70 text-sm line-clamp-2">
+              {deck.description || "설명이 없습니다."}
+            </p>
+          </div>
         </div>
         <Button
           variant="destructive"
           size="sm"
-          onClick={onDelete}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete && onDelete();
+          }}
           aria-label={`${deck.name} 덱 삭제하기`}
         >
           삭제
@@ -46,6 +66,7 @@ export default function DeckCard({ deck, cards, onDelete }: DeckCardProps) {
       <div className="text-sm text-white/80 mt-3">
         <p className="mb-2">카드 {cards.length}장</p>
         <div className="space-y-1">
+          {/* 카드 이름을 보여주는 부분 */}
           {cards.slice(0, 3).map((card) => (
             <p
               key={card.id}

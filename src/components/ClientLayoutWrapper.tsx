@@ -11,7 +11,8 @@ export default function ClientLayoutWrapper({
 }) {
   const pathname = usePathname();
 
-  const isPlainBackground = pathname.startsWith("/record");
+  const isPlainBackground =
+    pathname.startsWith("/record") || pathname.startsWith("/cards");
   return !isPlainBackground ? (
     <PageBackground>
       <main>{children}</main>

@@ -100,7 +100,7 @@ export default function Header() {
       className="fixed w-full top-0 z-50 bg-gradient-to-b from-[#070817]/80 to-[#1C1635]/80 backdrop-blur-md border-b border-[#FFD700]/20 shadow-lg shadow-[#1C1635]/20"
       role="banner"
     >
-      <div className="container mx-auto px-4 py-3 md:py-4">
+      <div className="lg:container mx-auto px-4 py-3 md:py-4">
         <nav
           className="flex items-center justify-between"
           role="navigation"

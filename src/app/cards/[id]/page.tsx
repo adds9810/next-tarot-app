@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import DeckForm from "@/components/card/DeckForm";
+import PageClient from "./PageClient";
 
 export const metadata: Metadata = {
   title: "덱 수정 | Whispers of the Stars",
@@ -23,9 +23,5 @@ interface Props {
 }
 
 export default function Page({ params }: Props) {
-  return (
-    <main className="container mx-auto px-4 py-8">
-      <DeckForm deckId={params.id} />
-    </main>
-  );
+  return <PageClient />;
 }
