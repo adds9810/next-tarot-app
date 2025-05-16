@@ -22,7 +22,7 @@ export default function DeckCard({ deck, cards, onDelete }: DeckCardProps) {
   const handleCardClick = () => {
     router.push(`/cards/${deck.id}`);
   };
-  console.log("Deck image URL: ", deck.image_url);
+  // console.log("Deck image URL: ", deck.image_url);
 
   return (
     <Card

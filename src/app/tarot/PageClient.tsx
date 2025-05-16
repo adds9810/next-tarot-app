@@ -32,7 +32,13 @@ function TarotContent() {
     const fetchCards = async () => {
       const {
         data: { session },
+        error: sessionError,
       } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        // console.error("세션 오류:", sessionError.message);
+        return;
+      }
 
       const isLoggedIn = !!session;
       setIsLoggedIn(isLoggedIn);
@@ -40,22 +46,28 @@ function TarotContent() {
       const tableName = isLoggedIn ? "cards" : "base_cards";
       const userCondition = isLoggedIn ? { user_id: session.user.id } : {};
 
-      const { data, error } = await supabase
-        .from(tableName)
-        .select("*")
-        .match({
-          ...userCondition,
-          deck_id: UNIVERSAL_DECK_ID,
-        })
-        .order("order_index", { ascending: true });
+      try {
+        // "Universal" 덱 이름과 is_locked가 true인 카드를 필터링
+        const { data, error } = await supabase
+          .from(tableName)
+          .select("*")
+          .match({
+            ...userCondition,
+            deck_name: "Universal", // deck_name이 "Universal"인 카드 찾기
+          })
+          .order("order_index", { ascending: true });
 
-      if (error) {
-        console.error(
-          `${isLoggedIn ? "회원" : "비회원"} 카드 불러오기 실패:`,
-          error.message
-        );
-      } else {
-        setCards(data || []);
+        if (error) {
+          console.error(
+            `${isLoggedIn ? "회원" : "비회원"} 카드 불러오기 실패:`,
+            error.message
+          );
+        } else {
+          // console.log("카드 데이터:", data); // 데이터가 제대로 출력되는지 확인
+          setCards(data || []);
+        }
+      } catch (err) {
+        console.error("카드 데이터 불러오기 중 오류 발생:", err);
       }
     };
 
