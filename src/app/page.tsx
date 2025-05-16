@@ -15,6 +15,7 @@ export default function Home() {
   const [nickname, setNickname] = useState("");
   const { toast } = useToast();
 
+  // ✅ 로그인 상태 확인
   useEffect(() => {
     const {
       data: { subscription },
@@ -41,27 +42,21 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // ✅ 회원가입 또는 로그인 성공 메시지 표시 (최초 렌더링 시 1회 실행)
+  // ✅ 가입 안내 메시지 (소셜 로그인 포함) 지연 표시
   useEffect(() => {
-    const signupMessage = localStorage.getItem("signup_message");
-    if (signupMessage) {
-      toast({
-        title: "🎉 가입 완료",
-        description: signupMessage,
-        duration: 5000,
-      });
-      localStorage.removeItem("signup_message");
-    }
+    const timer = setTimeout(() => {
+      const storedMessage = localStorage.getItem("signup_message");
+      if (storedMessage) {
+        toast({
+          title: "🎉 가입 완료",
+          description: storedMessage,
+          duration: 5000,
+        });
+        localStorage.removeItem("signup_message");
+      }
+    }, 300); // 살짝 지연
 
-    const loginMessage = localStorage.getItem("login_message");
-    if (loginMessage) {
-      toast({
-        title: "로그인 완료",
-        description: loginMessage,
-        duration: 5000,
-      });
-      localStorage.removeItem("login_message");
-    }
+    return () => clearTimeout(timer);
   }, []);
 
   if (!mounted || isLoading) {
