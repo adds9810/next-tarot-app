@@ -44,6 +44,11 @@ function LoginInner() {
 
   const handleSocialLogin = async (provider: Provider) => {
     try {
+      localStorage.setItem(
+        "login_message",
+        "Google 계정으로 로그인되었습니다."
+      );
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
@@ -55,31 +60,43 @@ function LoginInner() {
         },
       });
 
-      if (error) setError(error.message);
+      if (error) throw error;
     } catch (err) {
-      console.error("Social login error:", err);
       setError("소셜 로그인 중 오류가 발생했습니다.");
     }
   };
 
   useEffect(() => {
-    const storedMessage = localStorage.getItem("signup_message");
+    const signupMessage = localStorage.getItem("signup_message");
+    const loginMessage = localStorage.getItem("login_message");
     const redirectMessage = searchParams.get("message");
 
-    if (storedMessage) {
+    // ✅ 회원가입 안내 메시지 (흰색)
+    if (signupMessage) {
       toast({
-        title: "회원가입 완료",
-        description: storedMessage,
-        duration: 5000, // 흰색 감성 안내 토스트
+        title: "🎉 가입 완료",
+        description: signupMessage,
+        duration: 5000,
       });
       localStorage.removeItem("signup_message");
     }
 
+    // ✅ 로그인 안내 메시지 (흰색)
+    if (loginMessage) {
+      toast({
+        title: "✨ 로그인 완료",
+        description: loginMessage,
+        duration: 5000,
+      });
+      localStorage.removeItem("login_message");
+    }
+
+    // ✅ 접근 차단 메시지 (빨간색)
     if (redirectMessage) {
       toast({
         title: "로그인이 필요합니다.",
         description: redirectMessage,
-        variant: "destructive", // 빨간 경고 토스트 유지
+        variant: "destructive",
         duration: 5000,
       });
 

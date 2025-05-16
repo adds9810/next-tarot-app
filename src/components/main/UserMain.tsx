@@ -119,7 +119,7 @@ export default function UserMain({ nickname }: UserMainProps) {
             transition={{ delay: 0.1, duration: 0.6 }}
             className="font-title text-4xl md:text-5xl lg:text-6xl text-[#FFD700] leading-tight tracking-wide"
           >
-            {nickname}님의 <br className="block md:display-none" />
+            {nickname}님의 <br className="md:hidden" />
             별빛 일기장
           </motion.h1>
 

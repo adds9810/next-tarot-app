@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -30,7 +30,7 @@ export default function PageClient({ id }: PageClientProps) {
   } | null>(null);
 
   useEffect(() => {
-    const fetchRecord = async () => {
+    const fetchRecord = useCallback(async () => {
       try {
         const { data: recordData, error: recordError } = await supabase
           .from("records")
@@ -38,17 +38,18 @@ export default function PageClient({ id }: PageClientProps) {
           .eq("id", id)
           .single();
 
-        if (recordError) throw recordError;
+        if (recordError || !recordData)
+          throw recordError || new Error("기록 데이터를 찾을 수 없습니다.");
 
         const { data: cardLinks, error: linkError } = await supabase
           .from("record_cards")
           .select(
             `
-            type,
-            cards:card_id (
-              id, name, keywords, image_url, deck_id, deck_name
-            )
-          `
+          type,
+          cards:card_id (
+            id, name, keywords, image_url, deck_id, deck_name
+          )
+        `
           )
           .eq("record_id", id);
 
@@ -59,27 +60,17 @@ export default function PageClient({ id }: PageClientProps) {
           cards: Partial<Card> | null;
         }[];
 
-        const mainCards: Card[] = safeCardLinks
-          .filter((c) => c.type === "main" && c.cards?.id)
-          .map((c) => ({
-            id: c.cards!.id ?? "",
-            name: c.cards!.name ?? "",
-            keywords: c.cards!.keywords ?? [],
-            image_url: c.cards!.image_url ?? "",
-            deck_id: c.cards!.deck_id ?? "",
-            deck_name: c.cards!.deck_name ?? "",
-          }));
-
-        const subCards: Card[] = safeCardLinks
-          .filter((c) => c.type === "sub" && c.cards?.id)
-          .map((c) => ({
-            id: c.cards!.id ?? "",
-            name: c.cards!.name ?? "",
-            keywords: c.cards!.keywords ?? [],
-            image_url: c.cards!.image_url ?? "",
-            deck_id: c.cards!.deck_id ?? "",
-            deck_name: c.cards!.deck_name ?? "",
-          }));
+        const extractCards = (type: "main" | "sub") =>
+          safeCardLinks
+            .filter((c) => c.type === type && c.cards?.id)
+            .map((c) => ({
+              id: c.cards!.id ?? "",
+              name: c.cards!.name ?? "",
+              keywords: c.cards!.keywords ?? [],
+              image_url: c.cards!.image_url ?? "",
+              deck_id: c.cards!.deck_id ?? "",
+              deck_name: c.cards!.deck_name ?? "",
+            }));
 
         setRecord({
           title: recordData.title,
@@ -87,23 +78,51 @@ export default function PageClient({ id }: PageClientProps) {
           interpretation: recordData.interpretation || "",
           feedback: recordData.feedback || "",
           image_urls: recordData.image_urls || [],
-          mainCards,
-          subCards,
+          mainCards: extractCards("main"),
+          subCards: extractCards("sub"),
           category: recordData.category || "기타",
         });
       } catch (error: any) {
         toast({
           title: "불러오기 실패",
-          description: error.message,
+          description: error?.message || "기록을 불러오지 못했습니다.",
           variant: "destructive",
         });
         router.replace("/record");
       } finally {
         setIsLoading(false);
       }
+    }, [id, router, supabase, toast]);
+
+    const checkAuth = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!session) {
+          toast({
+            title: "로그인이 필요합니다.",
+            description: "기록을 수정하려면 먼저 로그인해주세요.",
+            variant: "destructive",
+          });
+          router.replace(`/login?redirect=/record/${id}/edit`);
+          return;
+        }
+
+        await fetchRecord();
+      } catch (error) {
+        console.error("Auth check error:", error);
+        toast({
+          title: "인증 오류",
+          description: "세션 정보를 불러오는 중 문제가 발생했습니다.",
+          variant: "destructive",
+        });
+        router.replace(`/login?redirect=/record/${id}/edit`);
+      }
     };
 
-    fetchRecord();
+    checkAuth();
   }, [id, router, supabase, toast]);
 
   const handleUpdate = async ({

@@ -55,19 +55,32 @@ export default function PageClient({ id }: PageClientProps) {
 
         if (!session) {
           setIsAuthenticated(false);
-          router.replace("/login");
+
+          toast({
+            title: "로그인이 필요합니다.",
+            description: "해당 기록을 보려면 먼저 로그인해주세요.",
+            variant: "destructive",
+            duration: 5000,
+          });
+
+          router.replace("/login?redirect=/record/" + id);
         } else {
           setIsAuthenticated(true);
         }
       } catch (error) {
         console.error("Auth check error:", error);
         setIsAuthenticated(false);
-        router.replace("/login");
+        toast({
+          title: "인증 오류",
+          description: "로그인 정보를 확인할 수 없습니다.",
+          variant: "destructive",
+        });
+        router.replace("/login?redirect=/record/" + id);
       }
     };
 
     checkAuth();
-  }, [router, supabase.auth]);
+  }, [router, supabase.auth, id, toast]);
 
   useEffect(() => {
     const fetchRecord = async () => {

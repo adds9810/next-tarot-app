@@ -41,16 +41,26 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // ✅ 회원가입 성공 메시지 표시 (최초 렌더링 시 1회 실행)
+  // ✅ 회원가입 또는 로그인 성공 메시지 표시 (최초 렌더링 시 1회 실행)
   useEffect(() => {
-    const storedMessage = localStorage.getItem("signup_message");
-    if (storedMessage) {
+    const signupMessage = localStorage.getItem("signup_message");
+    if (signupMessage) {
       toast({
-        title: "회원가입 완료",
-        description: storedMessage,
+        title: "🎉 가입 완료",
+        description: signupMessage,
         duration: 5000,
       });
       localStorage.removeItem("signup_message");
+    }
+
+    const loginMessage = localStorage.getItem("login_message");
+    if (loginMessage) {
+      toast({
+        title: "로그인 완료",
+        description: loginMessage,
+        duration: 5000,
+      });
+      localStorage.removeItem("login_message");
     }
   }, []);
 

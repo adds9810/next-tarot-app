@@ -28,6 +28,25 @@ export default function PageClient() {
     useState<Partial<RecordFormData> | null>(null);
 
   useEffect(() => {
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        toast({
+          title: "로그인이 필요합니다.",
+          description: "기록을 남기려면 먼저 로그인 해주세요.",
+          variant: "destructive",
+          duration: 5000,
+        });
+        router.push("/login?redirect=/record/create");
+      }
+    };
+
+    checkSession();
+
+    // 기존 저장된 세션 불러오는 로직 유지
     const saved = sessionStorage.getItem("tarot_temp_record");
     if (saved) {
       const parsed = JSON.parse(saved);

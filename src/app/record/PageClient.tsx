@@ -25,6 +25,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import LoadingIndicator from "@/components/LoadingIndicator";
+import { useToast } from "@/hooks/use-toast";
 
 const ITEMS_PER_PAGE = 9;
 const MAX_PAGE_BUTTONS = 10;
@@ -38,6 +39,7 @@ export default function PageClient() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const isFiltered = category !== "전체" || searchTerm.trim() !== "";
 
@@ -64,8 +66,16 @@ export default function PageClient() {
         const {
           data: { user },
         } = await supabase.auth.getUser();
-        if (!user) return setRecords([]);
-
+        if (!user) {
+          toast({
+            title: "로그인이 필요합니다",
+            description: "기록을 보려면 먼저 로그인 해주세요.",
+            variant: "destructive",
+            duration: 5000,
+          });
+          setRecords([]);
+          return;
+        }
         const { data, error } = await supabase
           .from("records")
           .select("*")
@@ -218,6 +228,7 @@ export default function PageClient() {
                     <div className="inline-block px-4 py-3 rounded-lg bg-[#1C1635]/70 border border-[#FFD700]/20 shadow-sm">
                       <p className="text-sm text-[#FFD700]">
                         내가 자주 뽑은 카드와 흐름이 궁금하다면?{" "}
+                        <br className="md:hidden" />
                         <Link
                           href="/analysis"
                           className="underline hover:text-[#FFE466] ml-1"

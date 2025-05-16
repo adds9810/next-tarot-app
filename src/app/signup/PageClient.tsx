@@ -81,9 +81,12 @@ export default function PageClient() {
       if (error) throw error;
 
       if (data) {
-        router.push(
-          "/login?message=회원가입이 완료되었습니다. 이메일을 확인해 주세요."
+        // ✅ 회원가입 성공 안내 메시지 저장 (흰색 박스로 Toast 예정)
+        localStorage.setItem(
+          "signup_message",
+          "회원가입이 완료되었습니다. 이메일을 확인해 주세요."
         );
+        router.push("/login");
       }
     } catch (error) {
       if (error instanceof AuthError) {
@@ -98,10 +101,12 @@ export default function PageClient() {
 
   const handleGoogleSignUp = async () => {
     try {
+      // ✅ 소셜 회원가입 성공 안내 메시지 저장
       localStorage.setItem(
         "signup_message",
-        "Google 계정으로 가입이 완료되었습니다. 로그인해 주세요."
+        "Google 계정으로 가입이 완료되었습니다."
       );
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
@@ -112,7 +117,9 @@ export default function PageClient() {
           },
         },
       });
+
       if (error) throw error;
+      // ❌ router.push("/login") 생략 – 소셜은 리다이렉션으로 이동
     } catch (error) {
       setError("Google 로그인 중 오류가 발생했습니다.");
     }

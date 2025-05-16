@@ -18,6 +18,7 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useToast } from "@/hooks/use-toast";
 
 const categories = [
   { id: "today", label: "오늘의 운세" },
@@ -47,6 +48,7 @@ export default function PageClient() {
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const [startOpen, setStartOpen] = useState(false);
   const [endOpen, setEndOpen] = useState(false);
+  const { toast } = useToast();
 
   const handleAnalyze = async () => {
     if (!startDate || !endDate) {
@@ -59,7 +61,15 @@ export default function PageClient() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error("로그인이 필요합니다.");
+      if (!user) {
+        toast({
+          title: "로그인이 필요합니다",
+          description: "기록을 분석하려면 먼저 로그인 해주세요.",
+          variant: "destructive",
+        });
+        setIsAnalyzing(false);
+        return;
+      }
 
       let query = supabase
         .from("records")
