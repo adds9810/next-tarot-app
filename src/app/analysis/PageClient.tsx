@@ -189,10 +189,11 @@ export default function PageClient() {
       <div className="max-w-5xl mx-auto space-y-8">
         <section className="text-center space-y-4 animate-fade-in">
           <h1 className="font-title text-3xl md:text-4xl text-[#FFD700] drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
-            나의 타로 기록을 분석해볼까요?
+            타로 여정의 시작, <br className="md:hidden" />내 카드와 질문을 따라
           </h1>
           <p className="font-body text-lg md:text-xl text-white/90 leading-relaxed">
-            내가 자주 뽑은 카드, 질문, 키워드를 분석하고 흐름을 정리해보세요.
+            내가 자주 뽑은 카드와 질문들, 그 속에서 드러나는 나만의 이야기를
+            들어보세요.
           </p>
         </section>
 

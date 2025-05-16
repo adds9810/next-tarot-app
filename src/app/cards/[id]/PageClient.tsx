@@ -6,6 +6,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useToast } from "@/hooks/use-toast";
 import { Database } from "@/types/supabase";
 import LoadingIndicator from "@/components/LoadingIndicator";
+import EmptyState from "@/components/EmptyState";
 
 export type CardType = {
   name: string;
@@ -83,7 +84,14 @@ export default function PageClient() {
   }
 
   if (!deck) {
-    return <p>덱 정보를 찾을 수 없습니다.</p>; // 덱 정보가 없는 경우
+    return (
+      <EmptyState
+        title="덱을 찾을 수 없습니다."
+        description="타로 카드 덱을 등록하여 나만의 타로 여정을 시작해 보세요."
+        buttonText="덱 등록하기"
+        buttonLink="/cards/create"
+      />
+    ); // 덱 정보가 없는 경우
   }
 
   return (

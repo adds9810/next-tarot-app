@@ -84,12 +84,14 @@ export default function PageClient() {
         const { data: decksData } = await supabase
           .from("decks")
           .select("*")
-          .eq("user_id", session.user.id);
+          .eq("user_id", session.user.id)
+          .order("created_at", { ascending: false });
 
         const { data: cardsData } = await supabase
           .from("cards")
           .select("*")
-          .eq("user_id", session.user.id);
+          .eq("user_id", session.user.id)
+          .order("created_at", { ascending: false });
 
         setDecks(decksData || []);
         setCards(cardsData || []);
