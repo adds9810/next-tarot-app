@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import DeckList from "@/components/card/cardsList";
+import DeckList from "@/components/card/DeckList";
 
 export const metadata: Metadata = {
   title: "내 덱과 카드 관리 | Whispers of the Stars",
