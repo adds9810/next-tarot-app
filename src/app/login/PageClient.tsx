@@ -70,7 +70,7 @@ function LoginInner() {
       toast({
         title: "회원가입 완료",
         description: storedMessage,
-        duration: 5000,
+        duration: 5000, // 흰색 감성 안내 토스트
       });
       localStorage.removeItem("signup_message");
     }
@@ -79,7 +79,7 @@ function LoginInner() {
       toast({
         title: "로그인이 필요합니다.",
         description: redirectMessage,
-        variant: "destructive",
+        variant: "destructive", // 빨간 경고 토스트 유지
         duration: 5000,
       });
 

@@ -9,8 +9,8 @@ export async function GET(request: Request) {
   console.log("Search Params:", requestUrl.searchParams.toString());
   console.log("OAuth CODE:", code);
 
-  // 항상 루트로 리디렉션 (메시지는 localStorage로 처리)
-  const redirectUrl = new URL("/login", requestUrl.origin);
+  // 리디렉션 경로 변경 (기존: /login)
+  const redirectUrl = new URL("/", requestUrl.origin);
 
   if (code) {
     const supabase = createRouteHandlerClient({ cookies });
