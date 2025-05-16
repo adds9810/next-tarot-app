@@ -72,7 +72,14 @@ export default function Header() {
   const handleLogout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      if (error) {
+        console.log("로그아웃 실패:", error.message);
+        return;
+      }
+
+      // 로컬 스토리지에서 사용자 관련 정보 삭제
+      localStorage.removeItem("login_message");
+      sessionStorage.removeItem("signup_message");
       router.push("/");
     } catch (error) {
       console.error("Error logging out:", error);
