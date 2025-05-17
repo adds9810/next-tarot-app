@@ -44,21 +44,34 @@ function LoginInner() {
 
   const handleSocialLogin = async (provider: Provider) => {
     try {
-      localStorage.setItem(
-        "login_message",
-        "Google 계정으로 로그인되었습니다."
-      );
+      // URL에서 redirect 파라미터를 추출
+      const redirectToParam = window.location.search.includes("redirect=")
+        ? new URLSearchParams(window.location.search).get("redirect")
+        : "/"; // 기본 리디렉션 URL
 
-      const { error } = await supabase.auth.signInWithOAuth({
+      // 문자열로 강제 변환하여 인코딩
+      const redirectTo = String(redirectToParam);
+
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${
+            window.location.origin
+          }/auth/callback?redirectTo=${encodeURIComponent(redirectTo)}`, // 로그인 후 리디렉트될 URL 인코딩
           queryParams: {
             access_type: "offline",
             prompt: "select_account",
           },
         },
       });
+
+      // 로그인 성공 시, localStorage에 메시지를 저장
+      // if (data) {
+      //   localStorage.setItem(
+      //     "login_message",
+      //     "Google 계정으로 로그인되었습니다."
+      //   );
+      // }
 
       if (error) throw error;
     } catch (err) {

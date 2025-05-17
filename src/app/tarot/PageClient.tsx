@@ -150,11 +150,11 @@ function TarotContent() {
     };
 
     sessionStorage.setItem("tarot_temp_record", JSON.stringify(payload));
-    if (session) {
-      router.push("/record/create");
-    } else {
-      router.push("/login?redirect=/record/create");
-    }
+    // if (session) {
+    router.push("/record/create");
+    // } else {
+    //   router.push("/login?redirect=/record/create");
+    // }
   };
 
   const renderStep = () => {
@@ -170,7 +170,15 @@ function TarotContent() {
                 별들이 속삭입니다.
               </h1>
               <p className="font-body text-lg md:text-xl text-white/90 leading-relaxed">
-                어떤 운세를 듣고 싶으신가요?
+                {isLoggedIn ? (
+                  "어떤 운세를 듣고 싶으신가요?"
+                ) : (
+                  <>
+                    어떤 운세를 듣고 싶으신가요?
+                    <br />
+                    기록을 남기고 싶다면, 먼저 로그인 해주세요.
+                  </>
+                )}
               </p>
             </section>
             <motion.div
@@ -181,6 +189,16 @@ function TarotContent() {
               role="group"
               aria-label="운세 종류 선택"
             >
+              {!isLoggedIn ? (
+                <Button
+                  onClick={() => router.push("/login?redirect=/tarot")}
+                  className="px-6 py-3 w-full sm:w-auto min-w-[200px] bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-[#0B0C2A] font-body text-base sm:text-lg overflow-hidden font-medium tracking-wide rounded-lg hover:bg-[#FFE566] transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
+                >
+                  로그인하고 운세보기
+                </Button>
+              ) : (
+                ""
+              )}
               <Button
                 onClick={() => setStep(3)}
                 className="px-6 py-3 w-full min-w-[200px] bg-[#FFD700] text-[#0B0C2A] font-body text-base sm:text-lg  font-medium tracking-wide rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
@@ -376,7 +394,16 @@ function TarotContent() {
               className="space-y-6"
             >
               <p className="text-[#BFA2DB]">
-                이 리딩을 마음속에 간직하시겠어요?
+                {!isLoggedIn ? (
+                  <>
+                    현재 로그인하지 않으셨기 때문에, 이 운세는 저장할 수
+                    없습니다.
+                    <br />
+                    로그인 후 운세를 보면, 그 운세를 저장할 수 있습니다.
+                  </>
+                ) : (
+                  "이 리딩을 마음속에 간직하시겠어요?"
+                )}
               </p>
               <div className="flex gap-4 justify-center flex-col sm:flex-row items-center sm:gap-6 ">
                 {isLoggedIn ? (
@@ -388,10 +415,10 @@ function TarotContent() {
                   </Button>
                 ) : (
                   <Button
-                    onClick={saveToSessionAndGo}
+                    onClick={() => router.push("/login?redirect=/tarot")}
                     className="px-6 py-3 w-full sm:w-auto min-w-[200px] bg-[#FFD700] text-[#0B0C2A] font-body text-base sm:text-lg font-medium tracking-wide rounded-lg hover:bg-[#FFE566] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 shadow-lg shadow-[#FFD700]/20"
                   >
-                    로그인하고 저장하기
+                    로그인하고 운세 간직하기
                   </Button>
                 )}
                 <Button className="px-6 py-3 w-full sm:w-auto min-w-[200px] text-[#EAE7FF] hover:text-[#FFD700] border border-[#FFD700]/20 rounded-lg hover:border-[#FFD700]/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 text-center">

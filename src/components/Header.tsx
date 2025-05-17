@@ -79,7 +79,8 @@ export default function Header() {
 
       // 로컬 스토리지에서 사용자 관련 정보 삭제
       localStorage.removeItem("login_message");
-      sessionStorage.removeItem("signup_message");
+      localStorage.removeItem("signup_message");
+      sessionStorage.removeItem("tarot_temp_record");
       router.push("/");
     } catch (error) {
       console.error("Error logging out:", error);
