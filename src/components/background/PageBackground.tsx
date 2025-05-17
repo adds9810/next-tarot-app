@@ -61,7 +61,7 @@ export default function PageBackground({ children }: PageBackgroundProps) {
       className="relative overflow-hidden"
     >
       {/* 배경 이미지 */}
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 -z-10">
         <Image
           src="/images/starry-night.jpg"
           alt="Starry Night Background"
@@ -140,7 +140,7 @@ export default function PageBackground({ children }: PageBackgroundProps) {
       ))}
 
       {/* 메인 콘텐츠 */}
-      <div className="relative min-h-screen w-full pt-16 md:pt-20 flex items-center justify-center z-20">
+      <div className="relative min-h-[calc(100dvh-110px)] w-full pt-16 md:pt-20 flex items-center justify-center z-20">
         {children}
       </div>
     </motion.div>

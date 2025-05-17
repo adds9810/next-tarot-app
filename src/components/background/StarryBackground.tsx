@@ -64,7 +64,7 @@ export default function StarryBackground({
 
   return (
     <div
-      className="absolute inset-0 overflow-hidden pointer-events-none"
+      className="absolute inset-0 overflow-hidden pointer-events-none "
       aria-hidden="true"
     >
       {stars.map((star) => (

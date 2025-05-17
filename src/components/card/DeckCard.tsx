@@ -27,7 +27,7 @@ export default function DeckCard({ deck, cards, onDelete }: DeckCardProps) {
   return (
     <Card
       onClick={handleCardClick}
-      className="cursor-pointer bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow"
+      className="cursor-pointer p-6 bg-[#0B0C2A] rounded-2xl border border-[#FFD70020] shadow-xl hover:shadow-2xl transition-all duration-300 space-y-3"
       tabIndex={0}
       role="button"
     >

@@ -76,16 +76,18 @@ export default function UserMain({ nickname }: UserMainProps) {
 
     const emoji = getWeatherEmoji(weatherData.description);
     const line1 = (
-      <span className="inline-flex items-center justify-center text-white text-lg md:text-xl font-semibold">
+      <span className="inline-flex flex-wrap items-center justify-center text-white text-lg md:text-xl font-semibold">
         {`${weatherData.city}의 날씨는`}
-        <span
-          role="img"
-          aria-label={weatherData.description}
-          className="ml-2 text-2xl md:text-3xl"
-        >
-          {emoji}
+        <span>
+          <span
+            role="img"
+            aria-label={weatherData.description}
+            className="mx-2 text-2xl md:text-3xl"
+          >
+            {emoji}
+          </span>
+          {`${weatherData.description}, ${weatherData.temp}°C입니다.`}
         </span>
-        {`${weatherData.description}, ${weatherData.temp}°C입니다.`}
       </span>
     );
     const line2 =

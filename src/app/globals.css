@@ -23,7 +23,7 @@
   --popover: rgb(0 0 0 / 0.3); /*#f0f0f0;*/
 }
 * {
-  word-break: keep-all;
+  word-break: break-all;
 }
 
 @media (prefers-color-scheme: dark) {
