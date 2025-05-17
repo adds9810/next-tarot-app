@@ -353,8 +353,8 @@ export default function DeckForm({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.2 }}
     >
-      <div className="flex flex-col sm:flex-row gap-6 px-4 pb-6 h-[calc(100vh-160px)]">
-        <div className="sm:w-64 flex flex-col gap-6 border-r border-white/10 pr-4 flex-shrink-0">
+      <div className="flex flex-col sm:flex-row gap-6 md:px-4 pb-6 md:h-[calc(100vh-160px)]">
+        <div className="sm:w-64 flex flex-col gap-6 md:border-r border-white/10 md:pr-4 flex-shrink-0">
           <div>
             <label className="text-white font-medium block mb-1">덱 이름</label>
             <Input
@@ -410,7 +410,7 @@ export default function DeckForm({
               )}
             </div>
           </div>
-          <div className="pt-2 border-t border-white/10">
+          <div className="pt-2 border-t border-white/10 fixed md:static bottom-4 left-0 w-full md:w-auto px-4 md:px-0 bg-black/50 md:bg-transparent">
             <Button
               type="button"
               onClick={handleCancel}
@@ -428,7 +428,7 @@ export default function DeckForm({
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto pr-2 pb-8">
+        <div className="flex-1 overflow-y-auto pr-2 pb-28 md:pb-0">
           <label className="block font-medium text-white">카드 목록</label>
           {cardList.map((card, index) => (
             <div

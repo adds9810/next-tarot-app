@@ -288,13 +288,13 @@ export default function PageClient({ id }: PageClientProps) {
             )}
         </section>
 
-        <div className="flex justify-between gap-4 pt-6 border-t border-white/10">
+        <div className="flex flex-col md:flex-row items-stretch md:justify-between gap-4 pt-6 border-t border-white/10">
           <Link href={`/record/`}>
             <Button className="w-full text-[#EAE7FF] hover:text-[#FFD700] border border-[#FFD700]/20 hover:border-[#FFD700]/40">
               목록으로
             </Button>
           </Link>
-          <div className="space-x-2">
+          <div className="space-x-2 flex justify-center">
             <Link href={`/record/${id}/edit`}>
               <Button
                 variant="outline"
