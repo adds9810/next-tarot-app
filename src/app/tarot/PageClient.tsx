@@ -421,7 +421,10 @@ function TarotContent() {
                     로그인하고 운세 간직하기
                   </Button>
                 )}
-                <Button className="px-6 py-3 w-full sm:w-auto min-w-[200px] text-[#EAE7FF] hover:text-[#FFD700] border border-[#FFD700]/20 rounded-lg hover:border-[#FFD700]/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 text-center">
+                <Button
+                  onClick={() => router.push("/")}
+                  className="px-6 py-3 w-full sm:w-auto min-w-[200px] text-[#EAE7FF] hover:text-[#FFD700] border border-[#FFD700]/20 rounded-lg hover:border-[#FFD700]/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700]/50 text-center"
+                >
                   메인으로
                 </Button>
               </div>
