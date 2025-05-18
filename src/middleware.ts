@@ -13,7 +13,15 @@ export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   // 보호된 경로
-  const protectedRoutes = ["/record/create", "/record/", "/profile"];
+  const protectedRoutes = [
+    "/record/create",
+    "/record/",
+    "/analysis",
+    "/cards",
+    "/cards/create",
+    "/cards/",
+    "/profile",
+  ];
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );
@@ -38,5 +46,11 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/record/:path*", "/profile", "/auth/callback"],
+  matcher: [
+    "/record/:path*",
+    "/cards",
+    "/cards/:path*",
+    "/profile",
+    "/auth/callback",
+  ],
 };
