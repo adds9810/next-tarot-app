@@ -118,7 +118,7 @@ export default function PageBackground({ children }: PageBackgroundProps) {
           animate={{
             opacity: [0, 1, 0],
             top: ["0%", "100%"],
-            left: [star.left, `${parseInt(star.left) + 20}%`],
+            left: [star.left, `${parseInt(star.left) + -20}%`],
           }}
           transition={{
             duration: star.duration,
