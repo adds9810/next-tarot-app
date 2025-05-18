@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/types/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { supabase } from "@/lib/supabase";
 import MysticSpinner from "@/components/MysticSpinner";
 import LoadingIndicator from "@/components/LoadingIndicator";
 

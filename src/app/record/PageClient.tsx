@@ -26,11 +26,13 @@ import {
 } from "@/components/ui/pagination";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const ITEMS_PER_PAGE = 9;
 const MAX_PAGE_BUTTONS = 10;
 
 export default function PageClient() {
+  const router = useRouter();
   const supabase = createClientComponentClient();
   const [records, setRecords] = useState<RecordSummary[]>([]);
   const [filteredRecords, setFilteredRecords] = useState<RecordSummary[]>([]);
@@ -67,6 +69,7 @@ export default function PageClient() {
           data: { user },
         } = await supabase.auth.getUser();
         if (!user) {
+          router.push("/login?redirect=/record");
           toast({
             title: "로그인이 필요합니다",
             description: "기록을 보려면 먼저 로그인 해주세요.",
