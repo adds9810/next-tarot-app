@@ -158,7 +158,7 @@ export default function PageClient({ id }: PageClientProps) {
     >
       <div className="w-full p-6 sm:p-8 bg-black/30 backdrop-blur-lg rounded-xl border border-white/10 space-y-8">
         <header className="text-center space-y-4">
-          <h1 className="text-3xl md:text-4xl text-[#FFD700] font-title drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
+          <h1 className="text-3xl md:text-4xl text-[#FFD700] font-title drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] break-all">
             {record.title}
           </h1>
           <p className="text-white/90 font-body">
