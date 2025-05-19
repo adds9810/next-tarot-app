@@ -340,7 +340,11 @@ function TarotContent() {
 
       case 4:
         return (
-          <div className="text-center space-y-4 w-full sm:max-w-xl mx-auto">
+          <div
+            className="text-center space-y-4 w-full sm:max-w-xl mx-auto"
+            role="status"
+            aria-busy="true"
+          >
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}

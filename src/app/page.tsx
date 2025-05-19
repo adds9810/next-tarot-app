@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import GuestMain from "@/components/main/GuestMain";
 import UserMain from "@/components/main/UserMain";
-import MysticSpinner from "@/components/MysticSpinner";
+import LoadingIndicator from "@/components/LoadingIndicator";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
@@ -60,7 +60,9 @@ export default function Home() {
   }, []);
 
   if (!mounted || isLoading) {
-    return <MysticSpinner />;
+    return (
+      <LoadingIndicator message="🔮 기억의 흔적을 조심스럽게 불러오는 중이에요." />
+    );
   }
 
   return (
