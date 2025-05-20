@@ -109,6 +109,7 @@ function TarotContent() {
     const payload = {
       card: card.name,
       questionType: question ? "custom" : "today",
+      question:question||""
     };
 
     try {
