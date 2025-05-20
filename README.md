@@ -83,3 +83,8 @@
 ## 📄 License
 
 This project is licensed under the [MIT License](./LICENSE).
+
+> 본 프로젝트의 기획안, 타로 리딩 흐름, UI 구성 및 감성적 문구는 개발자의 창작물로 보호되며,
+> 무단 도용 및 상업적 사용을 금합니다.
+>
+> 타인의 참고를 위해 공개된 저장소이며, 사용 시 반드시 출처를 명시해 주세요.
